@@ -14,7 +14,7 @@ sudo apt-get update && sudo apt-get install -y doppler
 # Install direnv
 sudo apt-get install -y direnv
 
-{{ if (not .ephemeral) -}}
+{{ if (not .ephemeral ) -}}
 
 # Add k8s repo
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
