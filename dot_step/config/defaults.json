@@ -1,0 +1,6 @@
+{
+  "ca-url": "https://ca.zhr.one:8443",
+  "fingerprint": "229c0154173cef3bb94ebcd4a84689899b1c7a753236c5c319a8dabc3f63ebcb",
+  "root": "/Users/vlad/.step/certs/root_ca.crt",
+  "redirect-url": ""
+}

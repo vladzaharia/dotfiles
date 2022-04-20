@@ -1,0 +1,98 @@
+Host router
+    hostname router.zhr.one
+    user root
+    port 22
+
+Host truenas
+    hostname 10.10.0.10
+    port 22
+
+Host personal
+    hostname 10.10.10.13
+    user vlad
+    port 22
+
+Host ansible
+    hostname 10.10.1.10
+    user vlad
+    port 22
+Host ca
+    hostname 10.10.1.11
+    user vlad
+    port 22
+Host hashicorp
+    hostname 10.10.1.12
+    user vlad
+    port 22
+Host caddy
+    hostname 10.10.1.50
+    user vlad
+    port 22
+Host testvm
+    hostname 10.10.1.110
+    user vlad
+    port 22
+
+Host gitlab
+    hostname 10.11.1.10
+    user vlad
+    port 22
+Host matrix
+    hostname 10.11.1.20          
+    user vlad
+    port 22
+Host pterodactyl
+    hostname 10.11.1.50
+    user vlad
+    port 22
+
+Host plex
+    hostname 10.12.1.10
+    user vlad
+    port 22
+
+Host printsrv
+    hostname 10.15.1.10
+    user vlad
+    port 22
+Host hoobs
+    hostname 10.15.1.30
+    user vlad
+    port 22
+
+Host ar
+    hostname ar.sea.core.zhr.one
+    user vlad
+    port 3022
+Host ba
+    hostname ba.sea.core.zhr.one
+    user vlad
+    port 4022
+Host co
+    hostname co.sea.core.zhr.one
+    user vlad
+    port 3022
+    port 22
+Host ga
+    hostname ga.sea.core.zhr.one
+    user vlad
+    port 22
+Host ggstream-sea
+    hostname svc-sea.ggstream.app
+    user vlad
+    port 3022
+Host hoa
+    hostname o.sea.core.zhr.one
+    user vlad
+    port 22
+
+
+Host ml
+    Hostname 10.11.2.50
+    Port 10201
+    User root
+    ServerAliveCountMax 10
+    ServerAliveInterval 60
+    IdentityFile ~/.ssh/ml
+    #ProxyCommand ssh -W %h:%p -i ~/.ssh/ml -p {PORT_MANAGER} limited-user@{HOSTNAME_MANAGER}
+

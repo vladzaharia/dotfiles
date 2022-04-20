@@ -1,0 +1,4 @@
+Match exec "step ssh check-host %h"
+	User vlad
+	UserKnownHostsFile "~/.step/ssh/known_hosts"
+	ProxyCommand step ssh proxycommand %r %h %p --provisioner="Azure"
