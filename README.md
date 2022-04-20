@@ -8,7 +8,7 @@ chezmoi will run a package install script on first run, and anytime dependencies
 
 ## Bootstrapping
 
-You can bootstrap the environment using `bootstrap.sh -g` which will download and install chezmoi and link it to this GitHub repository. 
+You can bootstrap the environment by downloading [the bootstrap file](https://raw.githubusercontent.com/vladzaharia/dotfiles/main/bootstrap.sh) and using `bootstrap.sh -g` which will download and install chezmoi and link it to this GitHub repository. 
 
 Running `bootstrap.sh` without the flag will also download and install chezmoi, but link it to the local directory instead.
 
