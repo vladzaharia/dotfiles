@@ -18,19 +18,19 @@ GitPod and Codespaces are supported with a limited set of pre-installed software
 
 ## Installed Software
 
-| Software                                                       | macOS | Linux | GitPod / Codespaces |
-|----------------------------------------------------------------|-------|-------|---------------------|
-| [oh-my-zsh](https://ohmyz.sh/)                                 | ✅    | ✅   | ✅                  |
-| [Starship](https://starship.rs/)                               | ✅    | ✅   | ✅                  |
-| [Doppler](https://www.doppler.com/)                            | ✅    | ✅   | ✅                  |
-| [direnv](https://direnv.net/)                                  | ✅    | ✅   | ✅                  |
-| [1password-cli](https://1password.com/downloads/command-line/) | ✅    | ✅   |                     |
-| [docker](https://www.docker.com/)                              | ✅    | ✅   |                     |
-| [kubectl](https://kubernetes.io/docs/tasks/tools/)             | ✅    | ✅   |                     |
-| [azure-cli](https://docs.microsoft.com/en-us/cli/azure/)       | ✅    |       |                     |
-| [gitleaks](https://github.com/zricethezav/gitleaks)            | ✅    |       |                     |
-| [nvm](https://github.com/nvm-sh/nvm)                           | ✅    |       |                     |
-| [step](https://smallstep.com/docs/step-cli)                    | ✅    |       |                     |
+| Software | macOS | Debian | WSL | GitPod / Codespaces |
+|----------|-------|--------|-----|---------------------|
+| [oh-my-zsh](https://ohmyz.sh/)| ✅ | ✅| ✅| ✅|
+| [Starship](https://starship.rs/) | ✅ | ✅| ✅| ✅|
+| [Doppler](https://www.doppler.com/) | ✅ | ✅| ✅| ✅|
+| [direnv](https://direnv.net/) | ✅ | ✅| ✅| ✅|
+| [1password-cli](https://1password.com/downloads/command-line/) | ✅ | ✅| ||
+| [docker](https://www.docker.com/)| ✅ | ✅| ✅||
+| [kubectl](https://kubernetes.io/docs/tasks/tools/) | ✅ | ✅| ✅||
+| [azure-cli](https://docs.microsoft.com/en-us/cli/azure/) | ✅ | | ||
+| [gitleaks](https://github.com/zricethezav/gitleaks)| ✅ | | ||
+| [nvm](https://github.com/nvm-sh/nvm)| ✅ | | ||
+| [step](https://smallstep.com/docs/step-cli)  | ✅ | | ||
 
 ## Secret Files
 
