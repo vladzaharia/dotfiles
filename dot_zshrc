@@ -102,7 +102,7 @@ source $ZSH/oh-my-zsh.sh
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
-
+eval "$(direnv hook zsh)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

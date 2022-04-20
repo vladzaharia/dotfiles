@@ -7,6 +7,15 @@
 # Install Starship
 curl -sS https://starship.rs/install.sh | sh -s -- -y
 
+# Install doppler
+sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
+curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
+echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
+sudo apt-get update && sudo apt-get install -y doppler
+
+# Install direnv
+sudo apt-get install -y direnv
+
 {{ else if eq .chezmoi.os "linux" -}}
 
 # Install Starship
@@ -30,11 +39,17 @@ curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --d
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
+# Add doppler repo
+curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
+echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
+
 sudo apt-get update
 
 sudo apt-get install -y kubectl
 sudo apt-get install -y 1password-cli
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+sudo apt-get install -y doppler
+sudo apt-get install -y direnv
 
 {{ else if eq .chezmoi.os "darwin" -}}
 
@@ -45,6 +60,9 @@ brew install starship
 brew install step
 brew install azure-cli
 brew install nvm
+brew install gnupg
+brew install dopplerhq/cli/doppler
+brew install direnv
 
 {{ end -}}
 
