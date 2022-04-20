@@ -34,6 +34,6 @@ GitPod and Codespaces are supported with a limited set of pre-installed software
 
 ## Secret Files
 
-Some secret files (SSH private key, GNUPG keyring) require 1Password to be set up and authenticated before being restored. The 1Password CLI is automatically installed on macOS and Linux, but requires authentication either through the 1Password App or manually.
+Some secret files (eg. `.ssh/id_rsa`, `.gnupg/*`) require 1Password to be set up and authenticated before being restored. The 1Password CLI is automatically installed on macOS and Linux, but requires authentication either through the 1Password App or manually.
 
 Either [set up biometric unlock](https://developer.1password.com/docs/cli/get-started#turn-on-biometric-unlock) or [sign in manually](https://developer.1password.com/docs/cli/sign-in-manually) to properly restore these packages.
