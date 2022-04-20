@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Install oh-my-zsh
-curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
-
 {{ $codespaces:= env "CODESPACES" | not | not -}}
 {{ $gitpod:= env "GITPOD_WORKSPACE_ID" | not | not -}}
 {{ if (or $codespaces $gitpod) -}}
