@@ -1,1 +1,1 @@
-{{- onepasswordDocument "ztumj54iv2hs7ei34gjqtclhdq" -}}
+{{- $codespaces:= env "CODESPACES" | not | not -}}{{- $gitpod:= env "GITPOD_WORKSPACE_ID" | not | not -}}{{- if (not (or $codespaces $gitpod)) -}}{{- onepasswordDocument "ztumj54iv2hs7ei34gjqtclhdq" -}}{{- end -}}
