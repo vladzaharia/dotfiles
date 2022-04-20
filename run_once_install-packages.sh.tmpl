@@ -10,9 +10,6 @@ curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
 # Install Starship
 curl -sS https://starship.rs/install.sh | sh -s -- -y
 
-# Change shell to ZSH
-chsh -s /usr/bin/zhr
-
 {{ else if eq .chezmoi.os "linux" -}}
 
 # Install Starship
