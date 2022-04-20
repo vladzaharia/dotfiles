@@ -1,5 +1,3 @@
-{{- $codespaces:= env "CODESPACES" | not | not -}}
-{{- $gitpod:= env "GITPOD_WORKSPACE_ID" | not | not -}}
-{{- if (not (or $codespaces $gitpod)) -}}
+{{- if .opEnabled -}}
 {{- onepasswordDocument "ouhtcwsd74t73ipueqr2hgi57y" -}}
 {{- end -}}
