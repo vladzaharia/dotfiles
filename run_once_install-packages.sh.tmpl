@@ -3,7 +3,16 @@
 # Install oh-my-zsh
 curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
 
-{{ if eq .chezmoi.os "linux" -}}
+{{- $codespaces:= env "CODESPACES" | not | not -}}
+{{- $gitpod:= env "GITPOD_WORKSPACE_ID" | not | not -}}
+{{- if (or $codespaces $gitpod) -}}
+# Install Starship
+curl -sS https://starship.rs/install.sh | sh -s -- -y
+
+# Change shell to ZSH
+chsh -s /usr/bin/zhr
+
+{{- else if eq .chezmoi.os "linux" -}}
 # Install Starship
 curl -sS https://starship.rs/install.sh | sh -s -- -y
 
@@ -30,9 +39,7 @@ sudo apt-get update
 sudo apt-get install -y kubectl
 sudo apt-get install -y 1password-cli
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-
-{{ else if eq .chezmoi.os "darwin" -}}
+{{- else if eq .chezmoi.os "darwin" -}}
 brew install kubectl
 brew install docker docker-compose
 brew install gitleaks
@@ -40,5 +47,5 @@ brew install starship
 brew install step
 brew install azure-cli
 brew install nvm
-{{ end -}}
+{{- end -}}
 
