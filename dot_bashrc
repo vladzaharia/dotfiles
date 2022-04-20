@@ -1,10 +1,2 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
-# Import bashrc.d files
-if [ -d ${HOME}/.bashrc.d ]
-then
-  for file in ~/.bashrc.d/*.bashrc
-  do
-    source "${file}"
-  done
-fi
