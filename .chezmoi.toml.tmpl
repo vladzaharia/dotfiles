@@ -1,16 +1,9 @@
-# Check for Gitpod / Codespaces environments
 {{- $codespaces:= env "CODESPACES" | not | not -}}
 {{- $gitpod:= env "GITPOD_WORKSPACE_ID" | not | not -}}
-
-# Check for WSL
-{{ if eq .chezmoi.os "linux" }}
-{{   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-$wsl:= true
-{{   end }}
-{{ end }}
+{{- $wsl:= (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
     ephemeral = {{ (or $codespaces $gitpod) }}
-    opEnabled = {{ (or $wsl (or $codespaces $gitpod)) }}
+    openabled = {{ (not (or $wsl (or $codespaces $gitpod))) }}
