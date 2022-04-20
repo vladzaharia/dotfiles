@@ -1,9 +1,12 @@
 {{- $codespaces:= env "CODESPACES" | not | not -}}
 {{- $gitpod:= env "GITPOD_WORKSPACE_ID" | not | not -}}
-{{- $wsl:= (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
+{{- $ephemeral:= (or $codespaces $gitpod) -}}
+
+{{- $wsl:= (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
-    ephemeral = {{ (or $codespaces $gitpod) }}
-    openabled = {{ (not (or $wsl (or $codespaces $gitpod))) }}
+    ephemeral = {{ $ephemeral }}
+    wsl = {{ $wsl }}
+    openabled = {{ (not $ephemeral) }}

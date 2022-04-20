@@ -1,0 +1,4 @@
+{{ if .wsl -}}
+op account add --address my.1password.com --email accounts@vlad.gg
+eval $(op signin --account my)
+{{- end -}}

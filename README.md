@@ -24,7 +24,7 @@ GitPod and Codespaces are supported with a limited set of pre-installed software
 | [Starship](https://starship.rs/) | ✅ | ✅| ✅| ✅|
 | [Doppler](https://www.doppler.com/) | ✅ | ✅| ✅| ✅|
 | [direnv](https://direnv.net/) | ✅ | ✅| ✅| ✅|
-| [1password-cli](https://1password.com/downloads/command-line/) | ✅ | ✅| ||
+| [1password-cli](https://1password.com/downloads/command-line/) | ✅ | ✅| ⚠️ ||
 | [docker](https://www.docker.com/)| ✅ | ✅| ✅||
 | [kubectl](https://kubernetes.io/docs/tasks/tools/) | ✅ | ✅| ✅||
 | [azure-cli](https://docs.microsoft.com/en-us/cli/azure/) | ✅ | | ||
