@@ -4,9 +4,12 @@
 
 {{- $wsl:= (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 
+{{- $opdisabled:= (or $ephemeral $wsl) }}
+{{- $openabled:= env "OP_SESSION_F3TE4WF6SFE2PCZDHWTDWB2GA4" | not | not -}}
+
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
     ephemeral = {{ $ephemeral }}
     wsl = {{ $wsl }}
-    openabled = {{ (not $ephemeral) }}
+    openabled = {{ (or $openabled (not $opdisabled)) }}
