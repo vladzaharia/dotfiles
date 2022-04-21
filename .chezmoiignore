@@ -1,3 +1,7 @@
 .gitpod.yml
 bootstrap.sh
 README.md
+
+.oh-my-zsh/cache
+.oh-my-zsh/cache/**
+.oh-my-zsh/**/*.zwc
