@@ -34,4 +34,4 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
     chezmoi.chassis = {{ $chassisType | quote }}
     chezmoi.distro = {{ $distro | quote }}
     flags.op.available = {{ $opAvailable }}
-    flags.op.enabled = {{ (or $opAvailable $opAvailable) }}
+    flags.op.enabled = {{ (or $opAvailable $opEnabled) }}
