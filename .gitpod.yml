@@ -1,2 +1,2 @@
 tasks:
-  - init:  ~/.local/bin/chezmoi init --source=.
+  - command:  ~/.local/bin/chezmoi init --source=.
