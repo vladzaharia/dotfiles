@@ -6,9 +6,11 @@
 {{- $opEnabled := env "OP_SESSION_F3TE4WF6SFE2PCZDHWTDWB2GA4" | not | not -}}
 
 {{- $distro := (.chezmoi.os) -}}
+{{- $distroLike := (.chezmoi.os) -}}
 
 {{- if (eq $distro "linux") -}}
 {{- $distro = (.chezmoi.osRelease.id) -}}
+{{- $distroLike = (.chezmoi.osRelease.idLike) -}}
 {{- end -}}
 
 {{- $chassisType := "desktop" }}
@@ -32,6 +34,7 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
     chezmoi.chassis = {{ $chassisType | quote }}
-    chezmoi.distro = {{ $distro | quote }}
+    chezmoi.distro.name = {{ $distro | quote }}
+    chezmoi.distro.like = {{ $distroLike | quote }}
     flags.op.available = {{ $opAvailable }}
     flags.op.enabled = {{ (or $opAvailable $opEnabled) }}
