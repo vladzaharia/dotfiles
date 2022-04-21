@@ -51,7 +51,7 @@ sudo apt-get update
 sudo apt-get install -y 1password-cli docker-ce docker-ce-cli containerd.io kubectl
 {{   end -}}
 
-{{ else if eq .distro "darwin" -}}
+{{ else if eq .chezmoi.distro.name "darwin" -}}
 
 if [ "$(command -v brew)" ]; then
     # Cross-plat 
