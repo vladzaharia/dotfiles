@@ -38,8 +38,6 @@ Some secret files (eg. `.ssh/id_rsa`, `.gnupg/*`) require 1Password to be set up
 
 The 1Password CLI is automatically installed on macOS and Linux, but requires authentication either through the 1Password App or manually before it can be used.
 
-Either [set up biometric unlock](https://developer.1password.com/docs/cli/get-started#turn-on-biometric-unlock) or [sign in manually](https://developer.1password.com/docs/cli/sign-in-manually) to properly restore these packages.
+After installing, either [set up biometric unlock](https://developer.1password.com/docs/cli/get-started#turn-on-biometric-unlock) or [sign in manually](https://developer.1password.com/docs/cli/sign-in-manually).
 
-
-
-If signing in manually, run `chezmoi init` again after getting a session token to enable 1Password functionality.
+After logging in, start a new console and run `chezmoi init` to pick up the `op` command and session token (if available). The secret files should now be properly restored.
