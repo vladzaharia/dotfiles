@@ -1,57 +1,65 @@
 #!/bin/sh
 
-{{ if eq .chezmoi.distro "debian" -}}
+{{ if (or (eq .chezmoi.distro "debian") (eq .chezmoi.distro "ubuntu")) -}}
 
 # Install Starship
-curl -sS https://starship.rs/install.sh | sh -s -- -y
+if [ ! "$(command -v starship)" ]; then
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+fi
 
-# Install doppler
-sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
-curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
-echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
-sudo apt-get update && sudo apt-get install -y doppler
+# Add doppler repository
+if [ ! -f /etc/apt/sources.list.d/doppler-cli.list ]; then
+    sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
+    curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
+    echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
+fi
 
-# Install direnv
-sudo apt-get install -y direnv
-
-{{ if (not (eq .chezmoi.chassis "ephemeral")) -}}
-
-# Add k8s repo
-sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-# Add 1password repo
-curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | sudo tee /etc/apt/sources.list.d/1password.list
-sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
-sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
-
-# Add docker repo
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
+# Update repos
 sudo apt-get update
 
-sudo apt-get install -y kubectl
-sudo apt-get install -y 1password-cli
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-sudo apt-get install -y direnv
-{{ end -}}
+# Install direnv + doppler
+sudo apt-get install -y direnv doppler
+
+{{   if (not (eq .chezmoi.chassis "ephemeral")) -}}
+
+# Add k8s repository
+if [ ! -f /etc/apt/sources.list.d/kubernetes.list ]; then
+    sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+fi
+
+# Add 1password repository
+if [ ! -f /etc/apt/sources.list.d/1password.list ]; then
+    curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | sudo tee /etc/apt/sources.list.d/1password.list
+    sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
+    curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+    sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
+    curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+fi
+
+# Add docker repository
+if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
+    curl -fsSL https://download.docker.com/linux/{{.chezmoi.distro}}/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/{{.chezmoi.distro}} $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+fi
+
+# Update repos
+sudo apt-get update
+
+# Install packages
+sudo apt-get install -y 1password-cli docker-ce docker-ce-cli containerd.io kubectl
+{{   end -}}
 
 {{ else if eq .distro "darwin" -}}
 
-brew install kubectl
-brew install docker docker-compose
-brew install gitleaks
-brew install starship
-brew install step
-brew install azure-cli
-brew install nvm
-brew install gnupg
-brew install dopplerhq/cli/doppler
-brew install direnv
+if [ "$(command -v brew)" ]; then
+    # Cross-plat 
+    brew install 1password/tap/1password-cli direnv dopplerhq/cli/doppler docker docker-compose gnupg kubectl starship
+    
+    # Mac-specific 
+    brew install azure-cli gitleaks nvm step
+fi
 
 {{ end -}}
 
