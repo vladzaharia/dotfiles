@@ -1,22 +1,37 @@
-{{- $codespaces:= env "CODESPACES" | not | not -}}
-{{- $gitpod:= env "GITPOD_WORKSPACE_ID" | not | not -}}
-{{- $ephemeral:= (or $codespaces $gitpod) -}}
+{{- $codespaces := env "CODESPACES" | not | not -}}
+{{- $gitpod := env "GITPOD_WORKSPACE_ID" | not | not -}}
+{{- $wsl := (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 
-{{- $distro:= (.chezmoi.os) -}}
+{{- $opAvailable := env "OP_ENABLED" | not | not -}}
+{{- $opEnabled := env "OP_SESSION_F3TE4WF6SFE2PCZDHWTDWB2GA4" | not | not -}}
+
+{{- $distro := (.chezmoi.os) -}}
 
 {{- if (eq $distro "linux") -}}
 {{- $distro = (.chezmoi.osRelease.idLike) -}}
 {{- end -}}
 
-{{- $wsl:= (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
-
-{{- $opAvailable:= env "OP_ENABLED" | not | not -}}
-{{- $opEnabled:= env "OP_SESSION_F3TE4WF6SFE2PCZDHWTDWB2GA4" | not | not -}}
+{{- $chassisType := "desktop" }}
+{{- if (or $codespaces $gitpod) -}}
+{{-   $chassisType = "ephemeral" }}
+{{- else if $wsl }}
+{{-   $chassisType = "wsl" }}
+{{- else if eq .chezmoi.os "darwin" }}
+{{-   if contains "MacBook" (output "sysctl" "-n" "hw.model") }}
+{{-     $chassisType = "laptop" }}
+{{-   else }}
+{{-     $chassisType = "desktop" }}
+{{-   end }}
+{{- else if eq .chezmoi.os "linux" }}
+{{-   $chassisType = (output "hostnamectl" "--json=short" | mustFromJson).Chassis }}
+{{- else if eq .chezmoi.os "windows" }}
+{{-   $chassisType = (output "powershell.exe" "-noprofile" "-command" "if (Get-WmiObject -Class win32_battery -ComputerName localhost) { echo laptop } else { echo desktop }") }}
+{{- end }}
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
-    distro = "{{ $distro }}"
-    ephemeral = {{ $ephemeral }}
-    wsl = {{ $wsl }}
-    openabled = {{ (or $opAvailable $opAvailable) }}
+    chezmoi.chassis = {{ $chassisType | quote }}
+    chezmoi.distro = {{ $distro | quote }}
+    flags.op.available = {{ $opAvailable }}
+    flags.op.enabled = {{ (or $opAvailable $opAvailable) }}

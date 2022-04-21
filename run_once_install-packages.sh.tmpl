@@ -1,6 +1,6 @@
 #!/bin/sh
 
-{{ if eq .distro "debian" -}}
+{{ if eq .chezmoi.distro "debian" -}}
 
 # Install Starship
 curl -sS https://starship.rs/install.sh | sh -s -- -y
@@ -14,7 +14,7 @@ sudo apt-get update && sudo apt-get install -y doppler
 # Install direnv
 sudo apt-get install -y direnv
 
-{{ if (not .ephemeral) -}}
+{{ if (not (eq .chezmoi.chassis "ephemeral")) -}}
 
 # Add k8s repo
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
