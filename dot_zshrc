@@ -124,3 +124,9 @@ unset __conda_setup
 
 # Kubeconfig
 export KUBECONFIG=~/.kube/config
+
+# Check if 1Password CLI is installed
+if [ ! "$(command -v op)" ]; then
+    export OP_ENABLED=true
+    eval "$(op completion zsh)"; compdef _op op
+fi
