@@ -70,7 +70,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(1password ansible brew colored-man-pages colorize command-not-found dash docker-compose docker dotnet dotenv git iterm2 macos node npm nvm pip yarn zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(1password brew colored-man-pages colorize docker-compose docker dotnet dotenv git iterm2 macos node npm nvm pip yarn zsh-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -100,23 +100,31 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-if command -v /opt/homebrew/bin/brew  &> /dev/null; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+# Homebrew zsh hooks
+if [ "$(command -v brew)" ]; then
+    eval "$(brew shellenv)"
 fi
 
-eval "$(starship init zsh)"
-eval "$(direnv hook zsh)"
+# Starship zsh hooks
+if [ "$(command -v starship)" ]; then
+    eval "$(starship init zsh)"
+fi
+
+# Direnv zsh hooks
+if [ "$(command -v direnv)" ]; then
+    eval "$(direnv hook zsh)"
+fi
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/vlad/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('{{ .chezmoi.homeDir }}/mambaforge/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/Users/vlad/mambaforge/etc/profile.d/conda.sh" ]; then
-        . "/Users/vlad/mambaforge/etc/profile.d/conda.sh"
+    if [ -f "{{ .chezmoi.homeDir }}/mambaforge/etc/profile.d/conda.sh" ]; then
+        . "{{ .chezmoi.homeDir }}/mambaforge/etc/profile.d/conda.sh"
     else
-        export PATH="/Users/vlad/mambaforge/bin:$PATH"
+        export PATH="{{ .chezmoi.homeDir }}/mambaforge/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -127,6 +135,10 @@ export KUBECONFIG=~/.kube/config
 
 # Check if 1Password CLI is installed
 if [ "$(command -v op)" ]; then
+    # Set environment variable for chezmoi
     export OP_ENABLED=true
-    eval "$(op completion zsh)"; compdef _op op
+
+    # Add zsh hooks
+    eval "$(op completion zsh)"
+    compdef _op op
 fi
