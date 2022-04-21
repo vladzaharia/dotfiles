@@ -16,3 +16,7 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
+[".wgetrc"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/dotphiles/dotphiles/master/wget/wgetrc"
+    refreshPeriod = "168h"
