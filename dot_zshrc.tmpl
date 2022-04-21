@@ -5,6 +5,10 @@
 # Update PATH
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
+{{- if (eq .chezmoi.distro.name "darwin") -}}
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+{{- end -}}
+
 ######
 ### oh-my-zsh
 ######
