@@ -8,7 +8,7 @@
 {{- $distro := (.chezmoi.os) -}}
 
 {{- if (eq $distro "linux") -}}
-{{- $distro = (.chezmoi.osRelease.idLike) -}}
+{{- $distro = (.chezmoi.osRelease.id) -}}
 {{- end -}}
 
 {{- $chassisType := "desktop" }}
