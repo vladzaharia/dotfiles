@@ -1,6 +1,6 @@
 #!/bin/sh
 
-{{ if eq .chezmoi.os "linux" -}}
+{{ if eq .distro "debian" -}}
 
 # Install Starship
 curl -sS https://starship.rs/install.sh | sh -s -- -y
@@ -40,7 +40,7 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo apt-get install -y direnv
 {{ end -}}
 
-{{ else if eq .chezmoi.os "darwin" -}}
+{{ else if eq .distro "darwin" -}}
 
 brew install kubectl
 brew install docker docker-compose
