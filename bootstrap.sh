@@ -2,6 +2,17 @@
 
 set -e # -e: exit on error
 
+if [ -z "${VAULT_TOKEN}" ]; then
+  if [ ! "$(command -v vault)" ]; then
+    bin_dir="$HOME/.local/bin"
+    sh -c "$(curl -LO https://raw.github.com/robertpeteuil/vault-installer/master/vault-install.sh)"
+    chmod +x ./vault-install.sh
+    ./vault-instal.sh -c
+    mv vault "$bin_dir/vault"
+    rm vault*
+  fi
+fi
+
 if [ ! "$(command -v chezmoi)" ]; then
   bin_dir="$HOME/.local/bin"
   chezmoi="$bin_dir/chezmoi"
@@ -21,7 +32,7 @@ fi
 script_dir="$(cd -P -- "$(dirname -- "$(command -v -- "$0")")" && pwd -P)"
 # exec: replace current process with chezmoi init
 
-if [ "$1" == "-g" ]; then
+if [ "$1" = "-g" ]; then
   exec "$chezmoi" init --apply vladzaharia
 else
   exec "$chezmoi" init --apply "--source=$script_dir"
