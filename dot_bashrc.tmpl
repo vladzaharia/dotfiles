@@ -3,11 +3,11 @@
 {{ if (eq .chezmoi.chassis "ephemeral") -}}
 
 export SHELL=$(which zsh)
-if [[ -o login ]]
-then
+#if [[ -o login ]]
+#then
 #    exec zsh -l
-else
+#else
 #    exec zsh
-fi
+#fi
 
 {{ end -}}
