@@ -2,15 +2,15 @@
 
 set -e # -e: exit on error
 
-if [ -z "${VAULT_TOKEN}" ]; then
-  if [ ! "$(command -v vault)" ]; then
-    bin_dir="$HOME/.local/bin"
-    sh -c "$(curl -LO https://raw.github.com/robertpeteuil/vault-installer/master/vault-install.sh)"
-    chmod +x ./vault-install.sh
-    ./vault-instal.sh -c
-    mv vault "$bin_dir/vault"
-    rm vault*
-  fi
+export PATH=$PATH:$HOME/.local/bin
+
+if [ ! "$(command -v vault)" ]; then
+  bin_dir="$HOME/.local/bin"
+  sh -c "$(wget https://raw.github.com/robertpeteuil/vault-installer/master/vault-install.sh)"
+  chmod +x ./vault-install.sh
+  ./vault-install.sh -c
+  mv vault "$bin_dir/vault"
+  rm vault*
 fi
 
 if [ ! "$(command -v chezmoi)" ]; then
