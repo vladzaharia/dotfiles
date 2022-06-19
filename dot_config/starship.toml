@@ -2,6 +2,12 @@
 symbol = "  "
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
+[azure]
+disabled = false
+format = '\[[$symbol($subscription)]($style)\]'
+symbol = "ﴃ "
+style = "blue bold"
+
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -17,7 +23,6 @@ format = '\[[$symbol$environment]($style)\]'
 
 [crystal]
 format = '\[[$symbol($version)]($style)\]'
-
 
 [dart]
 symbol = " "
@@ -81,6 +86,12 @@ format = '\[[$symbol($version)]($style)\]'
 
 [kubernetes]
 format = '\[[$symbol$context( \($namespace\))]($style)\]'
+disabled = false
+
+[localip]
+ssh_only = true
+format = '\[@[$localipv4](bold red)\]'
+disabled = false
 
 [lua]
 format = '\[[$symbol($version)]($style)\]'
@@ -146,9 +157,16 @@ format = '\[[$symbol($version)]($style)\]'
 
 [sudo]
 format = '\[[as $symbol]\]'
+disabled = false
+style = 'bold green'
 
-[shlvl]
-symbol = " "
+[shell]
+bash_indicator = "b"
+fish_indicator = ""
+zsh_indicator = "z"
+powershell_indicator = "_"
+style = "bold cyan"
+disabled = false
 
 [swift]
 symbol = "ﯣ "
