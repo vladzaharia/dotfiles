@@ -62,21 +62,6 @@ if [ "$(command -v direnv)" ]; then
     eval "$(direnv hook zsh)"
 fi
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('{{ .chezmoi.homeDir }}/mambaforge/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "{{ .chezmoi.homeDir }}/mambaforge/etc/profile.d/conda.sh" ]; then
-        . "{{ .chezmoi.homeDir }}/mambaforge/etc/profile.d/conda.sh"
-    else
-        export PATH="{{ .chezmoi.homeDir }}/mambaforge/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
 # Kubeconfig
 export KUBECONFIG=~/.kube/config
 
