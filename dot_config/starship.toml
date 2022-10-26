@@ -157,7 +157,7 @@ format = '\[[$symbol($version)]($style)\]'
 
 [sudo]
 format = '\[[as $symbol]\]'
-disabled = false
+disabled = true
 style = 'bold green'
 
 [shell]

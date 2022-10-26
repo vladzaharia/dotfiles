@@ -1,6 +1,6 @@
 [user]
 	name = Vlad Zaharia
-	email = hey@vlad.gg
+	email = v.zaharia@pokemon.com
 [pull]
 	rebase = false
 [filter "lfs"]
