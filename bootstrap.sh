@@ -23,7 +23,7 @@ fi
 script_dir="$(cd -P -- "$(dirname -- "$(command -v -- "$0")")" && pwd -P)"
 # exec: replace current process with chezmoi init
 
-if [ "$1" = "-g" ]; then
+if [ "$1" == "-g" ]; then
   exec "$chezmoi" init --apply vladzaharia
 else
   exec "$chezmoi" init --apply "--source=$script_dir"
