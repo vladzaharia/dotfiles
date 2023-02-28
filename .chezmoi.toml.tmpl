@@ -16,6 +16,8 @@
 {{- $chassisType := "desktop" }}
 {{- if (or $codespaces $gitpod) -}}
 {{-   $chassisType = "ephemeral" }}
+{{- else if stat "/home/kasm-default-profile" -}}
+{{-   $chassisType = "kasm" }}
 {{- else if $wsl }}
 {{-   $chassisType = "wsl" }}
 {{- else if eq .chezmoi.os "darwin" }}
