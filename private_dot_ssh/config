@@ -1,3 +1,5 @@
+Include /Users/vlad/.colima/ssh_config
+
 Host router
     hostname router.zhr.one
     user root
@@ -7,43 +9,32 @@ Host truenas
     hostname 10.10.0.10
     port 22
 
-Host hashicorp
-    hostname 10.11.1.10
-    user vlad
+# XUI via Tailscale
+Host xui-ts
+    hostname xui
     port 22
 
-Host ar
-    hostname ar.sea.core.zhr.one
-    user vlad
-    port 3022
-Host ba
-    hostname ba.sea.core.zhr.one
-    user vlad
-    port 4022
-Host co
-    hostname co.sea.core.zhr.one
-    user vlad
-    port 3022
-    port 22
-Host ga
-    hostname ga.sea.core.zhr.one
-    user vlad
-    port 22
-Host ggstream-sea
-    hostname svc-sea.ggstream.app
-    user vlad
-    port 3022
-Host hoa
-    hostname o.sea.core.zhr.one
-    user vlad
+# XUI
+Host xui
+    hostname 10.11.1.200
     port 22
 
-Host ml
-    Hostname 10.11.2.50
-    Port 10201
-    User root
-    ServerAliveCountMax 10
-    ServerAliveInterval 60
-    IdentityFile ~/.ssh/ml
-    #ProxyCommand ssh -W %h:%p -i ~/.ssh/ml -p {PORT_MANAGER} limited-user@{HOSTNAME_MANAGER}
+# Core Services via Tailscale
+Host core-ts
+    hostname core
+    port 22
 
+# Core Services
+Host core
+    hostname 10.15.10.251
+    port 22
+
+# HOOBS via Tailscale
+Host hoobs-ts
+    hostname hoobs
+    port 22
+
+# HOOBS
+Host hoobs
+    hostname 10.15.2.180
+    port 22
