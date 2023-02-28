@@ -5,9 +5,6 @@
 {{- $opAvailable := env "OP_ENABLED" | not | not -}}
 {{- $opEnabled := env "OP_SESSION_F3TE4WF6SFE2PCZDHWTDWB2GA4" | not | not -}}
 
-{{- $vaultUrl := env "VAULT_ADDR" | not | not -}}
-{{- $vaultToken := env "VAULT_TOKEN" | not | not -}}
-
 {{- $distro := (.chezmoi.os) -}}
 {{- $distroLike := (.chezmoi.os) -}}
 
@@ -41,4 +38,3 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
     chezmoi.distro.like = {{ $distroLike | quote }}
     flags.op.available = {{ $opAvailable }}
     flags.op.enabled = {{ (or $opAvailable $opEnabled) }}
-    flags.vault.enabled = {{ (and $vaultUrl $vaultToken) }}
