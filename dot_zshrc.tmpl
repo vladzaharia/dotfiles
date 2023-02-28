@@ -3,11 +3,12 @@
 ######
 
 # Update PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-{{- if (eq .chezmoi.distro.name "darwin") -}}
+{{- if (eq .chezmoi.distro.name "darwin") }}
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-{{- end -}}
+{{- end }}
 
 ######
 ### oh-my-zsh
@@ -62,25 +63,12 @@ if [ "$(command -v direnv)" ]; then
     eval "$(direnv hook zsh)"
 fi
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('{{ .chezmoi.homeDir }}/mambaforge/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "{{ .chezmoi.homeDir }}/mambaforge/etc/profile.d/conda.sh" ]; then
-        . "{{ .chezmoi.homeDir }}/mambaforge/etc/profile.d/conda.sh"
-    else
-        export PATH="{{ .chezmoi.homeDir }}/mambaforge/bin:$PATH"
-    fi
+# Infisical zsh hooks
+if [ "$(command -v infisical)" ]; then
+    export INFISICAL_API_URL="https://env.zhr.one/api"
 fi
-unset __conda_setup
-# <<< conda initialize <<<
 
-# Kubeconfig
-export KUBECONFIG=~/.kube/config
-
-# Check if 1Password CLI is installed
+# 1Password zsh hooks
 if [ "$(command -v op)" ]; then
     # Set environment variable for chezmoi
     export OP_ENABLED=true
