@@ -3,11 +3,12 @@
 ######
 
 # Update PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-{{- if (eq .chezmoi.distro.name "darwin") -}}
+{{- if (eq .chezmoi.distro.name "darwin") }}
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-{{- end -}}
+{{- end }}
 
 ######
 ### oh-my-zsh
@@ -62,10 +63,12 @@ if [ "$(command -v direnv)" ]; then
     eval "$(direnv hook zsh)"
 fi
 
-# Kubeconfig
-export KUBECONFIG=~/.kube/config
+# Infisical zsh hooks
+if [ "$(command -v infisical)" ]; then
+    export INFISICAL_API_URL="https://env.zhr.one/api"
+fi
 
-# Check if 1Password CLI is installed
+# 1Password zsh hooks
 if [ "$(command -v op)" ]; then
     # Set environment variable for chezmoi
     export OP_ENABLED=true

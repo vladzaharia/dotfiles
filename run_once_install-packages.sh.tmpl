@@ -1,11 +1,6 @@
 #!/bin/sh
 
-{{ if (eq .chezmoi.distro.like "debian") -}}
-
-# Install Vault
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt-get update && sudo apt-get install vault
+{{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
 
 # Install Starship
 if [ ! "$(command -v starship)" ]; then
@@ -33,16 +28,6 @@ if [ ! -f /etc/apt/sources.list.d/kubernetes.list ]; then
     echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 fi
 
-# Add 1password repository
-if [ ! -f /etc/apt/sources.list.d/1password.list ]; then
-    curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | sudo tee /etc/apt/sources.list.d/1password.list
-    sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-    curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
-    sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-    curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
-fi
-
 # Add docker repository
 if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
     curl -fsSL https://download.docker.com/linux/{{.chezmoi.distro.name}}/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -53,7 +38,7 @@ fi
 sudo apt-get update
 
 # Install packages
-sudo apt-get install -y 1password-cli docker-ce docker-ce-cli containerd.io kubectl
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
 {{   end -}}
 
 {{ else if eq .chezmoi.distro.name "darwin" -}}
