@@ -7,6 +7,7 @@ README.md
 .oh-my-zsh/**/*.zwc
 
 {{- if .flags.pokemon }}
+.gnupg/**
 .ssh/id*
 **/*pkmn.*
 {{ end }}

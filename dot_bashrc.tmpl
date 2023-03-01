@@ -1,3 +1,15 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
 eval "$(starship init bash)"
+
+{{- if (eq .chezmoi.chassis "ephemeral") -}}
+
+export SHELL=$(which zsh)
+#if [[ -o login ]]
+#then
+#    exec zsh -l
+#else
+#    exec zsh
+#fi
+
+{{- end -}}

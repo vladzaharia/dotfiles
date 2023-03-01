@@ -13,7 +13,7 @@
 {{- $distroLike = (.chezmoi.osRelease.idLike) -}}
 {{- end -}}
 
-{{- $chassisType := "desktop" }}
+{{- $chassisType := "desktop" -}}
 {{- if (or $codespaces $gitpod) -}}
 {{-   $chassisType = "ephemeral" -}}
 {{- else if stat "/home/kasm-default-profile" -}}
@@ -32,13 +32,23 @@
 {{-   $chassisType = (output "powershell.exe" "-noprofile" "-command" "if (Get-WmiObject -Class win32_battery -ComputerName localhost) { echo laptop } else { echo desktop }") -}}
 {{- end -}}
 
+{{ $pokemon := false }}
+{{ $email := "hey@vlad.gg" }}
+{{- if (regexMatch "Mac-[A-Za-z0-9]+" .chezmoi.hostname) -}}
+{{ $pokemon := true }}
+{{ $email := "v.zaharia@pokemon.com" }}
+{{- end -}}
+
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
     chezmoi.chassis = {{ $chassisType | quote }}
     chezmoi.distro.name = {{ $distro | quote }}
     chezmoi.distro.like = {{ $distroLike | quote }}
+
     flags.op.available = {{ $opAvailable }}
-    flags.op.enabled = {{ (or $opAvailable $opEnabled) }}
-    flags.pokemon = false
-    email = "hey@vlad.gg"
+    flags.op.enabled = {{ (and (or $opAvailable $opEnabled) (not $pokemon)) }}
+    flags.pokemon = {{ $pokemon }}
+
+    personal.name = "Vlad Zaharia"
+    personal.email = {{ $email | quote }}
