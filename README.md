@@ -29,7 +29,7 @@ Running `bootstrap.sh` without the flag will also download and install chezmoi, 
 |----------|-------|--------|-----|---------------------|
 | [oh-my-zsh](https://ohmyz.sh/)| ✅ | ✅ | ✅ | ✅ |
 | [Starship](https://starship.rs/) | ✅ | ✅ | ✅ | ✅ |
-| [Doppler](https://www.doppler.com/) | ✅ | ✅ | ✅ | ✅ |
+| [Infisical](https://infisical.com//) | ✅ | ✅ | ✅ | ✅ |
 | [direnv](https://direnv.net/) | ✅ | ✅ | ✅ | ✅ |
 | [1password-cli](https://1password.com/downloads/command-line/) | ✅ | ✅ | ✅ | |
 | [docker](https://www.docker.com/)| ✅ | ✅ | ✅ | |
