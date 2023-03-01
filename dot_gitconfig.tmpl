@@ -1,8 +1,13 @@
+[core]
+	excludesFile = ~/.gitignore
+	editor = nano
 [user]
 	name = Vlad Zaharia
-	email = {{ .email | quote }}
+	email = {{ .email }}
 [pull]
 	rebase = false
+[push]
+	autoSetupRemote = true
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
@@ -10,3 +15,8 @@
 	clean = git-lfs clean -- %f
 [init]
 	defaultBranch = main
+
+{{- if .flags.pokemon }}
+[include]
+	path = ~/.pkmn.gitconfig
+{{- end }}

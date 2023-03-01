@@ -7,18 +7,18 @@ if [ ! "$(command -v starship)" ]; then
     curl -sS https://starship.rs/install.sh | sh -s -- -y
 fi
 
-# Add doppler repository
-if [ ! -f /etc/apt/sources.list.d/doppler-cli.list ]; then
-    sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
-    curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
-    echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
+# Add Infisical repository
+if [ ! -f /etc/apt/sources.list.d/infisical-infisical-cli.list ]; then
+    curl -1sLf \
+    'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' \
+    | sudo -E bash
 fi
 
 # Update repos
 sudo apt-get update
 
-# Install direnv + doppler
-sudo apt-get install -y direnv doppler
+# Install direnv + infisical
+sudo apt-get install -y direnv infisical
 
 {{   if (not (eq .chezmoi.chassis "ephemeral")) -}}
 
@@ -45,10 +45,11 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
 
 if [ "$(command -v brew)" ]; then
     # Cross-plat 
-    brew install 1password/tap/1password-cli direnv dopplerhq/cli/doppler docker docker-compose gnupg kubectl starship
-    
-    # Mac-specific 
-    brew install azure-cli gitleaks nvm step
+    brew install 1password/tap/1password-cli azure-cli direnv docker docker-compose gitleaks gnupg infisical/get-cli/infisical kubectl nvm starship
+
+    {{   if eq .chezmoi.arch "arm64" -}}
+    brew install colima
+    {{   end }}
 fi
 
 {{ end -}}

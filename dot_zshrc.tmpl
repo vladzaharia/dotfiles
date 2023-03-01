@@ -77,3 +77,19 @@ if [ "$(command -v op)" ]; then
     eval "$(op completion zsh)"
     compdef _op op
 fi
+
+{{- if (and (eq .chezmoi.distro.name "darwin") (eq .chezmoi.arch "arm64")) }}
+# Docker config for M1 via Colima
+DOCKER_HOST=unix:///Users/v.zaharia/.colima/default/docker.sock
+{{ end }}
+
+{{- if .flags.pokemon }}
+######
+### Pokemon Configuration
+######
+
+FILE=./.pkmn.zshrc
+if [ -f "$FILE" ]; then
+    . $FILE
+fi
+{{- end }}
