@@ -35,8 +35,8 @@
 {{ $pokemon := false }}
 {{ $email := "hey@vlad.gg" }}
 {{- if (regexMatch "Mac-[A-Za-z0-9]+" .chezmoi.hostname) -}}
-{{ $pokemon := true }}
-{{ $email := "v.zaharia@pokemon.com" }}
+{{ $pokemon = true }}
+{{ $email = "v.zaharia@pokemon.com" }}
 {{- end -}}
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
