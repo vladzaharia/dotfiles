@@ -40,3 +40,4 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
     chezmoi.distro.like = {{ $distroLike | quote }}
     flags.op.available = {{ $opAvailable }}
     flags.op.enabled = {{ (or $opAvailable $opEnabled) }}
+    flags.pokemon = false
