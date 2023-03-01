@@ -1,0 +1,44 @@
+Include {{ .chezmoi.homeDir }}/.colima/ssh_config
+
+{{- if .flags.pokemon }}
+Include {{ .chezmoi.homeDir }}/.ssh/pkmn.config
+{{- end }}
+
+Host router
+    hostname router.zhr.one
+    user root
+    port 22
+
+Host truenas
+    hostname 10.10.0.10
+    port 22
+
+# XUI via Tailscale
+Host xui-ts
+    hostname xui
+    port 22
+
+# XUI
+Host xui
+    hostname 10.11.1.200
+    port 22
+
+# Core Services via Tailscale
+Host core-ts
+    hostname core
+    port 22
+
+# Core Services
+Host core
+    hostname 10.15.10.251
+    port 22
+
+# HOOBS via Tailscale
+Host hoobs-ts
+    hostname hoobs
+    port 22
+
+# HOOBS
+Host hoobs
+    hostname 10.15.2.180
+    port 22
