@@ -38,14 +38,16 @@
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
+{{ if ne $chassisType "ephemeral" -}}
 encryption = "age"
 [age]
-{{- if $pokemon }}
+{{-   if $pokemon }}
     identity = "~/.keys/pkmn.key"
     recipient = "age1chxlg7tm275f5fsw8lfpj9x76drqfgtaphu02ef7u3lurkppwqnqfwxarn"
-{{- else }}
+{{-   else }}
     identity = "~/.keys/personal.key"
     recipient = "age1hpzuwy5lhe6ke9dkj37npz9qlgcfxkk2yyl0z235xt3sgqrmqpssqsjtcm"
+{{-   end }}
 {{- end }}
 
 [data]
@@ -53,6 +55,8 @@ encryption = "age"
     chezmoi.distro.name = {{ $distro | quote }}
     chezmoi.distro.like = {{ $distroLike | quote }}
 
+    flags.applesilicon = {{ and (eq $distro "darwin") (eq .chezmoi.arch "arm64") }}
+    flags.ephemeral = {{ eq $chassisType "ephemeral" }}
     flags.pokemon = {{ $pokemon }}
 
     personal.name = "Vlad Zaharia"

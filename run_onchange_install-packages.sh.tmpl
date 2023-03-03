@@ -1,0 +1,85 @@
+#!/bin/sh
+CYAN='\033[0;36m'
+LCYAN='\033[1;36m'
+RESET='\033[0m'
+
+{{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
+
+# Install Starship
+if [ ! "$(command -v starship)" ]; then
+    echo "${CYAN}###${RESET} Installing Starship prompt"
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+fi
+
+# Add Infisical repository
+if [ ! -f /etc/apt/sources.list.d/infisical-infisical-cli.list ]; then
+    echo "${CYAN}###${RESET} Adding Infisical repository"
+
+    curl -1sLf \
+    'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' \
+    | sudo -E bash
+fi
+
+# Install Moon
+if [ ! "$(command -v moon)" ]; then
+    echo "${CYAN}###${RESET} Installing Moon"
+    curl -fsSL https://moonrepo.dev/install.sh | bash
+    export PATH="{{ .chezmoi.homeDir }}/.moon/tools/moon/latest:$PATH"
+fi
+
+echo "${LCYAN}###${RESET} Apt install (common)"
+# Update repos
+sudo apt-get update
+
+# Install direnv + infisical
+sudo apt-get install -y direnv infisical
+
+{{   if (not (eq .chezmoi.chassis "ephemeral")) -}}
+
+# Add docker repository
+if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
+    echo "${CYAN}###${RESET} Adding docker repository"
+    curl -fsSL https://download.docker.com/linux/{{.chezmoi.distro.name}}/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/{{.chezmoi.distro.name}} $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+fi
+
+# Add k8s repository
+if [ ! -f /etc/apt/sources.list.d/kubernetes.list ]; then
+    echo "${CYAN}###${RESET} Adding k8s repository"
+    sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+fi
+
+echo "${LCYAN}###${RESET} Apt install (dev)"
+# Update repos
+sudo apt-get update
+
+# Install packages
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
+{{   end -}}
+
+{{ else if eq .chezmoi.distro.name "darwin" -}}
+
+if [ "$(command -v brew)" ]; then
+    # Install Moon
+    if [ ! "$(command -v moon)" ]; then
+        echo "${CYAN}###${RESET} Installing Moon"
+        curl -fsSL https://moonrepo.dev/install.sh | bash
+        export PATH="{{ .chezmoi.homeDir }}/.moon/tools/moon/latest:$PATH"
+    fi
+
+    echo "${CYAN}###${RESET} Homebrew install"
+    
+    # Cross-plat 
+    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gitleaks gnupg infisical/get-cli/infisical kubectl nvm starship
+
+    {{   if .flags.applesilicon -}}
+    echo "${LCYAN}###${RESET} Homebrew install (arm64)"
+
+    # M1 Mac
+    brew install colima
+    {{   end }}
+fi
+
+{{ end -}}
+
