@@ -18,7 +18,7 @@ fi
 sudo apt-get update
 
 # Install direnv + infisical
-sudo apt-get install -y direnv infisical
+sudo apt-get install -y age direnv infisical
 
 {{   if (not (eq .chezmoi.chassis "ephemeral")) -}}
 
@@ -45,9 +45,10 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
 
 if [ "$(command -v brew)" ]; then
     # Cross-plat 
-    brew install 1password/tap/1password-cli azure-cli direnv docker docker-compose gitleaks gnupg infisical/get-cli/infisical kubectl nvm starship
+    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gitleaks gnupg infisical/get-cli/infisical kubectl nvm starship
 
     {{   if eq .chezmoi.arch "arm64" -}}
+    # M1 Mac
     brew install colima
     {{   end }}
 fi
