@@ -15,5 +15,9 @@ README.md
 {{- else }}
 **/*pkmn.*
 .ssh/id_pkmn*
-{{ end }}
+{{- end }}
 
+{{- if .flags.ephemeral }}
+.gnupg/**
+.ssh/id*
+{{- end }}
