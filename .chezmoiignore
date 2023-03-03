@@ -12,5 +12,8 @@ README.md
 .gnupg/**
 .ssh/id*
 !.ssh/id_pkmn*
+{{- else }}
 **/*pkmn.*
+.ssh/id_pkmn*
 {{ end }}
+

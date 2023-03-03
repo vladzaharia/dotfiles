@@ -6,6 +6,8 @@
 {{ $filename = "pkmn.key" }}
 {{- end -}}
 
+mkdir -p ${HOME}/.keys
+
 if [ ! -f "${HOME}/.keys/{{ $filename }}" ]; then
     age --decrypt --output "${HOME}/.keys/{{ $filename }}" "{{ .chezmoi.sourceDir }}/private_dot_keys/{{ $filename }}.age"
     chmod 600 "${HOME}/.keys/{{ $filename }}"
