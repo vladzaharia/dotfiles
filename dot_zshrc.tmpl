@@ -3,8 +3,8 @@
 ######
 
 # Update PATH
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.moon/tools/moon/latest:$PATH
 
 {{- if (eq .chezmoi.distro.name "darwin") }}
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
