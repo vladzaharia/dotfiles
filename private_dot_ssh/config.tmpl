@@ -1,8 +1,10 @@
+{{ if not .flags.ephemeral -}}
+
 Include {{ .chezmoi.homeDir }}/.colima/ssh_config
 
-{{- if .flags.pokemon }}
+{{-   if .flags.pokemon }}
 Include {{ .chezmoi.homeDir }}/.ssh/pkmn.config
-{{- end }}
+{{-   end }}
 
 Host router
     hostname router.zhr.one
@@ -43,3 +45,4 @@ Host hoobs-ts
 Host hoobs
     hostname 10.15.2.180
     port 22
+{{ end -}}
