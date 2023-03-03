@@ -1,0 +1,17 @@
+#!/bin/sh
+
+{{ if .flags.pokemon -}}
+
+if [ ! -f "${HOME}/.keys/pkmn.key" ]; then
+    age --decrypt --output "${HOME}/.keys/pkmn.key" "{{ .chezmoi.sourceDir }}/private_dot_keys/pkmn.key.age"
+    chmod 600 "${HOME}/.keys/pkmn.key"
+fi
+
+{{- else -}}
+
+if [ ! -f "${HOME}/.keys/personal.key" ]; then
+    age --decrypt --output "${HOME}/.keys/personal.key" "{{ .chezmoi.sourceDir }}/private_dot_keys/personal.key.age"
+    chmod 600 "${HOME}/.keys/personal.key"
+fi
+
+{{- end }}
