@@ -1,0 +1,15 @@
+#!/bin/sh
+TEAL='\033[0;36m'
+RESET='\033[0m'
+
+{{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
+echo "${TEAL}###${RESET} Apt upgrade"
+
+sudo apt update
+sudo apt upgrade
+{{ else if eq .chezmoi.distro.name "darwin" -}}
+echo "${TEAL}###${RESET} Homebrew upgrade"
+
+brew update
+brew upgrade
+{{- end }}
