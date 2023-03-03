@@ -68,6 +68,11 @@ if [ "$(command -v infisical)" ]; then
     export INFISICAL_API_URL="https://env.zhr.one/api"
 fi
 
+# Moon hooks
+if [ -d "{{ .chezmoi.homeDir }}/.moon/tools/moon/latest" ]; then
+    export PATH="{{ .chezmoi.homeDir }}/.moon/tools/moon/latest:$PATH"
+fi
+
 # 1Password zsh hooks
 if [ "$(command -v op)" ]; then
     # Set environment variable for chezmoi
