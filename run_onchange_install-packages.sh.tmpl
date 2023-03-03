@@ -25,7 +25,7 @@ echo "${LCYAN}###${RESET} Apt install (common)"
 sudo apt-get update
 
 # Install direnv + infisical
-sudo apt-get install -y age direnv infisical
+sudo apt-get install -y direnv infisical
 
 {{   if (not (eq .chezmoi.chassis "ephemeral")) -}}
 
