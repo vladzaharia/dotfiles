@@ -1,4 +1,7 @@
 #!/bin/sh
+CYAN='\033[0;36m'
+LCYAN='\033[1;36m'
+RESET='\033[0m'
 
 {{ $filename := "personal.key" }}
 
@@ -6,9 +9,13 @@
 {{ $filename = "pkmn.key" }}
 {{- end -}}
 
+echo "${CYAN}###${RESET} Decrypting keys"
+
 mkdir -p ${HOME}/.keys
 
 if [ ! -f "${HOME}/.keys/{{ $filename }}" ]; then
+    echo "${LCYAN}###${RESET} Decrypting {{ $filename }}"
+
     age --decrypt --output "${HOME}/.keys/{{ $filename }}" "{{ .chezmoi.sourceDir }}/private_dot_keys/{{ $filename }}.age"
     chmod 600 "${HOME}/.keys/{{ $filename }}"
 fi
