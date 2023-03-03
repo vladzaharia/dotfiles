@@ -11,5 +11,6 @@ README.md
 {{- if .flags.pokemon }}
 .gnupg/**
 .ssh/id*
+!.ssh/id_pkmn*
 **/*pkmn.*
 {{ end }}
