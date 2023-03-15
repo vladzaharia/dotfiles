@@ -1,6 +1,6 @@
 {{ if not .flags.ephemeral -}}
 #!/bin/sh
-YELLOW='\033[1,33m'
+YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 LCYAN='\033[1;36m'
 RESET='\033[0m'
@@ -22,9 +22,11 @@ if [ "$(command -v age)" ]; then
 
             age --decrypt --output "${HOME}/.keys/{{ $filename }}" "{{ .chezmoi.sourceDir }}/private_dot_keys/{{ $filename }}.age"
             chmod 600 "${HOME}/.keys/{{ $filename }}"
+        else
+            echo "${YELLOW}###${RESET} {{ $filename }} already exists, skipping"
         fi
     else
-        echo "${YELLOW}###${RESET} Could not find key {{ $filename }}"
+        echo "${YELLOW}###${RESET} Could not find key {{ $filename }}.age, skipping"
     fi
 fi
 {{ end }}
