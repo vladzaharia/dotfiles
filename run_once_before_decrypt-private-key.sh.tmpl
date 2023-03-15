@@ -1,5 +1,6 @@
 {{ if not .flags.ephemeral -}}
 #!/bin/sh
+YELLOW='\033[1,33m'
 CYAN='\033[0;36m'
 LCYAN='\033[1;36m'
 RESET='\033[0m'
@@ -13,14 +14,17 @@ RESET='\033[0m'
 echo "${CYAN}###${RESET} Decrypting keys"
 
 if [ "$(command -v age)" ]; then
-mkdir -p ${HOME}/.keys
+    mkdir -p ${HOME}/.keys
 
-if [ ! -f "${HOME}/.keys/{{ $filename }}" ]; then
-    echo "${LCYAN}###${RESET} Decrypting {{ $filename }}"
+    if [ -f "{{ .chezmoi.sourceDir }}/private_dot_keys/{{ $filename }}.age" ]; then
+        if [ ! -f "${HOME}/.keys/{{ $filename }}" ]; then
+            echo "${LCYAN}###${RESET} Decrypting {{ $filename }}"
 
-    age --decrypt --output "${HOME}/.keys/{{ $filename }}" "{{ .chezmoi.sourceDir }}/private_dot_keys/{{ $filename }}.age"
-    chmod 600 "${HOME}/.keys/{{ $filename }}"
-fi
-
+            age --decrypt --output "${HOME}/.keys/{{ $filename }}" "{{ .chezmoi.sourceDir }}/private_dot_keys/{{ $filename }}.age"
+            chmod 600 "${HOME}/.keys/{{ $filename }}"
+        fi
+    else
+        echo "${YELLOW}###${RESET} Could not find key {{ $filename }}"
+    fi
 fi
 {{ end }}
