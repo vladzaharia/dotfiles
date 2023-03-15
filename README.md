@@ -37,7 +37,6 @@ Running `bootstrap.sh` without the flag will also download and install chezmoi, 
 | [azure-cli](https://docs.microsoft.com/en-us/cli/azure/) | ✅ | | | |
 | [gitleaks](https://github.com/zricethezav/gitleaks)| ✅ | | | |
 | [nvm](https://github.com/nvm-sh/nvm)| ✅ | | | |
-| [step](https://smallstep.com/docs/step-cli)  | ✅ | | | |
 
 ## Secret Files
 
