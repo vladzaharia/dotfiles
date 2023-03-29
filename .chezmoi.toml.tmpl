@@ -56,7 +56,7 @@ encryption = "age"
     chezmoi.distro.like = {{ $distroLike | quote }}
 
     flags.applesilicon = {{ and (eq $distro "darwin") (eq .chezmoi.arch "arm64") }}
-    flags.ephemeral = {{ eq $chassisType "ephemeral" }}
+    flags.ephemeral = {{ or (eq $chassisType "ephemeral") (eq $chassisType "kasm") }}
     flags.pokemon = {{ $pokemon }}
 
     personal.name = "Vlad Zaharia"
