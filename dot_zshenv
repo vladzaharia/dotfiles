@@ -1,7 +1,13 @@
 function vssh() {
-    vault ssh -mode=ca -role=user $USER@$1
-}
+    mode=ca
+    role=user
+    username=$USER
+    host=$1
 
-function vssh-root() {
-    vault ssh -mode=ca -role=root root@$1
+    if [[ $1 == -r* ]]; then
+        role=root
+        username=root
+        host=$2
+    fi
+    vault ssh -mode=$mode -role=$role $username@$host
 }
