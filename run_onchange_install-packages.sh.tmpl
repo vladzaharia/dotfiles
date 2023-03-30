@@ -32,7 +32,7 @@ echo "${LCYAN}###${RESET} Apt install (common)"
 sudo apt-get update
 
 # Install direnv + infisical
-sudo apt-get install -y direnv infisical
+sudo apt-get install -y direnv infisical jq
 
 {{   if (not (eq .chezmoi.chassis "ephemeral")) -}}
 
@@ -73,7 +73,7 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gitleaks gnupg infisical/get-cli/infisical kubectl nvm starship hashicorp/tap/vault
+    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gitleaks gnupg infisical/get-cli/infisical jq kubectl nvm starship hashicorp/tap/vault
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
