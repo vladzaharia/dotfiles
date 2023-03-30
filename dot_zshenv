@@ -1,0 +1,7 @@
+function vssh() {
+    vault ssh -mode=ca -role=user $USER@$1
+}
+
+function vssh-root() {
+    vault ssh -mode=ca -role=root root@$1
+}
