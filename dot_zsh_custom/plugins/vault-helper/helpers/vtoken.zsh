@@ -11,8 +11,8 @@ function vtoken() {
     fi
 
     if [ $# -eq 1 ]; then
-	vault token lookup $1
+	    vault token lookup $1
     elif [ $# -eq 2 ]; then
-	vault token capabilities $1 $2
+	    vault token capabilities $1 $2
     fi
 }
