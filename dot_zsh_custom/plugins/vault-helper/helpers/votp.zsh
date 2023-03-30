@@ -1,5 +1,4 @@
 # Generate OTP code
-# TODO: add list
 function votp() {
     if [ "$(command -v vault)" ]; then; else
         echo "${_COLOR_RED}[!] vault must be installed to use votp!${_RESET}"
@@ -11,5 +10,11 @@ function votp() {
         return 1
     fi
 
-    vault read -field=code totp/code/$1
+    if [[ $1 == -l* ]]; then
+        echo "${_COLOR_YELLOW}[i] Listing tokens${_RESET}"
+            
+        vault list totp/keys
+    else
+        vault read -field=code totp/code/$1
+    fi
 }

@@ -16,9 +16,9 @@ function vssh() {
     host=$1
 
     if [[ $1 == -r* ]]; then
-	echo "${_COLOR_YELLOW}[i] Connecting as root${_RESET}"
-        
-	role=root
+        echo "${_COLOR_YELLOW}[i] Connecting as root${_RESET}"
+            
+        role=root
         username=root
         host=$2
     fi
