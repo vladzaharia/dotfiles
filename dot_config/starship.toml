@@ -86,7 +86,7 @@ format = '\[[$symbol($version)]($style)\]'
 
 [kubernetes]
 format = '\[[$symbol$context( \($namespace\))]($style)\]'
-disabled = false
+disabled = true
 
 [localip]
 ssh_only = true
