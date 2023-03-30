@@ -69,13 +69,22 @@ if [ "$(command -v infisical)" ]; then
 fi
 
 # 1Password zsh hooks
-if [ "$(command -v op)" ]; then
-    # Set environment variable for chezmoi
-    export OP_ENABLED=true
+#if [ "$(command -v op)" ]; then
+#    # Set environment variable for chezmoi
+#    export OP_ENABLED=true
 
-    # Add zsh hooks
-    eval "$(op completion zsh)"
-    compdef _op op
+#    # Add zsh hooks
+#    eval "$(op completion zsh)"
+#    compdef _op op
+#fi
+
+# Vault hooks
+if [ "$(command -v vault)" ]; then
+    export VAULT_ADDR="https://vault.zhr.one"
+    
+    # Autocomplete
+    autoload -U +X bashcompinit && bashcompinit
+    complete -o nospace -C /opt/homebrew/bin/vault vault
 fi
 
 {{- if (and (eq .chezmoi.distro.name "darwin") (eq .chezmoi.arch "arm64")) }}

@@ -69,9 +69,11 @@ if [ "$(command -v brew)" ]; then
     fi
 
     echo "${CYAN}###${RESET} Homebrew install"
+
+    brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gitleaks gnupg infisical/get-cli/infisical kubectl nvm starship
+    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gitleaks gnupg infisical/get-cli/infisical kubectl nvm starship hashicorp/tap/vault
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
