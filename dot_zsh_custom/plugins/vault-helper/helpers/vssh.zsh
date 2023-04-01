@@ -11,7 +11,7 @@ function vssh() {
             echo ""
         fi
 
-        echo "${_COLOR_CYAN}[i]${_cRESET} vssh [-r] <hostname>"
+        echo "${_COLOR_CYAN}[i]${_cRESET} vssh [-r] [username@]<hostname>"
         echo "${_COLOR_CYAN}[i]${_RESET} hostname: Computer to connect to"
         echo "${_COLOR_CYAN}[i]${_RESET}       -r: Connect as root"
 	    return 1
@@ -25,15 +25,21 @@ function vssh() {
     _vssh_find_key
 
     echo "${_COLOR_CYAN}[i]${_RESET} Using public key $HOME/.ssh/$sshKey.pub"
-
-    if [[ $1 == -r* ]]; then
+    if [[ $1 == -r* ]] || [[ $3 == -r* ]]; then
         echo "${_COLOR_YELLOW}[!]${_RESET} -r passed in, connecting as root"
             
         role=root
         username=root
         host=$2
     fi
-    vault ssh -mode=$mode -role=$role -public-key-path="$HOME/.ssh/$sshKey.pub" -private-key-path="$HOME/.ssh/$sshKey" $username@$host
+
+    if [[ $host == *@* ]]; then
+        connString=$host
+    else
+        connString=$username@$host
+    fi
+
+    vault ssh -mode=$mode -role=$role -public-key-path="$HOME/.ssh/$sshKey.pub" -private-key-path="$HOME/.ssh/$sshKey" $connString
 }
 
 function _vssh_find_key() {
