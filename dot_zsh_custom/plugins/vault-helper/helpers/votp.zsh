@@ -1,10 +1,12 @@
 # Generate OTP code
 function votp() {
-    if [ "$(command -v vault)" ]; then; else
+    # Check that vault exists
+    if [ $(command -v vault) ]; then; else
         echo "${_COLOR_RED}[!]${_RESET} vault must be installed to use votp!"
         return 1
     fi
 
+    # Help text if no OTP key is entered or -h is passed in
     if [ $# -eq 0 ] || [[ $1 == -h* ]]; then
         if [ $# -eq 0 ]; then
             echo "${_COLOR_RED}[!]${_RESET} Must provide TOTP key!"
@@ -19,9 +21,11 @@ function votp() {
 
     if [[ $1 == -l* ]]; then
         echo "${_COLOR_YELLOW}[!]${_RESET} -l passed in, listing keys"
-            
+        
+        # List all possible OTP keys
         vault list totp/keys
     else
+        # Get OTP code for passed in key
         vault read -field=code totp/code/$1
     fi
 }
