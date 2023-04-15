@@ -1,10 +1,12 @@
 # Inject environment variables for a project automatically
 function vnv() {
-    if [ "$(command -v vault)" ]; then; else
+    # Check that vault exists
+    if [ $(command -v vault) ]; then; else
         echo "${_COLOR_RED}[!]${_RESET} vault must be installed to use vnv!"
         return 1
     fi
 
+    # Help text if -h is passed in
     if [[ $1 == -h* ]]; then
         echo "${_COLOR_CYAN}[i]${_RESET} vnv [-c] <project>"
         echo "${_COLOR_CYAN}[i]${_RESET} project: Project to get dotenv variables for"
@@ -12,31 +14,35 @@ function vnv() {
         return 1
     fi
 
-    project=$1
+    # Determine project to use, defaults to current working directory
+    local vaultProject=$1
     if [ $# -eq 0 ]; then
-        project=${PWD##*/}
-        echo "${_COLOR_YELLOW}[!]${_RESET} No project was specified, using current directory '$project'"
+        vaultProject=${PWD##*/}
+        echo "${_COLOR_YELLOW}[!]${_RESET} No project was specified, using current directory '$vaultProject'"
     fi
 
+    # Clean up set environment variables if -c is passed in
     if [[ $1 == -c* ]]; then
-        project=$2
-        echo "${_COLOR_YELLOW}[!]${_RESET} -c provided, cleaning environment variables for '$project'"
+        vaultProject=$2
+        echo "${_COLOR_YELLOW}[!]${_RESET} -c provided, cleaning environment variables for '$vaultProject'"
     else
-        echo "${_COLOR_CYAN}[i]${_RESET} Injecting variables from dotenv/$project/dev"
+        echo "${_COLOR_CYAN}[i]${_RESET} Injecting variables from dotenv/$vaultProject/dev"
     fi
 
-    local json_out=$(vault read -format=raw dotenv/$project/dev)
-    local parsed=($(echo $json_out | jq -r '.data | to_entries | map(.key+"="+.value) | @sh'))
+    # Get JSON at dotenv/<project>/dev and parse out contents as key=value array
+    local json=$(vault read -format=raw dotenv/$vaultProject/dev)
+    local envVars=($(echo $json | jq -r '.data | to_entries | map(.key+"="+.value) | @sh'))
 
-    for envvar in $parsed; do
-        exported=$(echo $envvar | tr -d "'")
-        key=$(echo $exported | cut -d "=" -f 1)
+    for envVar in $envVars; do
+        local exportStr=$(echo $envVar | tr -d "'")
 
         if [[ $1 == -c* ]]; then
-            unset $key
+            # Clean up by unsetting key
+            unset $(echo $exported | cut -d "=" -f 1)
             echo "${_COLOR_GREEN}[✓]${_RESET} Finished cleaning up $key"
         else
-            export $exported
+            # Export environment variable
+            export $exportStr
             echo "${_COLOR_GREEN}[✓]${_RESET} Finished injecting $key"
         fi
     done

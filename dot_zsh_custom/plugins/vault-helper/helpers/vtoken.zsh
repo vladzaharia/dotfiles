@@ -1,10 +1,12 @@
 # Lookup token information and capabilities
 function vtoken() {
-    if [ "$(command -v vault)" ]; then; else
+    # Check that vault exists
+    if [ $(command -v vault) ]; then; else
         echo "${_COLOR_RED}[!]${_RESET} vault must be installed to use vtoken!"
         return 1
     fi
 
+    # Help text if no token is entered or -h is passed in
     if [ $# -eq 0 ] || [[ $1 == -h* ]]; then
         if [ $# -eq 0 ]; then
             echo "${_COLOR_RED}[!]${_RESET} Must provide token!"
@@ -18,8 +20,10 @@ function vtoken() {
     fi
 
     if [ $# -eq 1 ]; then
+        # Token lookup
 	    vault token lookup $1
     elif [ $# -eq 2 ]; then
+        # Token capability check against path
 	    vault token capabilities $1 $2
     fi
 }

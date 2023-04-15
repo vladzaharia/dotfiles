@@ -82,7 +82,7 @@ fi
 #fi
 
 # Vault hooks
-if [ "$(command -v vault)" ]; then
+if [ $(command -v vault) ]; then
     export VAULT_ADDR="https://vault.zhr.one"
     
     # Autocomplete
