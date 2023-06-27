@@ -11,22 +11,6 @@ if [ ! "$(command -v starship)" ]; then
     curl -sS https://starship.rs/install.sh | sh -s -- -y
 fi
 
-# Add Infisical repository
-if [ ! -f /etc/apt/sources.list.d/infisical-infisical-cli.list ]; then
-    echo "${CYAN}###${RESET} Adding Infisical repository"
-
-    curl -1sLf \
-    'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' \
-    | sudo -E bash
-fi
-
-# Install Moon
-if [ ! "$(command -v moon)" ]; then
-    echo "${CYAN}###${RESET} Installing Moon"
-    curl -fsSL https://moonrepo.dev/install.sh | bash
-    export PATH="{{ .chezmoi.homeDir }}/.moon/tools/moon/latest:$PATH"
-fi
-
 echo "${LCYAN}###${RESET} Apt install (common)"
 # Update repos
 sudo apt-get update
@@ -73,7 +57,7 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gitleaks gnupg jq kubectl nvm starship hashicorp/tap/vault 
+    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gnupg jq kubectl nvm starship hashicorp/tap/vault 
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"

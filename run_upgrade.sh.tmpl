@@ -2,11 +2,11 @@
 TEAL='\033[0;36m'
 RESET='\033[0m'
 
-{{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
+{{ if (and (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) (not (eq .chezmoi.chassis "ephemeral")) ) -}}
 echo "${TEAL}###${RESET} Apt upgrade"
 
 sudo apt update
-sudo apt upgrade
+sudo apt upgrade -y
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 echo "${TEAL}###${RESET} Homebrew upgrade"
 
