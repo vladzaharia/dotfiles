@@ -1,0 +1,42 @@
+#!/bin/sh
+CYAN='\033[0;36m'
+LCYAN='\033[1;36m'
+RESET='\033[0m'
+
+{{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
+
+# Remove Infisical repository
+if [ -f /etc/apt/sources.list.d/infisical-infisical-cli.list ]; then
+    echo "${CYAN}###${RESET} Removing Infisical repository"
+
+    sudo rm -rf /etc/apt/sources.list.d/infisical-infisical-cli.list
+fi
+
+# Remove Infisical
+if [ "$(command -v infisical)" ]; then
+    sudo apt-get remove infisical -y
+fi
+
+# Remove Moon
+if [ "$(command -v moon)" ]; then
+    echo "${CYAN}###${RESET} Removing Moon"
+    rm -rf "{{ .chezmoi.homeDir }}/.moon"
+fi
+
+{{ else if eq .chezmoi.distro.name "darwin" -}}
+
+if [ "$(command -v brew)" ]; then
+    # Remove Infisical
+    if [ "$(command -v infisical)" ]; then
+        brew remove infisical
+    fi
+
+    # Remove Moon
+    if [ "$(command -v moon)" ]; then
+        echo "${CYAN}###${RESET} Removing Moon"
+        rm -rf "{{ .chezmoi.homeDir }}/.moon"
+    fi
+fi
+
+{{ end -}}
+

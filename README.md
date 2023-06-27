@@ -29,13 +29,11 @@ Running `bootstrap.sh` without the flag will also download and install chezmoi, 
 |----------|-------|--------|-----|---------------------|
 | [oh-my-zsh](https://ohmyz.sh/)| ✅ | ✅ | ✅ | ✅ |
 | [Starship](https://starship.rs/) | ✅ | ✅ | ✅ | ✅ |
-| [Infisical](https://infisical.com//) | ✅ | ✅ | ✅ | ✅ |
 | [direnv](https://direnv.net/) | ✅ | ✅ | ✅ | ✅ |
 | [1password-cli](https://1password.com/downloads/command-line/) | ✅ | ✅ | ✅ | |
 | [docker](https://www.docker.com/)| ✅ | ✅ | ✅ | |
 | [kubectl](https://kubernetes.io/docs/tasks/tools/) | ✅ | ✅ | ✅ | |
 | [azure-cli](https://docs.microsoft.com/en-us/cli/azure/) | ✅ | | | |
-| [gitleaks](https://github.com/zricethezav/gitleaks)| ✅ | | | |
 | [nvm](https://github.com/nvm-sh/nvm)| ✅ | | | |
 
 ## Secret Files
