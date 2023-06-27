@@ -45,13 +45,6 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 
 if [ "$(command -v brew)" ]; then
-    # Install Moon
-    if [ ! "$(command -v moon)" ]; then
-        echo "${CYAN}###${RESET} Installing Moon"
-        curl -fsSL https://moonrepo.dev/install.sh | bash
-        export PATH="{{ .chezmoi.homeDir }}/.moon/tools/moon/latest:$PATH"
-    fi
-
     echo "${CYAN}###${RESET} Homebrew install"
 
     brew tap hashicorp/tap
