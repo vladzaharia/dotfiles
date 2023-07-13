@@ -90,6 +90,9 @@ if [ $(command -v vault) ]; then
     complete -o nospace -C /opt/homebrew/bin/vault vault
 fi
 
+# Assassin environment variables
+. ~/.config/assassin/.env
+
 {{- if (and (eq .chezmoi.distro.name "darwin") (eq .chezmoi.arch "arm64")) }}
 # Docker config for M1 via Colima
 DOCKER_HOST=unix:///Users/v.zaharia/.colima/default/docker.sock

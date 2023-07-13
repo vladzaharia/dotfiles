@@ -5,6 +5,11 @@ RESET='\033[0m'
 
 {{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
 
+# Install Hurl
+curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/4.0.0/hurl_4.0.0_amd64.deb
+sudo apt update && sudo apt install ./hurl_4.0.0_amd64.deb
+rm -rf ./hurl_4.0.0_amd64.deb
+
 # Install Starship
 if [ ! "$(command -v starship)" ]; then
     echo "${CYAN}###${RESET} Installing Starship prompt"
@@ -50,7 +55,7 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gnupg jq kubectl nvm starship hashicorp/tap/vault 
+    brew install 1password/tap/1password-cli age azure-cli direnv docker docker-compose gnupg hurl jq kubectl nvm starship hashicorp/tap/vault 
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
