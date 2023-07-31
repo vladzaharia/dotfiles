@@ -6,15 +6,13 @@
 {{- $distro := (.chezmoi.os) -}}
 {{- $distroLike := (.chezmoi.os) -}}
 
-{{- if (eq $distro "linux") -}}
+{{- if (and (eq $distro "linux") (not $coder)) -}}
 {{- $distro = (.chezmoi.osRelease.id) -}}
-{{-   if not $coder -}}
 {{- $distroLike = (.chezmoi.osRelease.idLike) -}}
-{{-   end -}}
 {{- end -}}
 
 {{- $chassisType := "desktop" -}}
-{{- if (or $codespaces $gitpod) -}}
+{{- if (or $codespaces $gitpod $coder) -}}
 {{-   $chassisType = "ephemeral" -}}
 {{- else if stat "/home/kasm-default-profile" -}}
 {{-   $chassisType = "kasm" -}}
