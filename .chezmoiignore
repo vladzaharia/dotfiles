@@ -21,3 +21,8 @@ README.md
 .gnupg/**
 .ssh/id*
 {{- end }}
+
+{{- if eq .chezmoi.chassis "beepy" }}
+*.age
+{{- end }}
+
