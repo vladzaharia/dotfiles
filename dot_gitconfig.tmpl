@@ -26,11 +26,13 @@
 [init]
 	defaultBranch = main
 
+{{- if ne .chezmoi.chassis "beepy" }}
 [gpg]
 	format = ssh
 
 [commit]
 	gpgsign = true
+{{- end }}
 
 {{- if .flags.pokemon }}
 [include]
