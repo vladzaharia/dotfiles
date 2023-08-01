@@ -23,6 +23,6 @@ README.md
 {{- end }}
 
 {{- if eq .chezmoi.chassis "beepy" }}
-*.age
+**/*.age
 {{- end }}
 
