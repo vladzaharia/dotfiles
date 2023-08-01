@@ -16,9 +16,14 @@ Host truenas
     user vlad
     port 22
 
+# TrueNAS via Tailscale
+Host truenas-ts
+    hostname 100.64.161.72
+    port 22
+
 # Docker via Tailscale
 Host docker-ts
-    hostname docker
+    hostname 100.77.31.112
     port 22
 
 # Docker
@@ -26,36 +31,14 @@ Host docker
     hostname 10.10.1.20
     port 22
 
-# XUI via Tailscale
-Host xui-ts
-    hostname xui
+# Beepy via Tailscale
+Host beepy-ts
+    hostname 100.64.204.130
     port 22
 
-# XUI
-Host xui
+# Beepy
+Host beepy
     hostname 10.15.10.23
-    user vlad
-    port 22
-
-# Core Services via Tailscale
-Host core-ts
-    hostname core
-    port 22
-
-# Core Services
-Host core
-    hostname 10.15.10.251
-    user vlad
-    port 22
-
-# HOOBS via Tailscale
-Host hoobs-ts
-    hostname hoobs
-    port 22
-
-# HOOBS
-Host hoobs
-    hostname 10.15.2.180
     user vlad
     port 22
 {{ end -}}

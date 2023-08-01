@@ -17,6 +17,8 @@
 {{-   $chassisType = "kasm" -}}
 {{- else if $wsl }}
 {{-   $chassisType = "wsl" -}}
+{{- else if eq .chezmoi.hostname "beepy" -}}
+{{-  $chassisType = "beepy" -}}
 {{- else if eq .chezmoi.os "darwin" -}}
 {{-   if contains "MacBook" (output "sysctl" "-n" "hw.model") -}}
 {{-     $chassisType = "laptop" -}}
@@ -38,7 +40,7 @@
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
-{{ if ne $chassisType "ephemeral" -}}
+{{ if and (ne $chassisType "ephemeral") (ne $chassisType "beepy") -}}
 encryption = "age"
 [age]
 {{-   if $pokemon }}
