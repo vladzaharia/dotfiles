@@ -66,24 +66,9 @@ if [ "$(command -v direnv)" ]; then
     eval "$(direnv hook zsh)"
 fi
 
-# Infisical zsh hooks
-if [ "$(command -v infisical)" ]; then
-    export INFISICAL_API_URL="https://env.zhr.one/api"
-fi
-
-# 1Password zsh hooks
-#if [ "$(command -v op)" ]; then
-#    # Set environment variable for chezmoi
-#    export OP_ENABLED=true
-
-#    # Add zsh hooks
-#    eval "$(op completion zsh)"
-#    compdef _op op
-#fi
-
 # Vault hooks
 if [ $(command -v vault) ]; then
-    export VAULT_ADDR="https://vault.zhr.one"
+    export VAULT_ADDR="https://vault.polaris.rest"
     
     # Autocomplete
     autoload -U +X bashcompinit && bashcompinit
@@ -98,6 +83,11 @@ fi
 if [ -f ~/.beepy.zshrc ]; then
     # Beepy configuration
     . ~/.beepy.zshrc
+fi
+
+if [ $(command -v github-copilot-cli) ]; then
+    # Copilot configuration
+    eval "$(github-copilot-cli alias -- "$0")"
 fi
 
 {{- if (and (eq .chezmoi.distro.name "darwin") (eq .chezmoi.arch "arm64")) }}
