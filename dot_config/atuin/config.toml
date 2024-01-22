@@ -54,11 +54,11 @@ filter_mode = "host"
 
 ## which style to use
 ## possible values: auto, full, compact
-# style = "auto"
+style = "compact"
 
 ## the maximum number of lines the interface should take up
 ## set it to 0 to always go full screen
-inline_height = 15
+inline_height = 10
 
 ## Invert the UI - put the search bar at the top , Default to `false`
 # invert = false
@@ -125,17 +125,20 @@ show_help = false
 # This applies for new installs. Old installs will keep the old behaviour unless configured otherwise.
 enter_accept = true
 
-#[stats]
+[stats]
 # Set commands where we should consider the subcommand for statistics. Eg, kubectl get vs just kubectl
-#common_subcommands = [
-#  "cargo",
-#  "go",
-#  "git",
-#  "npm",
-#  "yarn",
-#  "pnpm",
-#  "kubectl",
-#]
+common_subcommands = [
+ "cargo",
+ "go",
+ "git",
+ "npm",
+ "yarn",
+ "pnpm",
+ "kubectl",
+ "docker",
+ "docker compose",
+ "docker-compose",
+]
 # 
 # Set commands that should be totally stripped and ignored from stats
 #common_prefix = ["sudo"]
