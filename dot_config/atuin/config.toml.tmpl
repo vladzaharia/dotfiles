@@ -36,7 +36,11 @@ sync_frequency = "1m"
 
 ## which filter mode to use
 ## possible values: global, host, session, directory
+{{-   if .flags.pokemon }}
+filter_mode = "host"
+{{-   else }}
 filter_mode = "global"
+{{-   end }}
 
 ## With workspace filtering enabled, Atuin will filter for commands executed
 ## in any directory within a git repository tree (default: false)
