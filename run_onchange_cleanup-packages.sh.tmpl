@@ -8,13 +8,17 @@ RESET='\033[0m'
 # Remove Infisical repository
 if [ -f /etc/apt/sources.list.d/infisical-infisical-cli.list ]; then
     echo "${CYAN}###${RESET} Removing Infisical repository"
-
     sudo rm -rf /etc/apt/sources.list.d/infisical-infisical-cli.list
 fi
 
 # Remove Infisical
 if [ "$(command -v infisical)" ]; then
     sudo apt-get remove infisical -y
+fi
+
+# Remove Exa
+if [ "$(command -v exa)" ]; then
+    sudo apt-get remove exa -y
 fi
 
 # Remove Moon
@@ -40,6 +44,11 @@ if [ "$(command -v brew)" ]; then
      # Remove Azure CLI
     if [ "$(command -v az)" ]; then
         brew remove azure-cli
+    fi
+
+    # Remove Exa
+    if [ "$(command -v exa)" ]; then
+        brew remove exa
     fi
 fi
 

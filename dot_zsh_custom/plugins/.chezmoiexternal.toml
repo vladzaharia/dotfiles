@@ -46,9 +46,9 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
-["zsh-exa"]
+["zsh-eza"]
     type = "archive"
-    url = "https://github.com/zplugin/zsh-exa/archive/master.tar.gz"
+    url = "https://github.com/z-shell/zsh-eza/archive/master.tar.gz"
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
