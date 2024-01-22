@@ -23,10 +23,11 @@ export ZSH_CUSTOM="$HOME/.zsh_custom"
 # oh-my-zsh theme to use
 ZSH_THEME="robbyrussell"
 
+# Autoload .nvmrc files
 ZSH_NVM_AUTOLOAD=true
 
 # oh-my-zsh plugins to load
-plugins=(brew colored-man-pages colorize docker-compose docker dotnet dotenv git iterm2 macos node npm nvm pip vault-helper yarn zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(brew colors colored-man-pages colorize docker-compose docker dotnet dotenv git iterm2 macos node npm nvm pip vault-helper yarn zsh-256color zsh-alias-finder zsh-autosuggestions zsh-exa zsh-syntax-highlighting)
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -43,6 +44,9 @@ ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
+
+# Add extra completions
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
 

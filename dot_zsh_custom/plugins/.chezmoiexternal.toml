@@ -10,3 +10,45 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
+["zsh-256color"]
+    type = "archive"
+    url = "https://github.com/chrissicool/zsh-256color/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zsh-alias-finder"]
+    type = "archive"
+    url = "https://github.com/akash329d/zsh-alias-finder/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zsh-auto-notify"]
+    type = "archive"
+    url = "https://github.com/MichaelAquilina/zsh-auto-notify/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["colors"]
+    type = "archive"
+    url = "https://github.com/zpm-zsh/colors/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["colorize"]
+    type = "archive"
+    url = "https://github.com/zpm-zsh/colorize/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zsh-completions"]
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-completions/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zsh-exa"]
+    type = "archive"
+    url = "https://github.com/zplugin/zsh-exa/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
