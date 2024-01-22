@@ -20,4 +20,10 @@ README.md
 {{- if .flags.ephemeral }}
 .gnupg/**
 .ssh/id*
+**/*.age
 {{- end }}
+
+{{- if eq .chezmoi.chassis "beepy" }}
+**/*.age
+{{- end }}
+
