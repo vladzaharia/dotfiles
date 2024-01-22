@@ -19,15 +19,13 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # Path to custom plugins
 export ZSH_CUSTOM="$HOME/.zsh_custom"
+export ZSH_PLUGINS="$ZSH_CUSTOM/plugins"
 
 # oh-my-zsh theme to use
 ZSH_THEME="robbyrussell"
 
 # Autoload .nvmrc files
 ZSH_NVM_AUTOLOAD=true
-
-# oh-my-zsh plugins to load
-plugins=(brew colors colored-man-pages colorize docker-compose docker dotnet dotenv git iterm2 macos node npm nvm pip vault-helper yarn zsh-256color zsh-alias-finder zsh-autosuggestions zsh-eza zsh-syntax-highlighting)
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -49,6 +47,86 @@ COMPLETION_WAITING_DOTS="true"
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
+
+######
+### ZI
+######
+typeset -A ZI
+ZI[BIN_DIR]="${HOME}/.zi"
+source "${ZI[BIN_DIR]}/zi.zsh"
+
+autoload -Uz _zi
+(( ${+_comps} )) && _comps[zi]=_zi
+
+# Load autocompletions
+zi wait pack atload=+"zicompinit_fast; zicdreplay" for system-completions
+zi wait pack atload=+"zicompinit_fast; zicdreplay" for brew-completions
+
+######
+### ZSH plugins (via ZI)
+######
+# Homebrew
+zi ice wait lucid has'brew'
+zi snippet OMZP::brew
+
+# Docker
+zi wait lucid has'docker' for \
+  OMZP::docker \
+  OMZP::docker-compose
+
+# Git
+zi ice wait lucid has'git'
+zi snippet OMZP::git
+
+# Node
+zi ice wait lucid has'node' for \
+  OMZP::node \
+  has'npm' OMZP::npm \
+  has'nvm' OMZP::nvm \
+  has'yarn' OMZP::yarn
+
+# Pip
+zi ice wait lucid has'pip'
+zi snippet OMZP::pip
+
+# Mac-specific
+zi wait lucid for \
+  OMZP::dotenv \
+  OMZP::iterm2 #\
+#  OMZP::macos
+
+# Colorization
+zi wait lucid for \
+  $ZSH_PLUGINS/zsh-256color \
+  $ZSH_PLUGINS/colors \
+  $ZSH_PLUGINS/colorize \
+  OMZP::colored-man-pages
+
+# Fancy Diff
+zi light $ZSH_PLUGINS/z-a-bin-gem-node
+zi ice as'null' sbin'bin/*'
+zi light $ZSH_PLUGINS/zsh-diff-so-fancy
+
+# Syntax highlighting / Autocompletion
+zi wait lucid for \
+  atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    $ZSH_PLUGINS/F-Sy-H \
+  blockf \
+    $ZSH_PLUGINS/zsh-completions \
+  atload"!_zsh_autosuggest_start" \
+    $ZSH_PLUGINS/zsh-autosuggestions
+
+# ZBrowse
+zi load $ZSH_PLUGINS/zui
+zi load $ZSH_PLUGINS/zbrowse
+
+# Eza
+zi ice wait lucid has'eza'
+zi light $ZSH_PLUGINS/zsh-eza
+
+# Vault
+zi ice wait lucid has'vault'
+zi light $ZSH_PLUGINS/vault-helper
 
 ######
 ### User Configuration
