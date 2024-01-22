@@ -90,10 +90,10 @@ if [ $(command -v atuin) ]; then
     #bindkey '^[^[[A' _atuin_up_search_widget
 fi
 
-# Exa
-if [ $(command -v exa) ]; then
-    export EXA_ICON_SPACING=2
-    #export LS_COLORS="*.ts=34"
+# Eza
+if [ $(command -v eza) ]; then
+    export EZA_ICON_SPACING=2
+    export EZA_COLORS="di=38;5;039;1:ex=38;5;082;1:vi=38;5;105:.*=38;5;243:*.apk=38;5;154:*.jar=38;5;196:*.ts=38;5;033"
 fi
 
 if [ -f ~/.config/assassin/.env ]; then
@@ -104,11 +104,6 @@ fi
 if [ -f ~/.beepy.zshrc ]; then
     # Beepy configuration
     . ~/.beepy.zshrc
-fi
-
-if [ $(command -v github-copilot-cli) ]; then
-    # Copilot configuration
-    eval "$(github-copilot-cli alias -- "$0")"
 fi
 
 {{- if (and (eq .chezmoi.distro.name "darwin") (eq .chezmoi.arch "arm64")) }}
