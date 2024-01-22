@@ -90,6 +90,12 @@ if [ $(command -v atuin) ]; then
     #bindkey '^[^[[A' _atuin_up_search_widget
 fi
 
+# Exa
+if [ $(command -v exa) ]; then
+    export EXA_ICON_SPACING=2
+    #export LS_COLORS="*.ts=34"
+fi
+
 if [ -f ~/.config/assassin/.env ]; then
     # Assassin environment variables
     . ~/.config/assassin/.env
