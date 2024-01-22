@@ -52,3 +52,33 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
+["z-a-bin-gem-node"]
+    type = "archive"
+    url = "https://github.com/z-shell/z-a-bin-gem-node/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zsh-diff-so-fancy"]
+    type = "archive"
+    url = "https://github.com/z-shell/zsh-diff-so-fancy/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["F-Sy-H"]
+    type = "archive"
+    url = "https://github.com/z-shell/F-Sy-H/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zui"]
+    type = "archive"
+    url = "https://github.com/z-shell/zui/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zbrowse"]
+    type = "archive"
+    url = "https://github.com/z-shell/zbrowse/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"

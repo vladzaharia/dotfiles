@@ -8,3 +8,7 @@
     type = "file"
     url = "https://raw.githubusercontent.com/dotphiles/dotphiles/master/wget/wgetrc"
     refreshPeriod = "168h"
+[".zi"]
+    type = "git-repo"
+    url = "https://github.com/z-shell/zi.git"
+    refreshPeriod = "168h"
