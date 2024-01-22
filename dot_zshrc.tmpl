@@ -75,6 +75,11 @@ if [ $(command -v vault) ]; then
     complete -o nospace -C /opt/homebrew/bin/vault vault
 fi
 
+# Atuin
+if [ $(command -v atuin) ]; then
+    eval "$(atuin init zsh)"
+fi
+
 if [ -f ~/.config/assassin/.env ]; then
     # Assassin environment variables
     . ~/.config/assassin/.env
