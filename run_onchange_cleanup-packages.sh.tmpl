@@ -36,6 +36,11 @@ if [ "$(command -v brew)" ]; then
         echo "${CYAN}###${RESET} Removing Moon"
         rm -rf "{{ .chezmoi.homeDir }}/.moon"
     fi
+
+     # Remove Azure CLI
+    if [ "$(command -v az)" ]; then
+        brew remove azure-cli
+    fi
 fi
 
 {{ end -}}

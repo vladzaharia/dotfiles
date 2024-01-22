@@ -1,20 +1,38 @@
 [core]
 	excludesFile = ~/.gitignore
 	editor = nano
+
 [user]
 	name = {{ .personal.name }}
 	email = {{ .personal.email }}
+{{- if .flags.pokemon }}
+	signingkey = ~/.ssh/id_pkmn
+{{- else }}
+	signingkey = ~/.ssh/id_ed25519
+{{- end }}
+
 [pull]
 	rebase = false
+
 [push]
 	autoSetupRemote = true
+
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
+
 [init]
 	defaultBranch = main
+
+{{- if ne .chezmoi.chassis "beepy" }}
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
+{{- end }}
 
 {{- if .flags.pokemon }}
 [include]

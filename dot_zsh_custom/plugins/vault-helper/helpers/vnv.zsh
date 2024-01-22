@@ -35,10 +35,11 @@ function vnv() {
 
     for envVar in $envVars; do
         local exportStr=$(echo $envVar | tr -d "'")
+        local key=$(echo $exportStr | cut -d "=" -f 1)
 
         if [[ $1 == -c* ]]; then
             # Clean up by unsetting key
-            unset $(echo $exported | cut -d "=" -f 1)
+            unset $key
             echo "${_COLOR_GREEN}[✓]${_RESET} Finished cleaning up $key"
         else
             # Export environment variable
