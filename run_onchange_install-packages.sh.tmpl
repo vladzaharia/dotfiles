@@ -15,8 +15,8 @@ echo "${LCYAN}###${RESET} Apt install (common)"
 # Update repos
 sudo apt-get update
 
-# Install direnv + infisical
-sudo apt-get install -y direnv jq
+# Install direnv, exa and jq
+sudo apt-get install -y direnv exa jq
 
 {{   if and (ne .chezmoi.chassis "ephemeral") (ne .chezmoi.chassis "beepy") -}}
 
@@ -42,7 +42,7 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
 
 # Install Atuin
-bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | sh -s
 {{   end -}}
 
 {{ else if eq .chezmoi.distro.name "darwin" -}}
@@ -53,7 +53,7 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age atuin direnv docker docker-compose gnupg hurl jq kubectl nvm starship hashicorp/tap/vault 
+    brew install 1password/tap/1password-cli age atuin direnv docker docker-compose exa gnupg hurl jq kubectl nvm starship hashicorp/tap/vault 
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
