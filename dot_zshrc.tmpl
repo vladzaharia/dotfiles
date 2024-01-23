@@ -59,8 +59,8 @@ autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
 
 # Load autocompletions
-zi wait pack atload=+"zicompinit_fast; zicdreplay" for $ZSH_PLUGINS/system-completions
-zi wait pack has'brew' atload=+"zicompinit_fast; zicdreplay" for $ZSH_PLUGINS/brew-completions
+zi wait pack for $ZSH_PLUGINS/system-completions
+zi wait pack has'brew' for $ZSH_PLUGINS/brew-completions
 
 ######
 ### ZSH plugins (via ZI)
@@ -90,8 +90,7 @@ zi ice wait lucid has'pip'
 zi snippet OMZP::pip
 
 # Mac-specific
-zi wait lucid for \
-  OMZP::dotenv \
+zi wait lucid if'[[ $OSTYPE = darwin* ]]' for \
   OMZP::iterm2 #\
 #  OMZP::macos
 
@@ -115,6 +114,9 @@ zi wait lucid for \
     $ZSH_PLUGINS/zsh-completions \
   atload"!_zsh_autosuggest_start" \
     $ZSH_PLUGINS/zsh-autosuggestions
+
+# Dotenv
+zi snippet OMZP::dotenv
 
 # ZBrowse
 zi load $ZSH_PLUGINS/zui
