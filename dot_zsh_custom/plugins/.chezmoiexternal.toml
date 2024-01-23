@@ -10,24 +10,13 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
-["zsh-256color"]
+["zsh-completions"]
     type = "archive"
-    url = "https://github.com/chrissicool/zsh-256color/archive/master.tar.gz"
+    url = "https://github.com/zsh-users/zsh-completions/archive/master.tar.gz"
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
-["zsh-alias-finder"]
-    type = "archive"
-    url = "https://github.com/akash329d/zsh-alias-finder/archive/master.tar.gz"
-    exact = true
-    stripComponents = 1
-    refreshPeriod = "168h"
-["zsh-auto-notify"]
-    type = "archive"
-    url = "https://github.com/MichaelAquilina/zsh-auto-notify/archive/master.tar.gz"
-    exact = true
-    stripComponents = 1
-    refreshPeriod = "168h"
+
 ["colors"]
     type = "archive"
     url = "https://github.com/zpm-zsh/colors/archive/master.tar.gz"
@@ -40,12 +29,7 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
-["zsh-completions"]
-    type = "archive"
-    url = "https://github.com/zsh-users/zsh-completions/archive/master.tar.gz"
-    exact = true
-    stripComponents = 1
-    refreshPeriod = "168h"
+
 ["zsh-eza"]
     type = "archive"
     url = "https://github.com/z-shell/zsh-eza/archive/master.tar.gz"
@@ -79,6 +63,37 @@
 ["zbrowse"]
     type = "archive"
     url = "https://github.com/z-shell/zbrowse/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["system-completions"]
+    type = "archive"
+    url = "https://github.com/z-shell/system-completions/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["brew-completions"]
+    type = "archive"
+    url = "https://github.com/z-shell/brew-completions/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+["zsh-256color"]
+    type = "archive"
+    url = "https://github.com/chrissicool/zsh-256color/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zsh-alias-finder"]
+    type = "archive"
+    url = "https://github.com/akash329d/zsh-alias-finder/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+["zsh-auto-notify"]
+    type = "archive"
+    url = "https://github.com/MichaelAquilina/zsh-auto-notify/archive/master.tar.gz"
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
