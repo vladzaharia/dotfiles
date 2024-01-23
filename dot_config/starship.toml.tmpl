@@ -1,7 +1,7 @@
 # Right-aligned prompt
 {{ if not .flags.ephemeral -}}
-format = """$status$cmd_duration$battery $username$hostname$directory$shell$character"""
-right_format = """$all"""
+format = """$status$cmd_duration$battery$username$hostname$directory$shell$character"""
+right_format = '$all'
 {{- end }}
 
 [aws]
@@ -121,7 +121,7 @@ format = '\[[$symbol$branch]($style)\]'
 
 [hostname]
 ssh_symbol = '󰢩 '
-format = '\[[$ssh_symbol$hostname]($style)\]'
+format = '\[[$ssh_symbol$hostname]($style)\] '
 
 [java]
 symbol = ' '
@@ -141,7 +141,7 @@ disabled = true
 [localip]
 ssh_only = true
 format = '\[[󰩟 $localipv4]($style)\]'
-disabled = false
+disabled = true
 
 [lua]
 format = '\[[$symbol($version)]($style)\]'
