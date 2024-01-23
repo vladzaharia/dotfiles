@@ -60,7 +60,7 @@ autoload -Uz _zi
 
 # Load autocompletions
 zi wait pack atload=+"zicompinit_fast; zicdreplay" for system-completions
-zi wait pack atload=+"zicompinit_fast; zicdreplay" for brew-completions
+zi wait pack has'brew' atload=+"zicompinit_fast; zicdreplay" for brew-completions
 
 ######
 ### ZSH plugins (via ZI)
