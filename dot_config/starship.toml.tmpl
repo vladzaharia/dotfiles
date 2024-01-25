@@ -5,7 +5,7 @@ right_format = '$all'
 {{- end }}
 
 [aws]
-symbol = '  '
+symbol = ' '
 format = '\[[$symbol($profile)(\[$duration\])]($style)\]'
 {{- if .flags.pokemon }}
 disabled = false
@@ -95,19 +95,45 @@ format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
 [git_branch]
 symbol = ' '
 format = '\[[$symbol$branch]($style)\]'
+style = 'bold 135'
+
+[git_commit]
+format = '\[[󰜛 $hash$tag]($style)\]'
+commit_hash_length = 8
+tag_symbol = ' / 󰓼 '
+disabled = false
+tag_disabled = false
+only_detached = true
+
+[git_metrics]
+disabled = true
+format = '\[([+$added]($added_style))([-$deleted]($deleted_style))\]'
+
+[git_state]
+format = '\[[$state( \([$progress_current of $progress_total](white))\)]($style)\]'
+style = 'bold 199'
+merge = ' '
+rebase = ' '
+revert = ' '
+cherry_pick = ' '
+bisect = ' '
+am = '󰶌 '
+am_or_rebase = ' '
 
 [git_status]
-format = '\[[$all_status$ahead_behind]($style)\]'
-conflicted = ' '
-ahead = '󰴷 '
-behind = '󰴶 '
-diverged = ' '
-untracked = ' '
-stashed = ' '
-modified = '󰏫 '
-staged = '󰝖 '
-renamed = '󰗧 '
-deleted = ' '
+format = '\[[$ahead_behind$conflicted$staged$modified$renamed$deleted]($style)\] '
+style = 'bold 207'
+conflicted = '[](bold red)'
+up_to_date = '[󰄬](bold green)'
+ahead = '[](bold blue)'
+behind = '[](bold blue)'
+diverged = '[](bold red)'
+untracked = ''
+stashed = ''
+modified = '[ 󰏫 ](bold yellow)'
+staged = '[ 󰝖 ](bold green)'
+renamed = '[󰗧 ](bold yellow)'
+deleted = '[ ](bold yellow)'
 
 [golang]
 symbol = ' '
