@@ -161,6 +161,7 @@ if [ $(command -v vault) ]; then
     complete -o nospace -C /opt/homebrew/bin/vault vault
 fi
 
+{{- if not .flags.pokemon }}
 # Atuin
 if [ $(command -v atuin) ]; then
     #export ATUIN_NOBIND="true"
@@ -169,6 +170,7 @@ if [ $(command -v atuin) ]; then
     #bindkey '^r' _atuin_search_widget
     #bindkey '^[^[[A' _atuin_up_search_widget
 fi
+{{- end }}
 
 # Eza
 if [ $(command -v eza) ]; then
