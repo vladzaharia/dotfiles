@@ -6,7 +6,8 @@ right_format = '$all'
 
 [aws]
 symbol = ' '
-format = '\[[$symbol($profile)(\[$duration\])]($style)\]'
+format = '\[[$symbol($profile)]($style)\]'
+expiration_symbol = '[](bold red)'
 {{- if .flags.pokemon }}
 disabled = false
 {{- else }}
