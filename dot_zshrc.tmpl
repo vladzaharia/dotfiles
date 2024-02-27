@@ -89,10 +89,10 @@ zi ice wait lucid has'node' for \
 zi ice wait lucid has'pip'
 zi snippet OMZP::pip
 
-# Mac-specific
+# iTerm2
+source $ZSH_CUSTOM/scripts/iterm2_shell_integration.zsh
 zi wait lucid if'[[ $OSTYPE = darwin* ]]' for \
-  OMZP::iterm2 #\
-#  OMZP::macos
+  OMZP::iterm2
 
 # Colorization
 zi wait lucid for \
