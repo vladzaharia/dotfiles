@@ -26,7 +26,7 @@
 [init]
 	defaultBranch = main
 
-{{- if and (ne .chezmoi.chassis "beepy") (ne .flags.ephemeral) }}
+{{- if and (ne .chezmoi.chassis "beepy") (ne .chezmoi.chassis "ephemeral") }}
 [gpg]
 	format = ssh
 
