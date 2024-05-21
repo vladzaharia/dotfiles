@@ -76,10 +76,3 @@ fi
 
 {{ end -}}
 
-# Install Copilot CLI
-if [ $(command -v npm) ]; then
-    # Copilot install
-    echo "${LCYAN}###${RESET} Github Copilot CLI Install"
-    npm install -g @githubnext/github-copilot-cli
-fi
-
