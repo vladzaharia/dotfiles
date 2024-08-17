@@ -64,7 +64,7 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age atuin direnv docker docker-compose eza gnupg hurl jq kubectl nvm starship hashicorp/tap/vault 
+    brew install 1password/tap/1password-cli age atuin direnv docker docker-compose eza gnupg hammerspoon hurl jq kubectl nvm starship hashicorp/tap/vault wezterm
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
@@ -75,11 +75,4 @@ if [ "$(command -v brew)" ]; then
 fi
 
 {{ end -}}
-
-# Install Copilot CLI
-if [ $(command -v npm) ]; then
-    # Copilot install
-    echo "${LCYAN}###${RESET} Github Copilot CLI Install"
-    npm install -g @githubnext/github-copilot-cli
-fi
 
