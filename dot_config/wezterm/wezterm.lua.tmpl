@@ -25,12 +25,12 @@ config.initial_cols = appearance.initial_size.cols
 config.initial_rows = appearance.initial_size.rows
 
 -- Set fonts
-config.font = appearance.font.name_with_fallback
+config.font = appearance.font.name
 config.font_size = appearance.font.size
 
 -- Set font for window frame
 config.window_frame = {
-  font = wezterm.font({ family = appearance.font.name, weight = 'Bold' }),
+  font = appearance.font.name,
   font_size = appearance.font.title_font_size,
   active_titlebar_bg = colors.colors.titlebar.active,
 }

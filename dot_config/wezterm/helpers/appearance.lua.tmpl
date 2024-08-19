@@ -22,8 +22,7 @@ module.initial_size = {
 }
 
 module.font = {
-  name = 'MonoLisa',
-  name_with_fallback = wezterm.font_with_fallback {
+  name = wezterm.font_with_fallback {
     'MonoLisa',
     'Fira Code',
     'Menlo',
