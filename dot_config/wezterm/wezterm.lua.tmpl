@@ -1,47 +1,69 @@
 local wezterm = require 'wezterm'
-local appearance = require 'helpers/appearance'
 local action = wezterm.action
 
 -- Local modules
 local appearance = require 'helpers/appearance'
+local colors = require 'helpers/colors'
 local projects = require 'helpers/projects'
+local right_bar = require 'helpers/right-bar'
 
 local config = wezterm.config_builder()
 
 -- Set color scheme
-config.color_scheme = 'Aci (Gogh)'
+config.color_scheme = colors.color_scheme
 
 -- Slightly transparent and blurred background
-config.window_background_opacity = 0.9
-config.macos_window_background_blur = 30
+config.window_background_opacity = appearance.window.background_opacity
+config.macos_window_background_blur = appearance.window.window_background_blur
+config.win32_system_backdrop = appearance.window.system_backdrop
 
 -- Remove title bar
-config.window_decorations = 'RESIZE'
+config.window_decorations = appearance.window.decorations
+
+-- Set width and height
+config.initial_cols = appearance.initial_size.cols
+config.initial_rows = appearance.initial_size.rows
 
 -- Set fonts
-config.font = wezterm.font_with_fallback {
-  'MonoLisa',
-  'Fira Code',
-  'Menlo',
-  'Monaco',
-  'Courier New'
-}
-
--- Set font size
-{{- if eq .chezmoi.os "windows" }}
-config.font_size = 10
-{{- else }}
-config.font_size = 12
-{{- end }}
+config.font = appearance.font.name_with_fallback
+config.font_size = appearance.font.size
 
 -- Set font for window frame
 config.window_frame = {
-  font = wezterm.font({ family = 'MonoLisa', weight = 'Bold' }),
-  {{- if eq .chezmoi.os "windows" }}
-  font_size = 10,
-  {{- else }}
-  font_size = 11,
-  {{- end }}
+  font = wezterm.font({ family = appearance.font.name, weight = 'Bold' }),
+  font_size = appearance.font.title_font_size,
+  active_titlebar_bg = colors.colors.titlebar.active,
+}
+
+-- Set tab bar colors
+config.colors = {
+  tab_bar = {
+    active_tab = {
+      bg_color = colors.colors.active_tab.bg,
+      fg_color = colors.colors.active_tab.fg,
+      intensity = 'Normal',
+    },
+
+    inactive_tab = {
+      bg_color = colors.colors.inactive_tab.bg,
+      fg_color = colors.colors.inactive_tab.fg,
+    },
+
+    inactive_tab_hover = {
+      bg_color = colors.colors.inactive_tab_hover.bg,
+      fg_color = colors.colors.inactive_tab_hover.fg,
+    },
+
+    new_tab = {
+      bg_color = colors.colors.new_tab.bg,
+      fg_color = colors.colors.new_tab.fg,
+    },
+
+    new_tab_hover = {
+      bg_color = colors.colors.new_tab_hover.bg,
+      fg_color = colors.colors.new_tab_hover.fg,
+    },
+  },
 }
 
 -- Windows-specific config
@@ -75,97 +97,7 @@ config.launch_menu = launch_menu
 
 
 -- Add window decoration
-local function segments_for_right_status(window)
-  local base_segments = {
-    wezterm.hostname(),
-  }
-
-  local idx = 0
-
-  -- Insert workspace if it's not default
-  if window:active_workspace() ~= "default" then
-    table.insert(base_segments, 1, "󱂬 " .. window:active_workspace())
-    idx = idx + 1
-  end
-
-  -- Insert domain if it's not local
-  local domain = window:active_pane():get_domain_name()
-  if domain ~= "local" then
-    local icon = "󰛳 "
-
-    if string.find(domain, "WSL") ~= nil then
-      icon = "󰌽 "
-      domain = domain:gsub("WSL:", "")
-    end
-    table.insert(base_segments, 1, icon .. domain)
-    idx = idx + 1
-  end
-
-  -- Insert battery percentage if it's low
-  local battery = wezterm.battery_info()
-  local battery_percentage = 100
-
-  if battery and battery[1] and battery[1].state_of_charge < 0.30 and battery[1].state ~= "Charging" then
-    battery_percentage = battery[1].state_of_charge * 100
-    table.insert(base_segments, idx + 1, string.format("󰂃 %.0f%%", battery_percentage))
-  end
-
-  return base_segments
-end
-
-wezterm.on('update-status', function(window, _)
-  local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
-  local segments = segments_for_right_status(window)
-
-  local color_scheme = window:effective_config().resolved_palette
-  local bg = wezterm.color.parse(color_scheme.background)
-  local fg = color_scheme.foreground
-
-  -- Create progressive color hops based on the system appearance
-  local gradient_to, gradient_from = bg
-  if appearance.is_dark() then
-    gradient_from = gradient_to:lighten(0.2)
-  else
-    gradient_from = gradient_to:darken(0.2)
-  end
-  local gradient = wezterm.color.gradient(
-    {
-      orientation = 'Horizontal',
-      colors = { gradient_from, gradient_to },
-    },
-    #segments -- only gives us as many colours as we have segments.
-  )
-
-  -- Build up elements based on segments
-  local elements = {}
-
-  for i, seg in ipairs(segments) do
-    local is_first = i == 1
-    local current_color = gradient[i]
-
-    -- Show battery specific colorway instead of default bg
-    if string.find(seg, "󰂃") ~= nil then
-      local battery_percentage = tonumber(string.match(seg, "(%d+)%%"))
-      if battery_percentage and battery_percentage < 10 then
-        current_color = "#8a164a"
-      else 
-        current_color = "#993f00"
-      end
-    end
-
-    if is_first then
-      table.insert(elements, { Background = { Color = 'none' } })
-    end
-    table.insert(elements, { Foreground = { Color = current_color } })
-    table.insert(elements, { Text = SOLID_LEFT_ARROW })
-
-    table.insert(elements, { Foreground = { Color = fg } })
-    table.insert(elements, { Background = { Color = current_color } })
-    table.insert(elements, { Text = ' ' .. seg .. ' ' })
-  end
-
-  window:set_right_status(wezterm.format(elements))
-end)
+wezterm.on('update-status', right_bar.update_status)
 
 -- Add custom hyperlink rules
 config.hyperlink_rules = {
