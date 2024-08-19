@@ -1,0 +1,11 @@
+{
+    "projectDirs": [
+        "/data",
+        "~",
+        "~/Documents"
+    ],
+    "scanDirs": [
+        "/docker",
+        "~/Documents/Repos"
+    ]
+}

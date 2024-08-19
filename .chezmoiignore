@@ -28,3 +28,25 @@ README.md
 **/*.age
 {{- end }}
 
+{{- if eq .chezmoi.os "windows" }}
+**
+!*.bat
+!*.ps1
+!.config
+.config/*
+!.config/wezterm
+!.config/wezterm/**
+!.config/starship.toml
+!.gitconfig
+!AppData
+!AppData/**
+!Documents
+!Documents/WindowsPowerShell
+!Documents/WindowsPowerShell/**
+
+{{- else}}
+AppData/**
+Documents/WindowsPowerShell/**
+*.bat
+*.ps1
+{{- end }}
