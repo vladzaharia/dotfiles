@@ -1,0 +1,300 @@
+local wezterm = require 'wezterm'
+local appearance = require 'helpers/appearance'
+local action = wezterm.action
+
+-- Local modules
+local appearance = require 'helpers/appearance'
+local projects = require 'helpers/projects'
+
+local config = wezterm.config_builder()
+
+-- Set color scheme
+config.color_scheme = 'Aci (Gogh)'
+
+-- Slightly transparent and blurred background
+config.window_background_opacity = 0.9
+config.macos_window_background_blur = 30
+
+-- Remove title bar
+config.window_decorations = 'RESIZE'
+
+-- Set fonts
+config.font = wezterm.font_with_fallback {
+  'MonoLisa',
+  'Fira Code',
+  'Menlo',
+  'Monaco',
+  'Courier New'
+}
+
+-- Set font size
+{{- if eq .chezmoi.os "windows" }}
+config.font_size = 10
+{{- else }}
+config.font_size = 11
+{{- end }}
+
+-- Set font for window frame
+config.window_frame = {
+  font = wezterm.font({ family = 'MonoLisa', weight = 'Bold' }),
+  {{- if eq .chezmoi.os "windows" }}
+  font_size = 10,
+  {{- else }}
+  font_size = 11,
+  {{- end }}
+}
+
+-- Windows-specific config
+{{- if eq .chezmoi.os "windows" }}
+-- Set WSL domains for Windows
+config.wsl_domains = {
+  {
+    name = 'WSL:Ubuntu',
+    distribution = 'Ubuntu',
+    default_cwd = '~',
+  },
+}
+config.default_domain = 'WSL:Ubuntu'
+
+-- -- Set clink env variables
+-- config.set_environment_variables['prompt'] = '$E]7;file://localhost/$P$E\\$E[32m$T$E[0m $E[35m$P$E[36m$_$G$E[0m '
+-- config.set_environment_variables['DIRCMD'] = '/d'
+
+-- -- Use clink by default for cmd.exe
+-- config.default_prog = { 'cmd.exe', '/s', '/k', 'c:/clink/clink_x64.exe', 'inject', '-q' }
+
+-- Add PowerShell to the launch menu
+local launch_menu = {}
+table.insert(launch_menu, {
+  label = 'PowerShell',
+  args = { 'powershell.exe', '-NoLogo' },
+  -- domain = { DomainName = 'Powershell' }
+})
+config.launch_menu = launch_menu
+{{- end }}
+
+
+-- Add window decoration
+local function segments_for_right_status(window)
+  local base_segments = {
+    wezterm.hostname(),
+  }
+
+  local idx = 0
+
+  -- Insert workspace if it's not default
+  if window:active_workspace() ~= "default" then
+    table.insert(base_segments, 1, "󱂬 " .. window:active_workspace())
+    idx = idx + 1
+  end
+
+  -- Insert domain if it's not local
+  local domain = window:active_pane():get_domain_name()
+  if domain ~= "local" then
+    local icon = "󰛳 "
+
+    if string.find(domain, "WSL") ~= nil then
+      icon = "󰌽 "
+      domain = domain:gsub("WSL:", "")
+    end
+    table.insert(base_segments, 1, icon .. domain)
+    idx = idx + 1
+  end
+
+  -- Insert battery percentage if it's low
+  local battery = wezterm.battery_info()
+  local battery_percentage = 100
+
+  if battery and battery[1] and battery[1].state_of_charge < 0.25 then
+    battery_percentage = battery[1].state_of_charge * 100
+    table.insert(base_segments, idx + 1, string.format("󰂃 %.0f%%", battery_percentage))
+  end
+
+  return base_segments
+end
+
+wezterm.on('update-status', function(window, _)
+  local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+  local segments = segments_for_right_status(window)
+
+  local color_scheme = window:effective_config().resolved_palette
+  local bg = wezterm.color.parse(color_scheme.background)
+  local fg = color_scheme.foreground
+
+  -- Create progressive color hops based on the system appearance
+  local gradient_to, gradient_from = bg
+  if appearance.is_dark() then
+    gradient_from = gradient_to:lighten(0.2)
+  else
+    gradient_from = gradient_to:darken(0.2)
+  end
+  local gradient = wezterm.color.gradient(
+    {
+      orientation = 'Horizontal',
+      colors = { gradient_from, gradient_to },
+    },
+    #segments -- only gives us as many colours as we have segments.
+  )
+
+  -- Build up elements based on segments
+  local elements = {}
+
+  for i, seg in ipairs(segments) do
+    local is_first = i == 1
+    local current_color = gradient[i]
+
+    -- Show battery specific colorway instead of default bg
+    if string.find(seg, "󰂃") ~= nil then
+      local battery_percentage = tonumber(string.match(seg, "(%d+)%%"))
+      if battery_percentage and battery_percentage < 10 then
+        current_color = "#8a164a"
+      else 
+        current_color = "#993f00"
+      end
+    end
+
+    if is_first then
+      table.insert(elements, { Background = { Color = 'none' } })
+    end
+    table.insert(elements, { Foreground = { Color = current_color } })
+    table.insert(elements, { Text = SOLID_LEFT_ARROW })
+
+    table.insert(elements, { Foreground = { Color = fg } })
+    table.insert(elements, { Background = { Color = current_color } })
+    table.insert(elements, { Text = ' ' .. seg .. ' ' })
+  end
+
+  window:set_right_status(wezterm.format(elements))
+end)
+
+-- Add custom hyperlink rules
+{{- if .flags.pokemon }}
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+table.insert(config.hyperlink_rules, { -- PTC-* tickets
+  regex = [[(PTC-\d+)]],
+  format = 'https://tpci.atlassian.net/browse/$1',
+})
+{{- end }}
+
+-- table.insert(config.hyperlink_rules, { -- mailto links
+--   regex = [[\b[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\b]],
+--   format = 'mailto:$0',
+-- })
+
+-- Add keybindings
+config.leader = { key = 'z', mods = 'CTRL', timeout_milliseconds = 1000 }
+config.keys = {
+  { -- Quick select mode
+    key = 'Space',
+    mods = 'LEADER',
+    action = action.QuickSelect,
+  },
+  { -- Copy
+    key = 'c',
+    mods = 'SUPER',
+    action = wezterm.action_callback(function(window, pane)
+      -- Copy and clear selection
+      window:perform_action(action.CopyTo 'ClipboardAndPrimarySelection', pane)
+      window:perform_action(action.ClearSelection, pane)
+    end),
+  },
+  { -- Copy or Ctrl+C
+    key = 'c',
+    mods = 'CTRL',
+    action = wezterm.action_callback(function(window, pane)
+      local has_selection = window:get_selection_text_for_pane(pane) ~= ''
+      if has_selection then
+        -- Copy and clear selection
+        window:perform_action(action.CopyTo 'ClipboardAndPrimarySelection', pane)
+        window:perform_action(action.ClearSelection, pane)
+      else
+        -- Send key to terminal
+        window:perform_action(action.SendKey { key = 'c', mods = 'CTRL' }, pane)
+      end
+    end),
+  },
+  { -- Paste
+    key = 'p',
+    mods = 'SUPER',
+    action = wezterm.action_callback(function(window, pane)
+      local has_selection = window:get_selection_text_for_pane(pane) ~= ''
+      if has_selection then
+        -- Paste and clear selection
+        window:perform_action(action.PasteFrom 'PrimarySelection', pane)
+        window:perform_action(action.ClearSelection, pane)
+      else
+        -- Paste from clipboard instead
+        window:perform_action(action.PasteFrom 'Clipboard', pane)
+      end
+    end),
+  },
+  { -- Jump left
+    key = 'LeftArrow',
+    mods = 'OPT',
+    action = action.SendString '\x1bb',
+  },
+  { -- Jump right
+    key = 'RightArrow',
+    mods = 'OPT',
+    action = action.SendString '\x1bf',
+  },
+  {  -- Move to previous tab
+    key = 'LeftArrow',
+    mods = 'SUPER',
+    action = action.ActivateTabRelative(-1),
+  },
+  { -- Move to next tab
+    key = 'RightArrow',
+    mods = 'SUPER',
+    action = action.ActivateTabRelative(1),
+  },
+  { -- Preferences
+    key = ',',
+    mods = 'SUPER',
+    action = action.SpawnCommandInNewTab {
+      cwd = wezterm.home_dir,
+      args = { 'code', wezterm.config_dir },
+    },
+  },
+  { -- Project picker
+    key = 'p',
+    mods = 'LEADER',
+    action = projects.choose_project(),
+  },
+  { -- Workspaces
+    key = 'w',
+    mods = 'LEADER',
+    action = action.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' },
+  },
+
+  {{- if eq .chezmoi.os "windows" }}
+  { -- New tab (Windows-style Ctrl+T)
+    key = 't',
+    mods = 'CTRL',
+    action = action.SpawnTab 'CurrentPaneDomain',
+  },
+  { -- Launcher
+    key = 't',
+    mods = 'CTRL|SHIFT',
+    action = action.ShowLauncher,
+  },
+  { -- Close tab (Windows-style Ctrl+W)
+    key = 'w',
+    mods = 'CTRL',
+    action = action.CloseCurrentTab { confirm = true },
+  },
+  {{- else }}
+  { -- New tab (Windows-style Cmd+T)
+    key = 't',
+    mods = 'SUPER',
+    action = action.SpawnTab 'CurrentPaneDomain',
+  },
+  { -- Launcher
+    key = 't',
+    mods = 'SUPER|SHIFT',
+    action = action.ShowLauncher,
+  },
+  {{- end }}
+}
+
+return config
