@@ -105,7 +105,7 @@ local function segments_for_right_status(window)
   local battery = wezterm.battery_info()
   local battery_percentage = 100
 
-  if battery and battery[1] and battery[1].state_of_charge < 0.25 then
+  if battery and battery[1] and battery[1].state_of_charge < 0.30 and battery[1].state ~= "Charging" then
     battery_percentage = battery[1].state_of_charge * 100
     table.insert(base_segments, idx + 1, string.format("󰂃 %.0f%%", battery_percentage))
   end
@@ -168,18 +168,23 @@ wezterm.on('update-status', function(window, _)
 end)
 
 -- Add custom hyperlink rules
+config.hyperlink_rules = {
+  { -- General links
+    regex = '\\b\\w+://\\S+[)/a-zA-Z0-9-]+',
+    format = '$0',
+  },
+  { -- Mailto links
+    regex = '\\b\\w+@[\\w-]+(\\.[\\w-]+)+\\b',
+    format = 'mailto:$0',
+  },
+}
+
 {{- if .flags.pokemon }}
-config.hyperlink_rules = wezterm.default_hyperlink_rules()
 table.insert(config.hyperlink_rules, { -- PTC-* tickets
   regex = [[(PTC-\d+)]],
   format = 'https://tpci.atlassian.net/browse/$1',
 })
 {{- end }}
-
--- table.insert(config.hyperlink_rules, { -- mailto links
---   regex = [[\b[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\b]],
---   format = 'mailto:$0',
--- })
 
 -- Add keybindings
 config.leader = { key = 'z', mods = 'CTRL', timeout_milliseconds = 1000 }
