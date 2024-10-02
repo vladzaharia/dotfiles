@@ -1,0 +1,36 @@
+local wezterm = require 'wezterm'
+local module = {}
+
+function module.is_dark()
+  if wezterm.gui then
+    return wezterm.gui.get_appearance():find("Dark")
+  end
+  return true
+end
+
+-- Slightly transparent and blurred background, with no title bar
+module.window = {
+  background_opacity = 0.75,
+  window_background_blur = 30,
+  system_backdrop = 'Acrylic',
+  decorations = 'RESIZE',
+}
+
+module.initial_size = {
+  cols = 120,
+  rows = 35,
+}
+
+module.font = {
+  name = wezterm.font_with_fallback {
+    'MonoLisa',
+    'Fira Code',
+    'Menlo',
+    'Monaco',
+    'Courier New'
+  },
+  size = {{- if eq .chezmoi.os "windows" -}} 10 {{- else -}} 12 {{- end }},
+  title_font_size = {{- if eq .chezmoi.os "windows" -}} 10 {{- else -}} 11 {{- end }},
+}
+
+return module

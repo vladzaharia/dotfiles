@@ -1,3 +1,5 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 # Right-aligned prompt
 {{ if not .flags.ephemeral -}}
 format = """$status$cmd_duration$battery$username$hostname$directory$shell$character"""
@@ -188,7 +190,7 @@ symbol = ' '
 format = '\[[$symbol$state( \($name\))]($style)\]'
 
 [nodejs]
-disabled = true
+disabled = false
 symbol = '󰎙 '
 format = '\[[$symbol($version)]($style)\]'
 

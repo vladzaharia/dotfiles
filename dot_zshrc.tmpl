@@ -3,8 +3,7 @@
 ######
 
 # Update PATH
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
-export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.moon/tools/moon/latest:$PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 {{- if (eq .chezmoi.distro.name "darwin") }}
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
@@ -83,17 +82,19 @@ zi ice wait lucid has'git'
 zi snippet OMZP::git
 
 # Node
-zi ice wait lucid has'node' for \
+zi for \
   OMZP::node \
-  has'npm' OMZP::npm \
-  has'nvm' OMZP::nvm \
-  has'yarn' OMZP::yarn
+  OMZP::npm \
+  OMZP::nvm \
+  OMZP::yarn \
+  $ZSH_PLUGINS/auto-nvmrc
 
 # Pip
 zi ice wait lucid has'pip'
 zi snippet OMZP::pip
 
-# iTerm2
+# Mac-specific
+#zstyle :omz:plugins:iterm2 shell-integration yes
 source $ZSH_CUSTOM/scripts/iterm2_shell_integration.zsh
 zi ice wait lucid if'[[ $OSTYPE = darwin* ]]'
 zi snippet OMZP::iterm2
@@ -141,6 +142,9 @@ zi light $ZSH_PLUGINS/zsh-eza
 zi ice wait lucid has'vault'
 zi light $ZSH_PLUGINS/vault-helper
 
+zi load $ZSH_PLUGINS/zui
+zi load $ZSH_PLUGINS/pkmn-repos
+
 ######
 ### User Configuration
 ######
@@ -181,6 +185,7 @@ fi
 # Atuin
 if [ $(command -v atuin) ]; then
     #export ATUIN_NOBIND="true"
+    export ATUIN_
     eval "$(atuin init zsh)"
 
     #bindkey '^r' _atuin_search_widget
@@ -203,6 +208,11 @@ if [ -f ~/.beepy.zshrc ]; then
     # Beepy configuration
     . ~/.beepy.zshrc
 fi
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 {{- if (and (eq .chezmoi.distro.name "darwin") (eq .chezmoi.arch "arm64")) }}
 # Docker config for M1 via Colima
