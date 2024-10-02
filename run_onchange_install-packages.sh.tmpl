@@ -63,11 +63,24 @@ curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | sh -s
 echo "${LCYAN}###${RESET} Zypper install (common)"
 
 # Basic utilities
-sudo zypper install starship direnv jq eza atuin kubectl
+sudo zypper install starship direnv jq eza atuin -y
 
 # Docker
 sudo zypper addrepo https://download.docker.com/linux/sles/docker-ce.repo
-sudo zypper install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo zypper update
+sudo zypper install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+# k8s
+cat <<EOF | sudo tee /etc/zypp/repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.31/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.31/rpm/repodata/repomd.xml.key
+EOF
+sudo zypper update
+sudo zypper install kubectl -y
 
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 if [ "$(command -v brew)" ]; then
