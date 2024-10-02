@@ -1,6 +1,9 @@
 {{ if not .flags.ephemeral -}}
 
+{{-   if (and (eq .chezmoi.distro.name "darwin") (eq .chezmoi.arch "arm64")) }}
 Include {{ .chezmoi.homeDir }}/.colima/ssh_config
+Include {{ .chezmoi.homeDir }}/.orbstack/ssh/config
+{{-   end }}
 
 {{-   if .flags.pokemon }}
 Include {{ .chezmoi.homeDir }}/.ssh/pkmn.config
@@ -29,6 +32,11 @@ Host docker-ts
 # Docker
 Host docker
     hostname 10.10.1.20
+    port 22
+
+# NixOS
+Host nixos
+    hostname 10.10.10.84
     port 22
 
 # Beepy via Tailscale

@@ -7,6 +7,12 @@ echo "${TEAL}###${RESET} Apt upgrade"
 
 sudo apt update
 sudo apt upgrade -y
+{{ else if eq .chezmoi.distro.like "suse opensuse" -}}
+
+echo "${TEAL}###${RESET} Zypper upgrade"
+sudo zypper refresh
+sudo zypper up
+
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 echo "${TEAL}###${RESET} Homebrew upgrade"
 

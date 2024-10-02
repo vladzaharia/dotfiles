@@ -9,13 +9,8 @@
     url = "https://raw.githubusercontent.com/dotphiles/dotphiles/master/wget/wgetrc"
     refreshPeriod = "168h"
 [".zi"]
-{{- if .flags.ephemeral }}
     type = "archive"
     url = "https://github.com/z-shell/zi/archive/master.tar.gz"
     exact = true
     stripComponents = 1
-{{- else }}
-    type = "git-repo"
-    url = "https://github.com/z-shell/zi.git"
-{{- end}}
     refreshPeriod = "168h"

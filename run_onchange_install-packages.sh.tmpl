@@ -6,6 +6,7 @@ RESET='\033[0m'
 {{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
 
 # Install Starship
+echo "${LCYAN}###${RESET} Starship install"
 if [ ! "$(command -v starship)" ]; then
     echo "${CYAN}###${RESET} Installing Starship prompt"
     curl -sS https://starship.rs/install.sh | sh -s -- -y
@@ -20,6 +21,7 @@ sudo apt-get install -y direnv jq
 
 # Install Eza
 if [ ! -f /etc/apt/sources.list.d/gierens.list ]; then
+    echo "${CYAN}###${RESET} Adding docker repository"
     sudo mkdir -p /etc/apt/keyrings
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
     echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
@@ -52,12 +54,22 @@ sudo apt-get update
 # Install packages
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
 
+echo "${LCYAN}###${RESET} Atuin install"
 # Install Atuin
 curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | sh -s
 {{   end -}}
 
-{{ else if eq .chezmoi.distro.name "darwin" -}}
+{{ else if eq .chezmoi.distro.like "suse opensuse" -}}
+echo "${LCYAN}###${RESET} Zypper install (common)"
 
+# Basic utilities
+sudo zypper install starship direnv jq eza atuin kubectl
+
+# Docker
+sudo zypper addrepo https://download.docker.com/linux/sles/docker-ce.repo
+sudo zypper install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+{{ else if eq .chezmoi.distro.name "darwin" -}}
 if [ "$(command -v brew)" ]; then
     echo "${CYAN}###${RESET} Homebrew install"
 
@@ -75,11 +87,4 @@ if [ "$(command -v brew)" ]; then
 fi
 
 {{ end -}}
-
-# Install Copilot CLI
-if [ $(command -v npm) ]; then
-    # Copilot install
-    echo "${LCYAN}###${RESET} Github Copilot CLI Install"
-    npm install -g @githubnext/github-copilot-cli
-fi
 

@@ -59,8 +59,8 @@ autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
 
 # Load autocompletions
-zi wait pack for $ZSH_PLUGINS/system-completions
-zi wait pack has'brew' for $ZSH_PLUGINS/brew-completions
+zi pack for $ZSH_PLUGINS/system-completions
+zi pack has'brew' for $ZSH_PLUGINS/brew-completions
 
 ######
 ### ZSH plugins (via ZI)
@@ -68,6 +68,10 @@ zi wait pack has'brew' for $ZSH_PLUGINS/brew-completions
 # Homebrew
 zi ice wait lucid has'brew'
 zi snippet OMZP::brew
+
+# asdf
+zi ice has'asdf'
+zi snippet OMZP::asdf
 
 # Docker
 zi wait lucid has'docker' for \
@@ -91,8 +95,15 @@ zi snippet OMZP::pip
 
 # iTerm2
 source $ZSH_CUSTOM/scripts/iterm2_shell_integration.zsh
-zi wait lucid if'[[ $OSTYPE = darwin* ]]' for \
-  OMZP::iterm2
+zi ice wait lucid if'[[ $OSTYPE = darwin* ]]'
+zi snippet OMZP::iterm2
+
+# SSH + Mosh
+zi ice wait lucid has'ssh'
+zi snippet OMZP::ssh
+
+zi ice wait lucid has'mosh'
+zi snippet OMZP::mosh
 
 # Colorization
 zi wait lucid for \
@@ -152,6 +163,11 @@ if [ "$(command -v direnv)" ]; then
     eval "$(direnv hook zsh)"
 fi
 
+# Mise hooks
+if [ "$(command -v mise)" ]; then
+    eval "$(mise activate zsh)"
+fi
+
 # Vault hooks
 if [ $(command -v vault) ]; then
     export VAULT_ADDR="https://vault.polaris.rest"
@@ -191,6 +207,13 @@ fi
 {{- if (and (eq .chezmoi.distro.name "darwin") (eq .chezmoi.arch "arm64")) }}
 # Docker config for M1 via Colima
 DOCKER_HOST=unix:///Users/v.zaharia/.colima/default/docker.sock
+
+# Orbstack
+if [ $(command -v orbctl) ]; then
+  eval "$(orbctl completion zsh)"
+  compdef _orb orbctl
+  compdef _orb orb
+fi
 {{ end }}
 
 {{- if .flags.pokemon }}
