@@ -68,11 +68,6 @@ sudo zypper refresh
 # Basic utilities
 sudo zypper -n install starship direnv jq eza atuin docker docker-compose docker-buildx
 
-# k8s
-if [ ! "$(command -v kubectl)" ]; then
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-fi
-
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 if [ "$(command -v brew)" ]; then
     echo "${CYAN}###${RESET} Homebrew install"
