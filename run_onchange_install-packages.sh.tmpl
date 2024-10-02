@@ -66,10 +66,7 @@ echo "${LCYAN}###${RESET} Zypper install (common)"
 sudo zypper refresh
 
 # Basic utilities
-sudo zypper -n install starship direnv jq eza atuin
-
-# Docker
-sudo zypper -n install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo zypper -n install starship direnv jq eza atuin docker docker-compose docker-buildx
 
 # k8s
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
