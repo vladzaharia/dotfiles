@@ -11,7 +11,7 @@ sudo apt upgrade -y
 
 echo "${TEAL}###${RESET} Zypper upgrade"
 sudo zypper refresh
-sudo zypper up
+sudo zypper -n up
 
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 echo "${TEAL}###${RESET} Homebrew upgrade"
