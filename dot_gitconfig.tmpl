@@ -1,6 +1,10 @@
 [core]
 	excludesFile = ~/.gitignore
+	{{- if eq .chezmoi.os "windows" }}
+	editor = \"C:\\Users\\me\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code\" --wait
+	{{- else }}
 	editor = nano
+	{{- end }}
 
 [user]
 	name = {{ .personal.name }}
@@ -26,7 +30,7 @@
 [init]
 	defaultBranch = main
 
-{{- if ne .chezmoi.chassis "beepy" }}
+{{- if and (ne .chezmoi.chassis "beepy") (ne .chezmoi.chassis "ephemeral") (ne .chezmoi.os "windows") }}
 [gpg]
 	format = ssh
 

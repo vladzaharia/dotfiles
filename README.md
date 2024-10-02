@@ -11,6 +11,8 @@ chezmoi will run a package install script on first run, and anytime dependencies
 - ✅ macOS (Apple or Intel)
     - [brew](https://brew.sh) is required to download packages
 - ✅ Debian / Ubuntu
+- ⚠️ Windows
+    - Only some settings are supported
 - ⚠️ WSL Debian / Ubuntu
     - Biometric 1Password authentication not available
 - ⚠️ Ephemeral workspaces (GitPod / Codespaces)

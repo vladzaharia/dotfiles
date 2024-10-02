@@ -1,18 +1,15 @@
-{{- $coder := env "CODER_ENV" | not | not -}}
-{{- $codespaces := env "CODESPACES" | not | not -}}
-{{- $gitpod := env "GITPOD_WORKSPACE_ID" | not | not -}}
-{{- $wsl := (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+{{- $devcontainer := (or (env "DEVPOD" | not | not) (env "GITPOD_WORKSPACE_ID" | not | not) (env "CODESPACES" | not | not) (env "CODER_ENV" | not | not))  -}}
 
+{{- $wsl := (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 {{- $distro := (.chezmoi.os) -}}
 {{- $distroLike := (.chezmoi.os) -}}
-
-{{- if (and (eq $distro "linux") (not $coder)) -}}
+{{- if (and (eq $distro "linux") (not $devcontainer)) -}}
 {{- $distro = (.chezmoi.osRelease.id) -}}
 {{- $distroLike = (.chezmoi.osRelease.idLike) -}}
 {{- end -}}
 
 {{- $chassisType := "desktop" -}}
-{{- if (or $codespaces $gitpod $coder) -}}
+{{- if $devcontainer -}}
 {{-   $chassisType = "ephemeral" -}}
 {{- else if stat "/home/kasm-default-profile" -}}
 {{-   $chassisType = "kasm" -}}
