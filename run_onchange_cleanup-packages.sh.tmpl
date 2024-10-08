@@ -27,6 +27,10 @@ if [ "$(command -v moon)" ]; then
     rm -rf "{{ .chezmoi.homeDir }}/.moon"
 fi
 
+{{ else if eq .chezmoi.distro.like "suse opensuse" -}}
+
+# Cleanup things in the future
+
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 
 if [ "$(command -v brew)" ]; then
