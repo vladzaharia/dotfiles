@@ -7,5 +7,6 @@ _RESET='\033[0m'
 source ${0:A:h}/helpers/vlogin.zsh
 source ${0:A:h}/helpers/votp.zsh
 source ${0:A:h}/helpers/vssh.zsh
+source ${0:A:h}/helpers/vmosh.zsh
 source ${0:A:h}/helpers/vtoken.zsh
 source ${0:A:h}/helpers/vnv.zsh
