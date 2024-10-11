@@ -63,7 +63,7 @@ function _vault_approle_login {
     vault token lookup &> /dev/null
 
     if [ $? -ne 0 ]; then
-      token=$(vault write -field="token" auth/approle/login role_id="xxx" secret_id="xxx")
+      token=$(vault write -field="token" auth/approle/login role_id="$VAULT_SOPS_ROLE_ID" secret_id="$VAULT_SOPS_SECRET_ID")
       export VAULT_TOKEN=$token
     fi
 }
