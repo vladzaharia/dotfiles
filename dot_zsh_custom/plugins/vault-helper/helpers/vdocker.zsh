@@ -1,3 +1,5 @@
+ENV_INJECTED_COMMANDS=("compose up", "ps")
+
 # Docker-with-Vault utility
 function vdocker {
     # Check that vault exists
@@ -13,16 +15,48 @@ function vdocker {
         return 1
     fi
 
-    # Login using Vault Approle helper
-    _vault_approle_login
+    setopt null_glob
 
-    # Decrupt all env files with SOPS/Vault/age
-    _sops_decrypt_files
+    # Verify if the command we're running needs env interception
+    _check_command_needs_env $@
+    needsEnv=$?
 
+    # Decrypt env files if needed
+    if [[ $needsEnv == 1 ]]; then
+      # Login using Vault Approle helper if needed
+      _vault_approle_login
+
+      # Decrupt all env files with SOPS/Vault/age
+      _sops_decrypt_files
+
+      # Check to make sure we decrypted successfully
+      for file in *.env; do
+        if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
+          echo "${_COLOR_RED}[!]${_RESET} Env file(s) were not successfully decrypted!"
+          return 1
+        fi
+      done
+    fi
+
+    # Run docker subcommand
     docker $@
 
-    # Re-encrypt all env files with SOPS/Vault/age
-    _sops_encrypt_files
+    # Re-encrypt env files if needed
+    if [[ $needsEnv == 1 ]]; then
+      _sops_encrypt_files
+    fi
+}
+
+function _check_command_needs_env {
+
+  for command in $ENV_INJECTED_COMMANDS; do
+    echo "Checking $@ contains $command"
+    if [[ $@ =~ $command ]] || [[ $@ == $command ]]; then
+      return true
+    fi
+  done
+
+  return false
 }
 
 # Login to Vault using approle if needed
@@ -37,9 +71,22 @@ function _vault_approle_login {
 }
 
 function _sops_decrypt_files {
-    find . -maxdepth 0 -type f -name "*.env" -exec sops decrypt "{}" \;
+    for file in *.env; do
+      if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
+        sops decrypt -i $file
+      else
+        echo "${_COLOR_CYAN}[i]${_RESET} $file does not need decryption!"
+      fi
+    done
 }
 
+
 function _sops_encrypt_files {
-    find . -maxdepth 0 -type f -name "*.env" -maxdepth 0 -exec sops encrypt "{}" \;
+    for file in *.env; do
+      if ! (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+' &> /dev/null) ; then
+        echo Need to encrypt
+      else
+        echo "${_COLOR_CYAN}[i]${_RESET} $file does not need encryption!"
+      fi
+    done
 }
