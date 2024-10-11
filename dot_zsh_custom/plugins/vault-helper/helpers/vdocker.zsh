@@ -1,5 +1,3 @@
-ENV_INJECTED_COMMANDS=("compose up", "ps")
-
 # Docker-with-Vault utility
 function vdocker {
     # Check that vault exists
@@ -16,45 +14,25 @@ function vdocker {
     fi
 
     setopt null_glob
+    # Login using Vault Approle helper if needed
+    _vault_approle_login
 
-    # Verify if the command we're running needs env interception
-    _check_command_needs_env $@
-    needsEnv=$?
+    # Decrupt all env files with SOPS/Vault/age
+    _sops_decrypt_files
 
-    # Decrypt env files if needed
-    if [[ $needsEnv == 1 ]]; then
-      # Login using Vault Approle helper if needed
-      _vault_approle_login
-
-      # Decrupt all env files with SOPS/Vault/age
-      _sops_decrypt_files
-
-      # Check to make sure we decrypted successfully
-      for file in *.env; do
-        if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
-          echo "${_COLOR_RED}[!]${_RESET} Env file(s) were not successfully decrypted!"
-          return 1
-        fi
-      done
-    fi
+    # Check to make sure we decrypted successfully
+    for file in *.env; do
+      if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
+        echo "${_COLOR_RED}[!]${_RESET} Env file(s) were not successfully decrypted!"
+        return 1
+      fi
+    done
 
     # Run docker subcommand
     docker $@
 
     # Re-encrypt env files if needed
-    if [[ $needsEnv == 1 ]]; then
-      _sops_encrypt_files
-    fi
-}
-
-function _check_command_needs_env {
-  for command in $ENV_INJECTED_COMMANDS; do
-    if [[ $@ =~ $command ]] || [[ $@ == $command ]]; then
-      return 1
-    fi
-  done
-
-  return 0
+    _sops_encrypt_files
 }
 
 # Login to Vault using approle if needed
