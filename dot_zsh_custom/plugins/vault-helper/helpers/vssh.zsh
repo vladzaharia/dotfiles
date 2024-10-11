@@ -14,9 +14,9 @@ function vssh() {
         fi
 
         echo "${_COLOR_CYAN}[i]${_cRESET} vssh [-r] [username@]<hostname>"
-        echo "${_COLOR_CYAN}[i]${_RESET} hostname: Computer to connect to"
-        echo "${_COLOR_CYAN}[i]${_RESET} username: User to connect as, defaults to your own"
-        echo "${_COLOR_CYAN}[i]${_RESET}       -r: Connect as root"
+        echo "${_COLOR_CYAN}[i]${_RESET}   hostname: Computer to connect to"
+        echo "${_COLOR_CYAN}[i]${_RESET}   username: User to connect as, defaults to your own"
+        echo "${_COLOR_CYAN}[i]${_RESET}   -r: Connect as root"
 	    return 1
     fi
 

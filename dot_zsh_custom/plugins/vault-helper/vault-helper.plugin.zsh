@@ -5,6 +5,7 @@ _COLOR_CYAN='\033[1;36m'
 _RESET='\033[0m'
 
 source ${0:A:h}/helpers/vlogin.zsh
+source ${0:A:h}/helpers/vdocker.zsh
 source ${0:A:h}/helpers/votp.zsh
 source ${0:A:h}/helpers/vssh.zsh
 source ${0:A:h}/helpers/vmosh.zsh

@@ -9,8 +9,8 @@ function vnv() {
     # Help text if -h is passed in
     if [[ $1 == -h* ]]; then
         echo "${_COLOR_CYAN}[i]${_RESET} vnv [-c] <project>"
-        echo "${_COLOR_CYAN}[i]${_RESET} project: Project to get dotenv variables for"
-        echo "${_COLOR_CYAN}[i]${_RESET}      -c: Cleanup environment variables for project"
+        echo "${_COLOR_CYAN}[i]${_RESET}   project: Project to get dotenv variables for"
+        echo "${_COLOR_CYAN}[i]${_RESET}   -c: Cleanup environment variables for project"
         return 1
     fi
 
