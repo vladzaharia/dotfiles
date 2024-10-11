@@ -28,7 +28,7 @@ function vssh() {
 
     # Find public key
     _vssh_find_key
-    echo "${_COLOR_CYAN}[i]${_RESET} Using public key $HOME/.ssh/$sshKey.pub"
+    echo "${_COLOR_BLUE}[i]${_RESET} Using public key $HOME/.ssh/$sshKey.pub"
 
     # Determine if we should be connecting as root
     if [[ $1 == -r* ]] || [[ $3 == -r* ]]; then

@@ -2,6 +2,7 @@ _COLOR_RED='\033[1;31m'
 _COLOR_YELLOW='\033[1;33m'
 _COLOR_GREEN='\033[1;32m'
 _COLOR_CYAN='\033[1;36m'
+_COLOR_BLUE='\033[1;34m'
 _RESET='\033[0m'
 
 source ${0:A:h}/helpers/vlogin.zsh

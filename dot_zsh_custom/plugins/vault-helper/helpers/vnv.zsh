@@ -26,7 +26,7 @@ function vnv() {
         vaultProject=$2
         echo "${_COLOR_YELLOW}[!]${_RESET} -c provided, cleaning environment variables for '$vaultProject'"
     else
-        echo "${_COLOR_CYAN}[i]${_RESET} Injecting variables from dotenv/$vaultProject/dev"
+        echo "${_COLOR_BLUE}[i]${_RESET} Injecting variables from dotenv/$vaultProject/dev"
     fi
 
     # Get JSON at dotenv/<project>/dev and parse out contents as key=value array

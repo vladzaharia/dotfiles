@@ -69,7 +69,7 @@ function _vault_approle_login {
 }
 
 function _sops_decrypt {
-    echo "${_COLOR_CYAN}[i]${_RESET} Running decryption on env files..."
+    echo "${_COLOR_BLUE}[i]${_RESET} Running decryption on env files..."
     for file in *.env; do
       if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
         sops decrypt -i $file
@@ -80,7 +80,7 @@ function _sops_decrypt {
 }
 
 function _sops_encrypt {
-    echo "${_COLOR_CYAN}[i]${_RESET} Running encryption on env files..."
+    echo "${_COLOR_BLUE}[i]${_RESET} Running encryption on env files..."
     for file in *.env; do
       if ! (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
         sops encrypt -i $file
