@@ -89,3 +89,6 @@ function _sops_encrypt {
       fi
     done
 }
+
+# Make vdocker the default when running `docker`
+alias docker=vdocker
