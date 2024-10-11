@@ -27,7 +27,7 @@ function vdocker {
       _vault_approle_login
 
       # Decrupt all env files with SOPS/Vault/age
-      _sops_execute decrypt
+      _sops_decrypt
 
       # Check to make sure we decrypted successfully
       for file in *.env; do
@@ -43,7 +43,7 @@ function vdocker {
 
     # Re-encrypt env files if needed
     if [[ $needsEnv == 1 ]]; then
-      _sops_execute encrypt
+      _sops_encrypt
     fi
 }
 
@@ -68,13 +68,24 @@ function _vault_approle_login {
     fi
 }
 
-function _sops_execute {
-    echo "${_COLOR_CYAN}[i]${_RESET} Running $1 on env files..."
+function _sops_decrypt {
+    echo "${_COLOR_CYAN}[i]${_RESET} Running decryption on env files..."
     for file in *.env; do
       if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
-        sops $1 -i $file
+        sops decrypt -i $file
       else
-        echo "${_COLOR_YELLOW}[!]${_RESET} $file does not need $1!"
+        echo "${_COLOR_YELLOW}[!]${_RESET} $file does not need decryption!"
+      fi
+    done
+}
+
+function _sops_encrypt {
+    echo "${_COLOR_CYAN}[i]${_RESET} Running encryption on env files..."
+    for file in *.env; do
+      if ! (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
+        sops encrypt -i $file
+      else
+        echo "${_COLOR_YELLOW}[!]${_RESET} $file does not need encryption!"
       fi
     done
 }
