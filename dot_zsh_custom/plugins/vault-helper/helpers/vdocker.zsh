@@ -1,3 +1,5 @@
+ENV_INJECTED_COMMANDS=("compose up") # Do NOT add commas here
+
 # Docker-with-Vault utility
 function vdocker {
     # Check that vault exists
@@ -14,55 +16,65 @@ function vdocker {
     fi
 
     setopt null_glob
-    # Login using Vault Approle helper if needed
-    _vault_approle_login
 
-    # Decrupt all env files with SOPS/Vault/age
-    _sops_decrypt_files
+    # Verify if the command we're running needs env interception
+    _check_command_needs_env $@
+    needsEnv=$?
+    
+    # Decrypt env files if needed
+    if [[ $needsEnv == 1 ]]; then
+      # Login using Vault Approle helper if needed
+      _vault_approle_login
 
-    # Check to make sure we decrypted successfully
-    for file in *.env; do
-      if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
-        echo "${_COLOR_RED}[!]${_RESET} Env file(s) were not successfully decrypted!"
-        return 1
-      fi
-    done
+      # Decrupt all env files with SOPS/Vault/age
+      _sops_execute decrypt
+
+      # Check to make sure we decrypted successfully
+      for file in *.env; do
+        if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
+          echo "${_COLOR_RED}[!]${_RESET} Env file(s) were not successfully decrypted!"
+          return 1
+        fi
+      done
+    fi
 
     # Run docker subcommand
     docker $@
 
     # Re-encrypt env files if needed
-    _sops_encrypt_files
+    if [[ $needsEnv == 1 ]]; then
+      _sops_execute encrypt
+    fi
+}
+
+function _check_command_needs_env {
+  for command in $ENV_INJECTED_COMMANDS; do
+    if [[ $@ =~ $command ]]; then
+      return 1
+    fi
+  done
+
+  return 0
 }
 
 # Login to Vault using approle if needed
 function _vault_approle_login {
     # Check if existing token still works
     vault token lookup &> /dev/null
-    
+
     if [ $? -ne 0 ]; then
       token=$(vault write -field="token" auth/approle/login role_id="xxx" secret_id="xxx")
       export VAULT_TOKEN=$token
-    fi   
+    fi
 }
 
-function _sops_decrypt_files {
+function _sops_execute {
+    echo "${_COLOR_CYAN}[i]${_RESET} Running $1 on env files..."
     for file in *.env; do
       if (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+') ; then
-        sops decrypt -i $file
+        sops $1 -i $file
       else
-        echo "${_COLOR_CYAN}[i]${_RESET} $file does not need decryption!"
-      fi
-    done
-}
-
-
-function _sops_encrypt_files {
-    for file in *.env; do
-      if ! (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+' &> /dev/null) ; then
-        sops encrypt -i $file
-      else
-        echo "${_COLOR_CYAN}[i]${_RESET} $file does not need encryption!"
+        echo "${_COLOR_YELLOW}[!]${_RESET} $file does not need $1!"
       fi
     done
 }
