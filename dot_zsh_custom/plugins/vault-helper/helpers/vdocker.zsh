@@ -37,9 +37,9 @@ function _vault_approle_login {
 }
 
 function _sops_decrypt_files {
-    find . -type f -name "*.env" -maxdepth 0 -exec sops decrypt "{}" \;
+    find . -maxdepth 0 -type f -name "*.env" -exec sops decrypt "{}" \;
 }
 
 function _sops_encrypt_files {
-    find . -type f -name "*.env" -maxdepth 0 -exec sops encrypt "{}" \;
+    find . -maxdepth 0 -type f -name "*.env" -maxdepth 0 -exec sops encrypt "{}" \;
 }
