@@ -60,7 +60,7 @@ function _sops_decrypt_files {
 function _sops_encrypt_files {
     for file in *.env; do
       if ! (cat $file | grep -qEx -e 'sops_version=[0-9]+\.[0-9]+\.[0-9]+' &> /dev/null) ; then
-        echo Need to encrypt
+        sops encrypt -i $file
       else
         echo "${_COLOR_CYAN}[i]${_RESET} $file does not need encryption!"
       fi
