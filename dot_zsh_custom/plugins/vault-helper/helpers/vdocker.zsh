@@ -48,15 +48,13 @@ function vdocker {
 }
 
 function _check_command_needs_env {
-
   for command in $ENV_INJECTED_COMMANDS; do
-    echo "Checking $@ contains $command"
     if [[ $@ =~ $command ]] || [[ $@ == $command ]]; then
-      return true
+      return 1
     fi
   done
 
-  return false
+  return 0
 }
 
 # Login to Vault using approle if needed
