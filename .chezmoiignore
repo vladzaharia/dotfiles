@@ -31,9 +31,10 @@ README.md
 {{- if eq .chezmoi.os "windows" }}
 **
 !*.bat
-!*.ps1
+!*.ps
+!.continue
+!.continue/config.json
 !.config
-.config/*
 !.config/wezterm
 !.config/wezterm/**
 !.config/starship.toml
@@ -47,10 +48,14 @@ README.md
 !Documents
 !Documents/WindowsPowerShell
 !Documents/WindowsPowerShell/**
+!Documents/AutoHotkey
+!Documents/AutoHotkey/**
 
 {{- else}}
 AppData/**
+Documents/**
 Documents/WindowsPowerShell/**
+Documents/AutoHotkey/**
 *.bat
 *.ps1
 {{- end }}
