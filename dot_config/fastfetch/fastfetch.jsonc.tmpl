@@ -1,0 +1,165 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    {{ if eq .chezmoi.distro.name "bazzite" -}}
+    "logo": {
+        "type": "file",
+        "source": "/usr/share/ublue-os/bazzite/logo.txt",
+        "color": {
+            "1": "94",
+            "2": "47",
+            "3": "95",
+            "4": "0",
+            "5": "8",
+            "6": "55"
+        }
+    },
+    {{ else if eq .chezmoi.distro.name "bluefin" -}}
+    "logo": {
+        "type": "file",
+        "source": "/usr/share/ublue-os/bluefin/logo.txt",
+        "color": {
+            "1": "38",
+            "2": "2",
+            "3": "87",
+            "4": "160",
+            "5": "198"
+        }
+    },
+    {{ else -}}
+    "logo",
+    {{ end -}}
+    "display": {
+        "separator": "  ",
+        "color": {
+            "keys": "light_blue"
+        },
+    },
+    "modules": [
+        {
+            "type": "title",
+            "key": " ",
+            "color": {
+                "user": "light_blue",
+                "at": "white",
+                "host": "magenta"
+            }
+        },
+        "break",
+        {{ if eq .chezmoi.distro.name "bazzite" -}}
+        {
+            "type": "command",
+            "key": " 󱋩",
+            "text": "/usr/libexec/bazzite-fetch-image"
+        },
+        {{ else if eq .chezmoi.distro.name "bluefin" -}}
+        {
+            "type": "command",
+            "key": "󱋩",
+            "text": "/usr/libexec/ublue-image-info.sh"
+        },
+        {{ end -}}
+        {
+            "type": "os",
+            "key": " 󰣛",
+            "format": "{pretty-name}"
+        },
+        {
+            "type": "kernel",
+            "key": " ",
+            "format": "{1} {2}"
+        },
+        {
+            "type": "uptime",
+            "key": " 󰅐"
+        },
+        {
+            "type": "command",
+            "key": " 󰔠",
+            "text": "date -d$(ls -alct / --time-style=full-iso|tail -1|awk '{print $6}') +'Spawned on %b %d %G'",
+            "shell": "/usr/bin/bash"
+        },
+        "break",
+        {
+            "type": "host",
+            "key": " 󰾰"
+        },
+        {
+            "type": "cpu",
+            "key": " 󰻠"
+        },
+        {
+            "type": "gpu",
+            "key": " 󰍛"
+        },
+        {
+            "type": "memory",
+            "key": " "
+        },
+        {
+            "type": "disk",
+            "key": " "
+        },
+        {
+            "type": "display",
+            "key": " 󰍹"
+        },
+        {
+            "type": "battery",
+            "key": " "
+        },
+        {
+            "type": "gamepad",
+            "key": " 󰖺"
+        },
+        "break",
+        {
+            "type": "wifi",
+            "key": " "
+        },
+        {
+            "type": "bluetooth",
+            "key": " 󰂯"
+        },
+        {
+            "type": "localip",
+            "showIpv6": true,
+            "key": " 󱦂"
+        },
+        {
+            "type": "publicip",
+            "timeout": 500,
+            "key": " 󰩟"
+        },
+        {
+            "type": "netio",
+            "key": " 󰛴"
+        },
+        "break",
+        {
+            "type": "de",
+            "key": " 󰕮"
+        },
+        {
+            "type": "wm",
+            "key": " "
+        },
+        {
+            "type": "shell",
+            "key": " "
+        },
+        {
+            "type": "terminal",
+            "key": " "
+        },
+        {
+            "type": "packages",
+            "key": " 󰏖"
+        },
+        "break",
+        {
+            "type": "colors",
+            "paddingLeft": 2,
+            "symbol": "circle"
+        }
+    ]
+}

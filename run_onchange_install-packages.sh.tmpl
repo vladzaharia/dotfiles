@@ -31,6 +31,9 @@ sudo apt-get install -y bat direnv eza fd-find fzf ripgrep rust-tealdeer ugrep y
 # Install ZOxide
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
+# Install Fastfetch
+curl -sSL https://alessandromrc.github.io/fastfetch-installer/installer.sh | bash
+
 {{   if and (ne .chezmoi.chassis "ephemeral") (ne .chezmoi.chassis "beepy") -}}
 
 # Add docker repository
