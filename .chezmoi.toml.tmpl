@@ -55,6 +55,22 @@ encryption = "age"
     chezmoi.distro.name = {{ $distro | quote }}
     chezmoi.distro.like = {{ $distroLike | quote }}
 
+    {{ if eq .chezmoi.distro.like "fedora" -}}
+    fastfetch.color = "light_blue"
+    {{ else if eq .chezmoi.distro.name "ubuntu" -}}
+    fastfetch.color = "yellow"
+    {{ else if eq .chezmoi.distro.like "debian" -}}
+    fastfetch.color = "red"
+    {{ else if eq .chezmoi.distro.like "opensuse" -}}
+    fastfetch.color = "green"
+    {{ else if eq .chezmoi.distro.like "windows" -}}
+    fastfetch.color = "light_blue"
+    {{ else if eq .chezmoi.distro.name "darwin" -}}
+    fastfetch.color = "light_blue"
+    {{ else -}}
+    fastfetch.color = "black"
+    {{ end -}}
+
     flags.applesilicon = {{ and (eq $distro "darwin") (eq .chezmoi.arch "arm64") }}
     flags.ephemeral = {{ or (eq $chassisType "ephemeral") (eq $chassisType "kasm") }}
     flags.pokemon = {{ $pokemon }}

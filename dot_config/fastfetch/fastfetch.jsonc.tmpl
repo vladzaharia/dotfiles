@@ -26,23 +26,10 @@
     },
     {{ end -}}
     "display": {
-        "separator": "  ",
+        "separator": "  ",
         "color": {
-            {{ if eq .chezmoi.distro.like "fedora" -}}
-            "keys": "light_blue"
-            {{ else if eq .chezmoi.distro.name "ubuntu" -}}
-            "keys": "yellow"
-            {{ else if eq .chezmoi.distro.like "debian" -}}
-            "keys": "red"
-            {{ else if eq .chezmoi.distro.like "opensuse" -}}
-            "keys": "green"
-            {{ else if eq .chezmoi.distro.like "windows" -}}
-            "keys": "light_blue"
-            {{ else if eq .chezmoi.distro.name "darwin" -}}
-            "keys": "light_blue"
-            {{ else -}}
-            "keys": "gray",
-            {{ end -}}
+            "keys": "{{ .fastfetch.color }}",
+            "separator": "dim_black"
         },
     },
     "modules": [
@@ -50,9 +37,9 @@
             "type": "title",
             "key": " ",
             "color": {
-                "user": "light_blue",
+                "user": "magenta",
                 "at": "white",
-                "host": "magenta"
+                "host": "{{ .fastfetch.color }}"
             }
         },
         "break",
