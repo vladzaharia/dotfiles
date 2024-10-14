@@ -63,7 +63,7 @@ encryption = "age"
     fastfetch.color = "red"
     {{ else if eq .chezmoi.distro.like "opensuse" -}}
     fastfetch.color = "green"
-    {{ else if eq .chezmoi.distro.like "windows" -}}
+    {{ else if eq .chezmoi.os "windows" -}}
     fastfetch.color = "light_blue"
     {{ else if eq .chezmoi.distro.name "darwin" -}}
     fastfetch.color = "light_blue"

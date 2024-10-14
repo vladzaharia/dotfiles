@@ -24,6 +24,15 @@
             "1": "yellow",
         }
     },
+    {{ else if eq .chezmoi.os "windows" -}}
+    "logo": {
+        "color": {
+            "1": "red",
+            "2": "green",
+            "3": "blue",
+            "4": "yellow",
+        }
+    },
     {{ end -}}
     "display": {
         "separator": "  ",
