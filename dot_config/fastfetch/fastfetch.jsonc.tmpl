@@ -17,21 +17,37 @@
     "logo": {
         "type": "file",
         "source": "/usr/share/ublue-os/bluefin/logo.txt"
+        "padding": {
+            "top": 1
+        },
     },
     {{ else if eq .chezmoi.distro.name "ubuntu" -}}
     "logo": {
+        "padding": {
+            "top": 1
+        },
         "color": {
             "1": "yellow",
         }
     },
     {{ else if eq .chezmoi.os "windows" -}}
     "logo": {
+        "padding": {
+            "left": 2,
+            "top": 1
+        },
         "color": {
             "1": "red",
             "2": "green",
             "3": "blue",
             "4": "yellow",
         }
+    },
+    {{ else -}}
+    "logo": {
+        "padding": {
+            "top": 1
+        },
     },
     {{ end -}}
     "display": {
