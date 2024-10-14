@@ -70,8 +70,6 @@ if [ "$(command -v brew)" ]; then
     # Cross-plat 
     brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd-find fzf gnupg hammerspoon hurl nvm ripgrep starship tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide
 
-bat direnv eza fd-find fzf ripgrep ugrep yq
-
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
 

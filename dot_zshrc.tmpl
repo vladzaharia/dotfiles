@@ -185,7 +185,7 @@ fi
 # Atuin
 if [ $(command -v atuin) ]; then
     #export ATUIN_NOBIND="true"
-    export ATUIN_
+    export ATUIN_SYNC_ADDRESS="https://atuin.polaris.rest"
     eval "$(atuin init zsh)"
 
     #bindkey '^r' _atuin_search_widget
