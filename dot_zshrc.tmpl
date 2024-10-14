@@ -185,7 +185,11 @@ fi
 # Atuin
 if [ $(command -v atuin) ]; then
     export ATUIN_SYNC_ADDRESS="https://atuin.polaris.rest"
+    {{- if eq .chezmoi.distro.name "ubuntu" }}
     . "$HOME/.atuin/bin/env"
+    {{- else }}
+    eval "$(atuin env zsh)"
+    {{- end }}
 fi
 {{- end }}
 
