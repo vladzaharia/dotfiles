@@ -184,12 +184,8 @@ fi
 {{- if not .flags.pokemon }}
 # Atuin
 if [ $(command -v atuin) ]; then
-    #export ATUIN_NOBIND="true"
     export ATUIN_SYNC_ADDRESS="https://atuin.polaris.rest"
-    eval "$(atuin init zsh)"
-
-    #bindkey '^r' _atuin_search_widget
-    #bindkey '^[^[[A' _atuin_up_search_widget
+    . "$HOME/.atuin/bin/env"
 fi
 {{- end }}
 
