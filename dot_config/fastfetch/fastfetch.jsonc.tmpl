@@ -18,6 +18,12 @@
         "type": "file",
         "source": "/usr/share/ublue-os/bluefin/logo.txt"
     },
+    {{ else if eq .chezmoi.distro.name "ubuntu" -}}
+    "logo": {
+        "color": {
+            "1": "yellow",
+        }
+    },
     {{ end -}}
     "display": {
         "separator": "  ",
