@@ -16,17 +16,8 @@
     {{ else if eq .chezmoi.distro.name "bluefin" -}}
     "logo": {
         "type": "file",
-        "source": "/usr/share/ublue-os/bluefin/logo.txt",
-        "color": {
-            "1": "38",
-            "2": "2",
-            "3": "87",
-            "4": "160",
-            "5": "198"
-        }
+        "source": "/usr/share/ublue-os/bluefin/logo.txt"
     },
-    {{ else -}}
-    "logo",
     {{ end -}}
     "display": {
         "separator": "  ",
@@ -60,7 +51,23 @@
         {{ end -}}
         {
             "type": "os",
+            {{ if eq .chezmoi.distro.like "fedora" -}}
             "key": " 󰣛",
+            {{ else if eq .chezmoi.distro.name "ubuntu" -}}
+            "key": " ",
+            {{ else if eq .chezmoi.distro.like "debian" -}}
+            "key": " ",
+            {{ else if eq .chezmoi.distro.like "opensuse" -}}
+            "key": " ",
+            {{ else if eq .chezmoi.distro.like "arch" -}}
+            "key": " 󰣇",
+            {{ else if eq .chezmoi.distro.like "windows" -}}
+            "key": " ",
+            {{ else if eq .chezmoi.distro.name "darwin" -}}
+            "key": " ",
+            {{ else -}}
+            "key": " ",
+            {{ end -}}
             "format": "{pretty-name}"
         },
         {
