@@ -35,6 +35,8 @@ README.md
 !.continue
 !.continue/config.json
 !.config
+!.config/fastfetch
+!.config/fastfetch/**
 !.config/wezterm
 !.config/wezterm/**
 !.config/starship.toml
