@@ -3,7 +3,7 @@
 ######
 
 # Update PATH
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
 
 {{- if (eq .chezmoi.distro.name "darwin") }}
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
@@ -210,14 +210,17 @@ if [ $(command -v zoxide) ]; then
     alias cd=z
 fi
 
-if [ -f ~/.config/assassin/.env ]; then
-    # Assassin environment variables
-    . ~/.config/assassin/.env
-fi
+# Bat
+if [ $(command -v bat) ]; then
+    # Man pages colorized
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
-if [ -f ~/.beepy.zshrc ]; then
-    # Beepy configuration
-    . ~/.beepy.zshrc
+    # Help pages colorized
+    alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
+    alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+
+    # cat replacement
+    alias cat=bat
 fi
 
 # nvm

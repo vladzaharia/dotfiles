@@ -12,12 +12,9 @@ if [ ! "$(command -v starship)" ]; then
     curl -sS https://starship.rs/install.sh | sh -s -- -y
 fi
 
-echo "${LCYAN}###${RESET} Apt install (common)"
+echo "${LCYAN}###${RESET} apt-get install (common)"
 # Update repos
 sudo apt-get update
-
-# Install direnv and jq
-sudo apt-get install -y direnv jq fd-find fzf
 
 # Install Eza
 if [ ! -f /etc/apt/sources.list.d/gierens.list ]; then
@@ -26,10 +23,10 @@ if [ ! -f /etc/apt/sources.list.d/gierens.list ]; then
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
     echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
     sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-    sudo apt update
+    sudo apt-get update
 fi
 
-sudo apt install -y eza
+sudo apt-get install -y bat direnv eza fd-find fzf ripgrep rust-tealdeer ugrep yq
 
 # Install ZOxide
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
@@ -43,7 +40,7 @@ if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/{{.chezmoi.distro.name}} $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 fi
 
-echo "${LCYAN}###${RESET} Apt install (dev)"
+echo "${LCYAN}###${RESET} apt-get install (dev)"
 # Update repos
 sudo apt-get update
 
@@ -71,7 +68,9 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age atuin direnv docker docker-compose eza fzf gnupg hammerspoon hurl jq kubectl nvm starship hashicorp/tap/vault wezterm tealdeer zoxide
+    brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd-find fzf gnupg hammerspoon hurl nvm ripgrep starship tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide
+
+bat direnv eza fd-find fzf ripgrep ugrep yq
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
