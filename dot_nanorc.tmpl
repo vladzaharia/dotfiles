@@ -133,10 +133,8 @@ set tabstospaces
 # Save automatically on exit, don't prompt.
 unset tempfile
 
-{{- if ne .chezmoi.chassis "beepy" }}
 # Disallow file modification.
-unset view
-{{- end }}
+#unset view
 
 # Set the two characters used to display the first characters of tabs and
 # spaces. They must be single-column characters.
