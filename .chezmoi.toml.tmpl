@@ -55,17 +55,17 @@ encryption = "age"
     chezmoi.distro.name = {{ $distro | quote }}
     chezmoi.distro.like = {{ $distroLike | quote }}
 
-    {{ if eq .chezmoi.distro.like "fedora" -}}
+    {{ if eq $distroLike "fedora" -}}
     fastfetch.color = "light_blue"
-    {{ else if eq .chezmoi.distro.name "ubuntu" -}}
+    {{ else if eq $distro "ubuntu" -}}
     fastfetch.color = "yellow"
-    {{ else if eq .chezmoi.distro.like "debian" -}}
+    {{ else if eq $distroLike "debian" -}}
     fastfetch.color = "red"
-    {{ else if eq .chezmoi.distro.like "opensuse" -}}
+    {{ else if eq $distroLike "opensuse" -}}
     fastfetch.color = "green"
     {{ else if eq .chezmoi.os "windows" -}}
     fastfetch.color = "light_blue"
-    {{ else if eq .chezmoi.distro.name "darwin" -}}
+    {{ else if eq $distro "darwin" -}}
     fastfetch.color = "light_blue"
     {{ else -}}
     fastfetch.color = "black"
