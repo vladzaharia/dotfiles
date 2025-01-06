@@ -3,7 +3,7 @@
 {{- $wsl := (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 {{- $distro := (.chezmoi.os) -}}
 {{- $distroLike := (.chezmoi.os) -}}
-{{- if (and (eq $distro "linux") (not $devcontainer)) -}}
+{{- if eq $distro "linux" -}}
 {{- $distro = (.chezmoi.osRelease.id) -}}
 {{- $distroLike = (.chezmoi.osRelease.idLike) -}}
 {{- end -}}
