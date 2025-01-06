@@ -18,12 +18,6 @@ README.md
 .ssh/id_pkmn*
 {{- end }}
 
-{{- if .flags.ephemeral }}
-.gnupg/**
-.ssh/id*
-**/*.age
-{{- end }}
-
 {{- if eq .chezmoi.chassis "beepy" }}
 **/*.age
 {{- end }}
@@ -58,6 +52,15 @@ AppData/**
 Documents/**
 Documents/WindowsPowerShell/**
 Documents/AutoHotkey/**
+*.bat
+*.ps1
+{{- end }}
+
+{{- if .flags.ephemeral }}
+.gnupg/**
+.ssh/id*
+**/*.age
+*.sh
 *.bat
 *.ps1
 {{- end }}
