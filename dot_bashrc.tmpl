@@ -2,6 +2,6 @@
 
 eval "$(starship init bash)"
 
-{{- if (eq .chezmoi.chassis "ephemeral") -}}
+{{ if (eq .chezmoi.chassis "ephemeral") -}}
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 {{- end -}}
