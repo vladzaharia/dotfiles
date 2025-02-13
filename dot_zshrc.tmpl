@@ -152,6 +152,15 @@ zi load $ZSH_PLUGINS/pkmn-repos
 # Set nano as default editor
 export EDITOR='nano'
 
+if [ "$(command -v micro)" ]; then
+    export EDITOR="$(where micro)"
+    alias nano=micro
+fi
+
+if [ "$(command -v bat)" ]; then
+    alias cat=bat
+fi
+
 # Homebrew zsh hooks
 if [ "$(command -v brew)" ]; then
     eval "$(brew shellenv)"
@@ -226,6 +235,11 @@ if [ $(command -v orbctl) ]; then
 fi
 {{ end }}
 
+# Windsurf
+if [ -d $HOME/.codeium/windsurf/bin ]; then
+    export PATH="$HOME/.codeium/windsurf/bin:$PATH"
+fi
+
 {{- if .flags.pokemon }}
 ######
 ### Pokemon Configuration
@@ -236,3 +250,4 @@ if [ -f "$FILE" ]; then
     . $FILE
 fi
 {{- end }}
+
