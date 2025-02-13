@@ -1,0 +1,204 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    {{ if eq .chezmoi.distro.name "bazzite" -}}
+    "logo": {
+        "type": "file",
+        "source": "/usr/share/ublue-os/bazzite/logo.txt",
+        "color": {
+            "1": "94",
+            "2": "47",
+            "3": "95",
+            "4": "0",
+            "5": "8",
+            "6": "55"
+        }
+    },
+    {{ else if eq .chezmoi.distro.name "bluefin" -}}
+    "logo": {
+        "type": "file",
+        "source": "/usr/share/ublue-os/bluefin-logos/symbols/dolly"
+        "padding": {
+            "top": 1
+        },
+    },
+    {{ else if eq .chezmoi.distro.name "ubuntu" -}}
+    "logo": {
+        "padding": {
+            "top": 1
+        },
+        "color": {
+            "1": "yellow",
+        }
+    },
+    {{ else if eq .chezmoi.os "windows" -}}
+    "logo": {
+        "padding": {
+            "left": 2,
+            "top": 1
+        },
+        "color": {
+            "1": "red",
+            "2": "green",
+            "3": "blue",
+            "4": "yellow",
+        }
+    },
+    {{ else -}}
+    "logo": {
+        "padding": {
+            "top": 1
+        },
+    },
+    {{ end -}}
+    "display": {
+        "separator": "  ",
+        "color": {
+            "keys": "{{ .fastfetch.color }}",
+            "separator": "dim_black"
+        },
+    },
+    "modules": [
+        {
+            "type": "title",
+            "key": " ",
+            "color": {
+                "user": "magenta",
+                "at": "white",
+                "host": "{{ .fastfetch.color }}"
+            }
+        },
+        "break",
+        {{ if eq .chezmoi.distro.name "bazzite" -}}
+        {
+            "type": "command",
+            "key": " 󱋩",
+            "text": "/usr/libexec/bazzite-fetch-image"
+        },
+        {{ else if eq .chezmoi.distro.name "bluefin" -}}
+        {
+            "type": "command",
+            "key": "󱋩",
+            "text": "/usr/libexec/ublue-image-info.sh"
+        },
+        {{ end -}}
+        {
+            "type": "os",
+            {{ if eq .chezmoi.distro.like "fedora" -}}
+            "key": " 󰣛",
+            {{ else if eq .chezmoi.distro.name "ubuntu" -}}
+            "key": " ",
+            {{ else if eq .chezmoi.distro.like "debian" -}}
+            "key": " ",
+            {{ else if eq .chezmoi.distro.like "opensuse" -}}
+            "key": " ",
+            {{ else if eq .chezmoi.distro.like "arch" -}}
+            "key": " 󰣇",
+            {{ else if eq .chezmoi.distro.like "windows" -}}
+            "key": " ",
+            {{ else if eq .chezmoi.distro.name "darwin" -}}
+            "key": " ",
+            {{ else -}}
+            "key": " ",
+            {{ end -}}
+            "format": "{pretty-name}"
+        },
+        {
+            "type": "kernel",
+            "key": " ",
+            "format": "{1} {2}"
+        },
+        {
+            "type": "uptime",
+            "key": " 󰅐"
+        },
+        {
+            "type": "command",
+            "key": " 󰔠",
+            "text": "date -d$(ls -alct / --time-style=full-iso|tail -1|awk '{print $6}') +'Spawned on %b %d %G'",
+            "shell": "/usr/bin/bash"
+        },
+        "break",
+        {
+            "type": "host",
+            "key": " 󰾰"
+        },
+        {
+            "type": "cpu",
+            "key": " 󰻠"
+        },
+        {
+            "type": "gpu",
+            "key": " 󰍛"
+        },
+        {
+            "type": "memory",
+            "key": " "
+        },
+        {
+            "type": "disk",
+            "key": " "
+        },
+        {
+            "type": "display",
+            "key": " 󰍹"
+        },
+        {
+            "type": "battery",
+            "key": " "
+        },
+        {
+            "type": "gamepad",
+            "key": " 󰖺"
+        },
+        "break",
+        {
+            "type": "wifi",
+            "key": " "
+        },
+        {
+            "type": "bluetooth",
+            "key": " 󰂯"
+        },
+        {
+            "type": "localip",
+            "showIpv6": true,
+            "key": " 󱦂"
+        },
+        {
+            "type": "publicip",
+            "timeout": 500,
+            "key": " 󰩟"
+        },
+        {
+            "type": "netio",
+            "key": " 󰛴"
+        },
+        "break",
+        {
+            "type": "de",
+            "key": " 󰕮"
+        },
+        {
+            "type": "wm",
+            "key": " "
+        },
+        {
+            "type": "shell",
+            "key": " "
+        },
+        {
+            "type": "terminal",
+            "key": " "
+        },
+        {
+            "type": "packages",
+            "key": " 󰏖"
+        },
+        "break",
+        {
+            "type": "colors",
+            "paddingLeft": 2,
+            "symbol": "circle"
+        }
+    ]
+}

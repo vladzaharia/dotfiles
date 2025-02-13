@@ -17,4 +17,8 @@ winget install docker.dockerdesktop git.git Microsoft.VisualStudioCode Microsoft
 # Customization tools
 winget install steelseries.gg
 
+# Neovim
+winget install Neovim.Neovim JesseDuffield.lazygit BurntSushi.ripgrep.MSVC sharkdp.fd
+winget install -i llvm
+
 exit 0

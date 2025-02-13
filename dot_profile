@@ -25,3 +25,8 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+
+# Fastfetch MOTD
+if [ $(command -v fastfetch) ]; then
+    $(which fastfetch) -c $HOME/.config/fastfetch/fastfetch.jsonc
+fi

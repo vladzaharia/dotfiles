@@ -18,12 +18,6 @@ README.md
 .ssh/id_pkmn*
 {{- end }}
 
-{{- if .flags.ephemeral }}
-.gnupg/**
-.ssh/id*
-**/*.age
-{{- end }}
-
 {{- if eq .chezmoi.chassis "beepy" }}
 **/*.age
 {{- end }}
@@ -31,9 +25,12 @@ README.md
 {{- if eq .chezmoi.os "windows" }}
 **
 !*.bat
-!*.ps1
+!*.ps
+!.continue
+!.continue/config.json
 !.config
-.config/*
+!.config/fastfetch
+!.config/fastfetch/**
 !.config/wezterm
 !.config/wezterm/**
 !.config/starship.toml
@@ -47,10 +44,23 @@ README.md
 !Documents
 !Documents/WindowsPowerShell
 !Documents/WindowsPowerShell/**
+!Documents/AutoHotkey
+!Documents/AutoHotkey/**
 
 {{- else}}
 AppData/**
+Documents/**
 Documents/WindowsPowerShell/**
+Documents/AutoHotkey/**
+*.bat
+*.ps1
+{{- end }}
+
+{{- if .flags.ephemeral }}
+.gnupg/**
+.ssh/id*
+**/*.age
+*.sh
 *.bat
 *.ps1
 {{- end }}

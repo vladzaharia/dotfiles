@@ -14,8 +14,8 @@ function votp() {
         fi
         
         echo "${_COLOR_CYAN}[i]${_RESET} votp [-l] <key>"
-        echo "${_COLOR_CYAN}[i]${_RESET} key: TOTP key to retrieve token for"
-        echo "${_COLOR_CYAN}[i]${_RESET}  -l: List all keys"
+        echo "${_COLOR_CYAN}[i]${_RESET}   key: TOTP key to retrieve token for"
+        echo "${_COLOR_CYAN}[i]${_RESET}   -l: List all keys"
         return 1
     fi
 

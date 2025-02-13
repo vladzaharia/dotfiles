@@ -3,7 +3,7 @@
 ######
 
 # Update PATH
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
 
 {{- if (eq .chezmoi.distro.name "darwin") }}
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
@@ -86,8 +86,8 @@ zi for \
   OMZP::node \
   OMZP::npm \
   OMZP::nvm \
-  OMZP::yarn \
-  $ZSH_PLUGINS/auto-nvmrc
+  OMZP::yarn 
+#  $ZSH_PLUGINS/auto-nvmrc
 
 # Pip
 zi ice wait lucid has'pip'
@@ -193,12 +193,12 @@ fi
 {{- if not .flags.pokemon }}
 # Atuin
 if [ $(command -v atuin) ]; then
-    #export ATUIN_NOBIND="true"
-    export ATUIN_
+    export ATUIN_SYNC_ADDRESS="https://atuin.polaris.rest"
+    {{- if eq .chezmoi.distro.name "ubuntu" }}
+    . "$HOME/.atuin/bin/env"
+    {{- else }}
     eval "$(atuin init zsh)"
-
-    #bindkey '^r' _atuin_search_widget
-    #bindkey '^[^[[A' _atuin_up_search_widget
+    {{- end }}
 fi
 {{- end }}
 
@@ -208,14 +208,28 @@ if [ $(command -v eza) ]; then
     export EZA_COLORS="di=38;5;039;1:ex=38;5;082;1:vi=38;5;105:.*=38;5;243:*.apk=38;5;154:*.env=38;5;243:*.jar=38;5;196:*.ts=38;5;033:docker-compose.yml=38;5;045"
 fi
 
-if [ -f ~/.config/assassin/.env ]; then
-    # Assassin environment variables
-    . ~/.config/assassin/.env
+# Zoxide
+if [ $(command -v zoxide) ]; then
+    eval "$(zoxide init zsh)"
+    alias cd=z
 fi
 
-if [ -f ~/.beepy.zshrc ]; then
-    # Beepy configuration
-    . ~/.beepy.zshrc
+# Bat
+if [ $(command -v bat) ]; then
+    # Man pages colorized
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+    # Help pages colorized
+    alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
+    alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+
+    # cat replacement
+    alias cat=bat
+fi
+
+# Fastfetch MOTD
+if [ $(command -v fastfetch) ]; then
+    $(which fastfetch) -c $HOME/.config/fastfetch/fastfetch.jsonc
 fi
 
 # nvm
@@ -250,4 +264,3 @@ if [ -f "$FILE" ]; then
     . $FILE
 fi
 {{- end }}
-

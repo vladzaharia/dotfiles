@@ -3,9 +3,9 @@
 {{- $wsl := (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 {{- $distro := (.chezmoi.os) -}}
 {{- $distroLike := (.chezmoi.os) -}}
-{{- if (and (eq $distro "linux") (not $devcontainer)) -}}
+{{- if eq $distro "linux" -}}
 {{- $distro = (.chezmoi.osRelease.id) -}}
-{{- $distroLike = (.chezmoi.osRelease.idLike) -}}
+{{- $distroLike = (or (index .chezmoi.osRelease "idLike") (.chezmoi.osRelease.id)) -}}
 {{- end -}}
 
 {{- $chassisType := "desktop" -}}
@@ -54,6 +54,22 @@ encryption = "age"
     chezmoi.chassis = {{ $chassisType | quote }}
     chezmoi.distro.name = {{ $distro | quote }}
     chezmoi.distro.like = {{ $distroLike | quote }}
+
+    {{ if eq $distroLike "fedora" -}}
+    fastfetch.color = "light_blue"
+    {{ else if eq $distro "ubuntu" -}}
+    fastfetch.color = "yellow"
+    {{ else if eq $distroLike "debian" -}}
+    fastfetch.color = "red"
+    {{ else if eq $distroLike "opensuse" -}}
+    fastfetch.color = "green"
+    {{ else if eq .chezmoi.os "windows" -}}
+    fastfetch.color = "light_blue"
+    {{ else if eq $distro "darwin" -}}
+    fastfetch.color = "light_blue"
+    {{ else -}}
+    fastfetch.color = "black"
+    {{ end -}}
 
     flags.applesilicon = {{ and (eq $distro "darwin") (eq .chezmoi.arch "arm64") }}
     flags.ephemeral = {{ or (eq $chassisType "ephemeral") (eq $chassisType "kasm") }}

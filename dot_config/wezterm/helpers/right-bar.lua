@@ -17,12 +17,18 @@ function get_segments(window)
   -- Insert domain if it's not local
   local domain = window:active_pane():get_domain_name()
   if domain ~= "local" then
-    local icon = "󰛳 "
+    local icon = " "
     
     if string.find(domain, "WSL") ~= nil then
       icon = "󰌽 "
       domain = domain:gsub("WSL:", "")
     end
+
+    if string.find(domain, "SSH") ~= nil then
+      icon = "󰢩 "
+      domain = domain:gsub("SSH:", "")
+    end
+
     table.insert(base_segments, 1, icon .. domain)
     idx = idx + 1
   end

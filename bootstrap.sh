@@ -28,3 +28,5 @@ if [ "$1" == "-g" ]; then
 else
   exec "$chezmoi" init --apply "--source=$script_dir" --force
 fi
+
+exit 0

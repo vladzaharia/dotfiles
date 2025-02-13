@@ -46,7 +46,7 @@ set historylog
 set matchbrackets string "(<[{)>]}"
 
 # Use of the blank line below the titlebar as extra editing space.
-unset morespace
+#unset morespace
 
 # Enable mouse support, so that mouse clicks can be used to place the cursor,
 # set the mark (with a double click), or execute shortcuts.
@@ -68,7 +68,7 @@ set noconvert
 #unset nonewlines
 
 # Don't wrap text at all.
-unset nowrap
+#unset nowrap
 
 # nano will only read and write files inside directory and its subdirectories.
 # Also, the current directory is changed to here, so files are inserted from
@@ -114,7 +114,7 @@ unset regexp
 set smarthome
 
 # Use smooth scrolling by default.
-set smooth
+#set smooth
 
 # Use spelling checker spellprog instead of the built-in one, which calls
 # "spell".
@@ -133,10 +133,8 @@ set tabstospaces
 # Save automatically on exit, don't prompt.
 unset tempfile
 
-{{- if ne .chezmoi.chassis "beepy" }}
 # Disallow file modification.
-unset view
-{{- end }}
+#unset view
 
 # Set the two characters used to display the first characters of tabs and
 # spaces. They must be single-column characters.

@@ -32,12 +32,18 @@ if [ ! -f /etc/apt/sources.list.d/gierens.list ]; then
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
     echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
     sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-    sudo apt update
+    sudo apt-get update
 fi
 
-sudo apt install -y eza
+sudo apt-get install -y bat direnv eza fd-find fzf ripgrep rust-tealdeer ugrep yq
 
-{{ if and (ne .chezmoi.chassis "ephemeral") (ne .chezmoi.chassis "beepy") -}}
+# Install ZOxide
+curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
+# Install Fastfetch
+curl -sSL https://alessandromrc.github.io/fastfetch-installer/installer.sh | bash
+
+{{   if and (ne .chezmoi.chassis "ephemeral") (ne .chezmoi.chassis "beepy") -}}
 
 # Add docker repository
 if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
@@ -46,19 +52,12 @@ if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/{{.chezmoi.distro.name}} $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 fi
 
-# Add k8s repository
-if [ ! -f /etc/apt/sources.list.d/kubernetes.list ]; then
-    echo "${CYAN}###${RESET} Adding k8s repository"
-    sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-fi
-
-echo "${LCYAN}###${RESET} Apt install (dev)"
+echo "${LCYAN}###${RESET} apt-get install (dev)"
 # Update repos
 sudo apt-get update
 
 # Install packages
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
 echo "${LCYAN}###${RESET} Atuin install"
 # Install Atuin
@@ -72,7 +71,7 @@ echo "${LCYAN}###${RESET} Zypper install (common)"
 sudo zypper refresh
 
 # Basic utilities
-sudo zypper -n install starship direnv jq eza atuin docker docker-compose docker-buildx
+sudo zypper -n install starship direnv fd jq eza atuin zoxide tealdeer docker docker-compose docker-buildx
 
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 if [ "$(command -v brew)" ]; then
@@ -81,7 +80,7 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age atuin direnv docker docker-compose eza gnupg hammerspoon hurl jq kubectl nvm starship hashicorp/tap/vault wezterm
+    brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd-find fzf gnupg hammerspoon hurl nvm ripgrep starship tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"

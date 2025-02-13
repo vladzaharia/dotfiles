@@ -9,8 +9,8 @@ function vnv() {
     # Help text if -h is passed in
     if [[ $1 == -h* ]]; then
         echo "${_COLOR_CYAN}[i]${_RESET} vnv [-c] <project>"
-        echo "${_COLOR_CYAN}[i]${_RESET} project: Project to get dotenv variables for"
-        echo "${_COLOR_CYAN}[i]${_RESET}      -c: Cleanup environment variables for project"
+        echo "${_COLOR_CYAN}[i]${_RESET}   project: Project to get dotenv variables for"
+        echo "${_COLOR_CYAN}[i]${_RESET}   -c: Cleanup environment variables for project"
         return 1
     fi
 
@@ -26,7 +26,7 @@ function vnv() {
         vaultProject=$2
         echo "${_COLOR_YELLOW}[!]${_RESET} -c provided, cleaning environment variables for '$vaultProject'"
     else
-        echo "${_COLOR_CYAN}[i]${_RESET} Injecting variables from dotenv/$vaultProject/dev"
+        echo "${_COLOR_BLUE}[i]${_RESET} Injecting variables from dotenv/$vaultProject/dev"
     fi
 
     # Get JSON at dotenv/<project>/dev and parse out contents as key=value array

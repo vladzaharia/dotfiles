@@ -9,7 +9,7 @@ function vlogin {
     # Help text if -h is passed in
     if [[ $1 == -h* ]]; then
         echo "${_COLOR_CYAN}[i]${_RESET} vlogin [-t]"
-        echo "${_COLOR_CYAN}[i]${_RESET} -t: Print out token"
+        echo "${_COLOR_CYAN}[i]${_RESET}   -t: Print out token"
         return 1
     fi
 

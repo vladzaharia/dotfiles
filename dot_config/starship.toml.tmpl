@@ -1,9 +1,9 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Right-aligned prompt
 {{ if not .flags.ephemeral -}}
-format = """$status$cmd_duration$battery$username$hostname$directory$shell$character"""
-right_format = '$all'
+# Right-aligned prompt
+format = '$status$cmd_duration$battery$username$hostname$container$directory$shell$character'
+right_format = '$aws$azure$git_status$git_state$git_commit$git_branch$package$docker_context$dotnet$golang$java$nix_shell$nodejs$perl$php$python$rust$terraform'
 {{- end }}
 
 [aws]
@@ -39,35 +39,15 @@ threshold = 40
 style = 'bold yellow'
 
 [character]
-error_symbol = '[](bold red)'
-
-[cmake]
-format = '\[[$symbol($version)]($style)\]'
+error_symbol = '[ ❯](bold red)'
 
 [cmd_duration]
 format = '\[[󰔚 $duration]($style)\] '
-
-[cobol]
-format = '\[[$symbol($version)]($style)\]'
-
-[conda]
-symbol = ' '
-format = '\[[$symbol$environment]($style)\]'
 
 [container]
 disabled = false
 symbol = ''
 format = '[$symbol \[$name\]]($style) '
-
-[crystal]
-format = '\[[$symbol($version)]($style)\]'
-
-[dart]
-symbol = ' '
-format = '\[[$symbol($version)]($style)\]'
-
-[deno]
-format = '\[[$symbol($version)]($style)\]'
 
 [directory]
 read_only = ' '
@@ -80,20 +60,6 @@ format = '\[[$symbol$context]($style)\]'
 
 [dotnet]
 format = '\[[$symbol($version)(🎯 $tfm)]($style)\]'
-
-[elixir]
-symbol = ' '
-format = '\[[$symbol($version \(OTP $otp_version\))]($style)\]'
-
-[elm]
-symbol = ' '
-format = '\[[$symbol($version)]($style)\]'
-
-[erlang]
-format = '\[[$symbol($version)]($style)\]'
-
-[gcloud]
-format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
 
 [git_branch]
 symbol = ' '
@@ -142,13 +108,6 @@ deleted = '[ ](bold yellow)'
 symbol = ' '
 format = '\[[$symbol($version)]($style)\]'
 
-[helm]
-format = '\[[$symbol($version)]($style)\]'
-
-[hg_branch]
-symbol = ' '
-format = '\[[$symbol$branch]($style)\]'
-
 [hostname]
 ssh_symbol = '󰢩 '
 format = '\[[$ssh_symbol$hostname]($style)\] '
@@ -157,33 +116,14 @@ format = '\[[$ssh_symbol$hostname]($style)\] '
 symbol = ' '
 format = '\[[$symbol($version)]($style)\]'
 
-[julia]
-symbol = ' '
-format = '\[[$symbol($version)]($style)\]'
-
-[kotlin]
-format = '\[[$symbol($version)]($style)\]'
-
 [kubernetes]
-format = '\[[$symbol$context( \($namespace\))]($style)\]'
 disabled = true
 
 [localip]
-ssh_only = true
-format = '\[[󰩟 $localipv4]($style)\]'
 disabled = true
-
-[lua]
-format = '\[[$symbol($version)]($style)\]'
 
 [memory_usage]
-symbol = '󰍛 '
-format = '\[[$symbol($ram)]($style)\]'
 disabled = true
-
-[nim]
-symbol = ' '
-format = '\[[$symbol($version)]($style)\]'
 
 [nix_shell]
 symbol = ' '
@@ -193,12 +133,6 @@ format = '\[[$symbol$state( \($name\))]($style)\]'
 disabled = false
 symbol = '󰎙 '
 format = '\[[$symbol($version)]($style)\]'
-
-[ocaml]
-format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
-
-[openstack]
-format = '\[[$symbol$cloud(\($project\))]($style)\]'
 
 [package]
 symbol = ' '
@@ -212,29 +146,12 @@ format = '\[[$symbol($version)]($style)\]'
 symbol = ' '
 format = '\[[$symbol($version)]($style)\]'
 
-[pulumi]
-format = '\[[$symbol$stack]($style)\]'
-
-[purescript]
-format = '\[[$symbol($version)]($style)\]'
-
 [python]
 symbol = ' '
 format = '\[[${symbol}${pyenv_prefix}(${version})(\($virtualenv\))]($style)\]'
 
-[red]
-format = '\[[$symbol($version)]($style)\]'
-
-[ruby]
-symbol = ' '
-format = '\[[$symbol($version)]($style)\]'
-
 [rust]
 symbol = ' '
-format = '\[[$symbol($version)]($style)\]'
-
-[scala]
-symbol = ' '
 format = '\[[$symbol($version)]($style)\]'
 
 [shell]
@@ -257,13 +174,7 @@ signal_symbol = '󱐋'
 disabled = false
 
 [sudo]
-format = '\[[as $symbol]\]'
 disabled = true
-style = 'bold green'
-
-[swift]
-symbol = 'ﯣ '
-format = '\[[$symbol($version)]($style)\]'
 
 [terraform]
 format = '\[[$symbol$workspace]($style)\]'
@@ -273,12 +184,3 @@ format = '\[[$time]($style)\]'
 
 [username]
 format = '\[[ $user]($style)\] '
-
-[vagrant]
-format = '\[[$symbol($version)]($style)\]'
-
-[vlang]
-format = '\[[$symbol($version)]($style)\]'
-
-[zig]
-format = '\[[$symbol($version)]($style)\]'
