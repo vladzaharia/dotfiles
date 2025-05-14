@@ -1,0 +1,13 @@
+# ------------START-CODER-----------
+# This section is managed by coder. DO NOT EDIT.
+#
+# You should not hand-edit this section unless you are removing it, all
+# changes will be lost when running "coder config-ssh".
+#
+Host coder.*
+    ConnectTimeout=0
+    StrictHostKeyChecking=no
+    UserKnownHostsFile=/dev/null
+    LogLevel ERROR
+    ProxyCommand /opt/homebrew/bin/coder --global-config "{{ .chezmoi.homeDir }}/Library/Application Support/coderv2" ssh --stdio --ssh-host-prefix coder. %h
+# ------------END-CODER------------
