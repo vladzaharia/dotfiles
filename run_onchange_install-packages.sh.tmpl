@@ -3,6 +3,13 @@ CYAN='\033[0;36m'
 LCYAN='\033[1;36m'
 RESET='\033[0m'
 
+# Install micro
+if [ ! "$(command -v micro)" ]; then
+    echo "${LCYAN}###${RESET} Micro install"
+    curl https://getmic.ro | bash
+    mv ./micro ~/.local/bin
+fi
+
 {{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
 
 # Install Starship
@@ -12,12 +19,6 @@ if [ ! "$(command -v starship)" ]; then
     curl -sS https://starship.rs/install.sh | sh -s -- -y
 fi
 
-# Install micro
-echo "${LCYAN}###${RESET} Micro install"
-if [ ! "$(command -v micro)" ]; then
-    curl https://getmic.ro/r | bash
-fi
-
 echo "${LCYAN}###${RESET} Apt install (common)"
 # Update repos
 sudo apt-get update
@@ -25,9 +26,9 @@ sudo apt-get update
 # Install utilities
 sudo apt-get install -y bat direnv jq
 
-# Install Eza
+# Install Eza Package Repo
 if [ ! -f /etc/apt/sources.list.d/gierens.list ]; then
-    echo "${CYAN}###${RESET} Adding docker repository"
+    echo "${CYAN}###${RESET} Adding eza repository"
     sudo mkdir -p /etc/apt/keyrings
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
     echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
@@ -35,7 +36,17 @@ if [ ! -f /etc/apt/sources.list.d/gierens.list ]; then
     sudo apt-get update
 fi
 
-sudo apt-get install -y bat direnv eza fd-find fzf ripgrep rust-tealdeer ugrep yq
+if [ ! -f /etc/apt/sources.list.d/openziti.list ]; then
+    echo "${CYAN}###${RESET} Adding docker repository"
+    sudo mkdir -p /etc/apt/keyrings
+    wget -qO- https://get.openziti.io/tun/package-repos.gpg | sudo gpg --dearmor -o /usr/share/keyrings/openziti.gpg
+    echo "deb [signed-by=/usr/share/keyrings/openziti.gpg] https://packages.openziti.org/zitipax-openziti-deb-stable debian main" | sudo tee /etc/apt/sources.list.d/openziti.list
+    sudo chmod 644 /etc/apt/keyrings/openziti.gpg /etc/apt/sources.list.d/openziti.list
+    sudo apt-get update
+fi
+
+# Install tooling
+sudo apt-get install -y bat direnv eza fd-find fzf ripgrep rust-tealdeer ugrep yq zrok
 
 # Install ZOxide
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
@@ -80,7 +91,7 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd-find fzf gnupg hammerspoon hurl nvm ripgrep starship tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide
+    brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd fzf gnupg hammerspoon hurl nvm ripgrep starship tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
@@ -88,6 +99,19 @@ if [ "$(command -v brew)" ]; then
     # M1 Mac
     brew install colima
     {{   end }}
+fi
+
+if [ ! "$(command -v zrok)" ]; then
+    echo "${CYAN}###${RESET} Zrok install"
+
+    ZROK_VERSION=0.4.48
+    mkdir -p /tmp/zrok
+    cd /tmp/zrok
+    curl -OL https://github.com/openziti/zrok/releases/download/v${ZROK_VERSION}/zrok_${ZROK_VERSION}_darwin_{{.chezmoi.arch}}.tar.gz 
+    tar -xf ./zrok*darwin*.tar.gz -C /tmp/zrok
+    install /tmp/zrok/zrok ~/.local/bin
+    rm -rf /tmp/zrok
+    zrok config set apiEndpoint https://zrok.tun.polaris.gdn/
 fi
 
 {{ end -}}
