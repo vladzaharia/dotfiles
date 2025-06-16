@@ -3,23 +3,23 @@
 # command = "/usr/bin/zsh"
 
 # The log level, one of: "off", "error", "warn", "info", "debug", "trace"
-log_level = "off"
+log_level = "warn"
 # The path to the log file. Defaults to your OS's `XDG_STATE_DIR`.
 # See: https://specifications.freedesktop.org/basedir-spec/latest/
 # log_path = ""
 
 # The target frame rate
-frame_rate = 30
+frame_rate = 60
 
 # Whether to show a small blue indicator in the very top-right of the terminal screen.
 # It can be useful to indicate that Tattoy is indeed running.
 show_tattoy_indicator = true
 
 # Whether to show the startup logo.
-show_startup_logo = true
+show_startup_logo = false
 
 # The number of lines in the scrollback. Any lines beyond this are removed.
-scrollback_size = 1000
+scrollback_size = 10000
 
 [notifications]
 enabled = true
@@ -52,33 +52,33 @@ target_contrast = 2.0
 apply_to_readable_text_only = true
 
 [minimap]
-enabled = false
+enabled = true
 animation_speed = 0.15
 # The maximum width of the minimap. It can be narrower when the scrollback is long
 # in order to maintain a consistent aspect ratio.
 max_width = 10
 
-[shader]
-enabled = false
-opacity = 0.75
-layer = -10
-# Whether to render the computed shader from the GPU. The shader pixels can still be
-# used for other purposes such as defining the foreground colour of the terminal's text,
-# see `render_shader_colours_to_text`.
-render = true
-# It can be useful to disable this for certain GUI terminal shaders (such as Ghostty shaders)
-# that also take responsibility for rendering terminal text. Tattoy can only send a crude 
-# representation of terminal text as 2 pixels per character, which is sometimes desirable
-# when the shader uses the terminal to inform the output of the shader, but it can also cause
-# an unnesceray blocky effect when the shader doesn't use the terminal colours.
-upload_tty_as_pixels = true
-# Use each "cell" of the shader to set the corresponding text cell's foreground colour.
-# This is most likely desirable in conjunction with the `render` option, so that the shader
-# is only visible via the terminal's text.
-render_shader_colours_to_text = false
-# Path to a Shadertoy shader on your local filesystem. Is relative to the root of
-# Tattoy's config directory.
-path = "shaders/soft_shadows.glsl"
+# [shader]
+# enabled = false
+# opacity = 0.3
+# layer = -10
+# # Whether to render the computed shader from the GPU. The shader pixels can still be
+# # used for other purposes such as defining the foreground colour of the terminal's text,
+# # see `render_shader_colours_to_text`.
+# render = true
+# # It can be useful to disable this for certain GUI terminal shaders (such as Ghostty shaders)
+# # that also take responsibility for rendering terminal text. Tattoy can only send a crude 
+# # representation of terminal text as 2 pixels per character, which is sometimes desirable
+# # when the shader uses the terminal to inform the output of the shader, but it can also cause
+# # an unnesceray blocky effect when the shader doesn't use the terminal colours.
+# upload_tty_as_pixels = false
+# # Use each "cell" of the shader to set the corresponding text cell's foreground colour.
+# # This is most likely desirable in conjunction with the `render` option, so that the shader
+# # is only visible via the terminal's text.
+# render_shader_colours_to_text = true
+# # Path to a Shadertoy shader on your local filesystem. Is relative to the root of
+# # Tattoy's config directory.
+# path = "shaders/rain.glsl"
 
 [bg_command]
 enabled = false

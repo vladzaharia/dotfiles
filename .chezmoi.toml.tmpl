@@ -75,10 +75,6 @@ encryption = "age"
     flags.apps.rio = true
     {{ end -}}
 
-    {{ if or (stat "/Applications/wezterm.app") (stat "/Applications/WezTerm.app") -}}
-    flags.apps.wezterm = true
-    {{ end -}}
-
     flags.applesilicon = {{ and (eq $distro "darwin") (eq .chezmoi.arch "arm64") }}
     flags.ephemeral = {{ or (eq $chassisType "ephemeral") (eq $chassisType "kasm") }}
     flags.pokemon = {{ $pokemon }}

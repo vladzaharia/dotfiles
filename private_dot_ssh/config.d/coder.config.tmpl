@@ -11,3 +11,13 @@ Host coder.*
     LogLevel ERROR
     ProxyCommand /opt/homebrew/bin/coder --global-config "{{ .chezmoi.homeDir }}/Library/Application Support/coderv2" ssh --stdio --ssh-host-prefix coder. %h
 # ------------END-CODER------------
+
+# --- START CODER VSCODE code.polaris.rest ---
+Host coder-vscode.code.polaris.rest--*
+  ConnectTimeout 0
+  LogLevel ERROR
+  ProxyCommand "{{ .chezmoi.homeDir }}/Library/Application Support/Code/User/globalStorage/coder.coder-remote/code.polaris.rest/bin/coder-darwin-arm64" --global-config "{{ .chezmoi.homeDir }}/Library/Application Support/Code/User/globalStorage/coder.coder-remote/code.polaris.rest" ssh --stdio --usage-app=vscode --disable-autostart --network-info-dir "{{ .chezmoi.homeDir }}/Library/Application Support/Code/User/globalStorage/coder.coder-remote/net" --ssh-host-prefix coder-vscode.code.polaris.rest-- %h
+  SetEnv  CODER_SSH_SESSION_TYPE=vscode
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+# --- END CODER VSCODE code.polaris.rest ---

@@ -6,6 +6,7 @@
     ],
     "scanDirs": [
         "/docker",
-        "~/Documents/Repos"
+        "~/Documents/Repos",
+        "~/Documents/Repos.nosync"
     ]
 }

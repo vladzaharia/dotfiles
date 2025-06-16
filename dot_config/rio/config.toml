@@ -20,7 +20,7 @@
 # (windows: C:\Users\USER\AppData\Local\rio\themes\dracula.toml)
 #
 # Example:
-theme = "Flat"
+theme = "WezTerm"
 
 # Padding-x
 #
@@ -35,7 +35,7 @@ padding-x = 10
 # (default is [0, 0])
 #
 # Example:
-padding-y = [10, 0]
+padding-y = [10, -5]
 
 # Option as Alt
 #
@@ -66,7 +66,7 @@ padding-y = [10, 0]
 # Environment variables
 #
 # Example:
-env-vars = ["USE_TATTOY=true"]
+# env-vars = ["USE_TATTOY=true"]
 
 # Use fork
 #
@@ -133,7 +133,7 @@ height = 700
 mode = "windowed"
 opacity = 0.65
 blur = true
-decorations = "Transparent"
+decorations = "Disabled"
 macos-use-unified-titlebar = false
 macos-use-shadow = true
 
@@ -279,7 +279,8 @@ clickable = true
 hide-if-single = false
 # use-current-path = false
 color-automation = [
-	{ program = "ssh", color = "#781aa0" }
+	{ program = "ssh", color = "#83FF08" },
+	{ program = "sudo", color = "#FF0883" }
 ]
 
 # Shell
