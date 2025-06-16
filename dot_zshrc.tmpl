@@ -254,7 +254,7 @@ if [ -d $HOME/.codeium/windsurf/bin ]; then
     export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 fi
 
-{{ if .flags.apps.rio -}}
+{{ if and (index .flags "apps") (index .flags.apps "rio") -}}
 # Rio + Tattoy
 if [ $(command -v tattoy) ] && [[ "${USE_TATTOY}" == "true" ]] && [[ "${TATTOY_RUNNING}" != "1" ]]; then
     tattoy
