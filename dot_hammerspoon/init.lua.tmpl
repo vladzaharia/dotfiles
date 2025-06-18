@@ -1,4 +1,4 @@
-{{ if .flags.apps.wezterm -}}
+{{ if and (index .flags "apps") (index .flags.apps "wezterm") -}}
 -- Open WezTerm
 function openWezTerm()
   local app = hs.application.get("com.github.wez.wezterm")
@@ -19,7 +19,7 @@ function openWezTerm()
 end
 {{- end }}
 
-{{ if .flags.apps.rio -}}
+{{ if and (index .flags "apps") (index .flags.apps "rio") -}}
 -- Open Rio Terminal
 function openRio()
   local app = hs.application.get("com.raphaelamorim.rio")
@@ -42,18 +42,18 @@ end
 
 -- Cmd+`
 hs.hotkey.bind({ "cmd" }, "`", function()
-  {{ if .flags.apps.rio -}}
+  {{ if and (index .flags "apps") (index .flags.apps "rio") -}}
   openRio()
-  {{- else if .flags.apps.wezterm -}}
+  {{- else if and (index .flags "apps") (index .flags.apps "wezterm") -}}
   openWezTerm()
   {{- end }}
 end)
 
 -- Cmd+Esc
 hs.hotkey.bind({ "cmd" }, "escape", function()
-  {{ if .flags.apps.rio -}}
+  {{ if and (index .flags "apps") (index .flags.apps "rio") -}}
   openRio()
-  {{- else if .flags.apps.wezterm -}}
+  {{- else if and (index .flags "apps") (index .flags.apps "wezterm") -}}
   openWezTerm()
   {{- end }}
 end)
