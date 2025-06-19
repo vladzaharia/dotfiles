@@ -12,13 +12,6 @@ fi
 
 {{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
 
-# Install Starship
-echo "${LCYAN}###${RESET} Starship install"
-if [ ! "$(command -v starship)" ]; then
-    echo "${CYAN}###${RESET} Installing Starship prompt"
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
-fi
-
 echo "${LCYAN}###${RESET} Apt install (common)"
 # Update repos
 sudo apt-get update
@@ -82,7 +75,7 @@ echo "${LCYAN}###${RESET} Zypper install (common)"
 sudo zypper refresh
 
 # Basic utilities
-sudo zypper -n install starship direnv fd jq eza atuin zoxide tealdeer docker docker-compose docker-buildx
+sudo zypper -n install direnv fd jq eza atuin zoxide tealdeer docker docker-compose docker-buildx
 
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 if [ "$(command -v brew)" ]; then
@@ -91,7 +84,7 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd fzf gnupg hammerspoon hurl nvm ripgrep starship tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide jandedobbeleer/oh-my-posh/oh-my-posh
+    brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd fzf gnupg hammerspoon hurl nvm ripgrep tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide jandedobbeleer/oh-my-posh/oh-my-posh
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"

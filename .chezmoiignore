@@ -35,7 +35,6 @@ README.md
 !.config/fastfetch/**
 !.config/wezterm
 !.config/wezterm/**
-!.config/starship.toml
 !.gitconfig
 !.ssh
 !.ssh/config

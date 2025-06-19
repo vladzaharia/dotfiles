@@ -9,7 +9,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 winget install AgileBits.1Password
 
 # Productivity tools
-winget install clink starship tailscale.tailscale wazuh.wazuhagent wez.wezterm
+winget install clink tailscale.tailscale wazuh.wazuhagent wez.wezterm
 
 # Dev tools
 winget install docker.dockerdesktop git.git Microsoft.VisualStudioCode Microsoft.WindowsTerminal

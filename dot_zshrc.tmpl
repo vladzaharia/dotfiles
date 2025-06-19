@@ -166,16 +166,6 @@ if [ "$(command -v brew)" ]; then
     eval "$(brew shellenv)"
 fi
 
-# Starship zsh hooks
-#if [ "$(command -v starship)" ]; then
-#    eval "$(starship init zsh)"
-#fi
-
-# Oh-My-Posh zsh hooks
-if [ "$(command -v oh-my-posh)" ] && [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-  eval "$(oh-my-posh init zsh --config {{ .chezmoi.homeDir }}/.config/oh-my-posh/out/full.yml)"
-fi
-
 # Direnv zsh hooks
 if [ "$(command -v direnv)" ]; then
     eval "$(direnv hook zsh)"
@@ -276,3 +266,8 @@ if [ -f "$FILE" ]; then
     . $FILE
 fi
 {{- end }}
+
+# Oh-My-Posh zsh hooks
+if [ "$(command -v oh-my-posh)" ] && [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  eval "$(oh-my-posh init zsh --config {{ .chezmoi.homeDir }}/.config/oh-my-posh/out/full.yml)"
+fi
