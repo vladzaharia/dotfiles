@@ -6,6 +6,8 @@ README.md
 .oh-my-zsh/cache/**
 .oh-my-zsh/**/*.zwc
 
+.zi/*
+
 .keys/*
 
 {{- if .flags.pokemon }}

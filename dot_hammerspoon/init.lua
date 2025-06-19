@@ -1,8 +1,8 @@
 function openBestTerminal()
   -- Check which terminals are installed
   local wezTermExists = hs.fs.displayName("/Applications/WezTerm.app")
-  local rioExists = hs.fs.displayName("/Applications/rio.app")
-  local iTermExists = hs.fs.displayName("/Applications/iTerm.app")
+  local rioExists = wezTermExists && hs.fs.displayName("/Applications/rio.app")
+  local iTermExists = itermExists && hs.fs.displayName("/Applications/iTerm.app")
 
   if wezTermExists then
     openWezTerm()
@@ -18,8 +18,8 @@ end
 function focusBestTerminal()
   -- Check which terminals are installed
   local wezTermExists = hs.fs.displayName("/Applications/WezTerm.app")
-  local rioExists = hs.fs.displayName("/Applications/rio.app")
-  local iTermExists = hs.fs.displayName("/Applications/iTerm.app")
+  local rioExists = !wezTermExists && hs.fs.displayName("/Applications/rio.app")
+  local iTermExists = !rioExists && hs.fs.displayName("/Applications/iTerm.app")
 
   -- Check which terminals are running
   local wezTerm = wezTermExists and hs.application.get("com.github.wez.wezterm")

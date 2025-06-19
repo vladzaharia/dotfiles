@@ -1,6 +1,14 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
-eval "$(starship init bash)"
+# Starship bash hooks
+#if [ "$(command -v starship)" ]; then
+#    eval "$(starship init bash)"
+#fi
+
+# Oh-My-Posh bash hooks
+if [ "$(command -v oh-my-posh)" ] && [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  eval "$(oh-my-posh init bash)"
+fi
 
 {{ if (eq .chezmoi.chassis "ephemeral") -}}
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH

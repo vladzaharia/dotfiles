@@ -1,0 +1,3 @@
+[submodule "dot_config/oh-my-posh"]
+	path = dot_config/oh-my-posh
+	url = git@github.com:vladzaharia/oh-my-posh.git
