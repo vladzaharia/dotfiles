@@ -1,118 +1,67 @@
-function openBestTerminal()
-  -- Check which terminals are installed
-  local wezTermExists = hs.fs.displayName("/Applications/WezTerm.app")
-  local rioExists = wezTermExists && hs.fs.displayName("/Applications/rio.app")
-  local iTermExists = itermExists && hs.fs.displayName("/Applications/iTerm.app")
+local function openTerminal(name, bundleId)
+  local app = hs.application.get(bundleId)
 
-  if wezTermExists then
-    openWezTerm()
-  elseif rioExists then
-    openRio()
-  elseif iTermExists then
-    openiTerm()
+  if app then
+    if not app:mainWindow() then
+      app:selectMenuItem({ name, "New OS window" })
+    elseif app:isFrontmost() then
+      app:hide()
+    else
+      app:activate()
+    end
+
+    app:mainWindow():moveToUnit '[90,80,10,0]'
   else
-    openTerminal()
+    hs.application.launchOrFocusByBundleID(bundleId)
   end
 end
 
-function focusBestTerminal()
+local function openBestTerminal()
   -- Check which terminals are installed
-  local wezTermExists = hs.fs.displayName("/Applications/WezTerm.app")
-  local rioExists = !wezTermExists && hs.fs.displayName("/Applications/rio.app")
-  local iTermExists = !rioExists && hs.fs.displayName("/Applications/iTerm.app")
+  local warpExists = hs.fs.displayName("/Applications/Warp.app")
+  local wezTermExists = (not warpExists) and hs.fs.displayName("/Applications/WezTerm.app")
+  local rioExists = (not wezTermExists) and hs.fs.displayName("/Applications/rio.app")
+  local iTermExists = (not rioExists) and hs.fs.displayName("/Applications/iTerm.app")
+
+  if warpExists then
+    openTerminal("Warp", "dev.warp.Warp-Stable")
+  elseif wezTermExists then
+    openTerminal("WezTerm", "com.github.wez.wezterm")
+  elseif rioExists then
+    openTerminal("Rio", "com.github.wez.wezterm")
+  elseif iTermExists then
+    openTerminal("iTerm", "com.googlecode.iterm2")
+  else
+    openTerminal("Terminal", "com.apple.Terminal")
+  end
+end
+
+local function focusBestTerminal()
+  -- Check which terminals are installed
+  local warpExists = hs.fs.displayName("/Applications/Warp.app")
+  local wezTermExists = (not warpExists) and hs.fs.displayName("/Applications/WezTerm.app")
+  local rioExists = (not wezTermExists) and hs.fs.displayName("/Applications/rio.app")
+  local iTermExists = (not rioExists) and hs.fs.displayName("/Applications/iTerm.app")
 
   -- Check which terminals are running
+  local warp = warpExists and hs.application.get("dev.warp.Warp-Stable")
   local wezTerm = wezTermExists and hs.application.get("com.github.wez.wezterm")
   local rio = rioExists and hs.application.get("com.raphaelamorim.rio")
-  local iTerm = itermExists and hs.application.get("com.googlecode.iterm2")
+  local iTerm = iTermExists and hs.application.get("com.googlecode.iterm2")
   local terminal = hs.application.get("com.apple.Terminal")
 
-  if wezTerm then
-    openWezTerm()
+  if warp then
+    openTerminal("Warp", "dev.warp.Warp-Stable")
+  elseif wezTerm then
+    openTerminal("WezTerm", "com.github.wez.wezterm")
   elseif rio then
-    openRio()
+    openTerminal("Rio", "com.raphaelamorim.rio")
   elseif iTerm then
-    openiTerm()
+    openTerminal("iTerm", "com.googlecode.iterm2")
   elseif terminal then
-    openTerminal()
+    openTerminal("Terminal", "com.apple.Terminal")
   else
     openBestTerminal()
-  end
-end
-
--- Open WezTerm
-function openWezTerm()
-  local app = hs.application.get("com.github.wez.wezterm")
-
-  if app then
-    if not app:mainWindow() then
-      app:selectMenuItem({ "WezTerm", "New OS window" })
-    elseif app:isFrontmost() then
-      app:hide()
-    else
-      app:activate()
-    end
-
-    app:mainWindow():moveToUnit '[90,80,10,0]'
-  else
-    hs.application.launchOrFocusByBundleID("com.github.wez.wezterm")
-  end
-end
-
--- Open Rio Terminal
-function openRio()
-  local app = hs.application.get("com.raphaelamorim.rio")
-
-  if app then
-    if not app:mainWindow() then
-      app:selectMenuItem({ "Rio", "New OS window" })
-    elseif app:isFrontmost() then
-      app:hide()
-    else
-      app:activate()
-    end
-
-    app:mainWindow():moveToUnit '[90,80,10,0]'
-  else
-    hs.application.launchOrFocusByBundleID("com.raphaelamorim.rio")
-  end
-end
-
--- Open iTerm
-function openiTerm()
-  local app = hs.application.get("com.googlecode.iterm2")
-
-  if app then
-    if not app:mainWindow() then
-      app:selectMenuItem({ "iTerm", "New OS window" })
-    elseif app:isFrontmost() then
-      app:hide()
-    else
-      app:activate()
-    end
-
-    app:mainWindow():moveToUnit '[90,80,10,0]'
-  else
-    hs.application.launchOrFocusByBundleID("com.googlecode.iterm2")
-  end
-end
-
--- Open Terminal
-function openTerminal()
-  local app = hs.application.get("com.apple.Terminal")
-
-  if app then
-    if not app:mainWindow() then
-      app:selectMenuItem({ "Terminal", "New OS window" })
-    elseif app:isFrontmost() then
-      app:hide()
-    else
-      app:activate()
-    end
-
-    app:mainWindow():moveToUnit '[90,80,10,0]'
-  else
-    hs.application.launchOrFocusByBundleID("com.apple.Terminal")
   end
 end
 
