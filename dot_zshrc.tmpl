@@ -123,9 +123,9 @@ zi wait lucid for \
   atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
     $ZSH_PLUGINS/F-Sy-H \
   blockf \
-    $ZSH_PLUGINS/zsh-completions \
-  atload"!_zsh_autosuggest_start" \
-    $ZSH_PLUGINS/zsh-autosuggestions
+    $ZSH_PLUGINS/zsh-completions #\
+  #atload"!_zsh_autosuggest_start" \
+  #  $ZSH_PLUGINS/zsh-autosuggestions
 
 # Dotenv
 zi snippet OMZP::dotenv
@@ -141,6 +141,10 @@ zi light $ZSH_PLUGINS/zsh-eza
 # Vault
 zi ice wait lucid has'vault'
 zi light $ZSH_PLUGINS/vault-helper
+
+# Crypto (SOPS utilities)
+zi ice wait lucid has'sops'
+zi light $ZSH_PLUGINS/crypto
 
 zi load $ZSH_PLUGINS/zui
 zi load $ZSH_PLUGINS/pkmn-repos

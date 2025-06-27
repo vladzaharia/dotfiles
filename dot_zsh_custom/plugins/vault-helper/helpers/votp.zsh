@@ -1,31 +1,81 @@
-# Generate OTP code
+# Vault OTP Utility
+# Modern ZSH implementation following best practices for variable scoping and error handling
+# Provides TOTP code generation and key management via Vault
+
+#---------------------------------------------------------------
+# Function:    votp
+# Description: Generate TOTP codes or list available keys from Vault
+# Arguments:   [-l] to list keys, [-h] for help, or <key> for TOTP code
+# Returns:     0 on success, 1 on failure
+# Globals:     Uses color variables
+# Usage:       votp <key>      # Generate TOTP code for key
+#              votp -l         # List all available keys
+#              votp -h         # Show help
+# Examples:    votp github     # Get TOTP code for github key
+#              votp -l         # List all TOTP keys
+#---------------------------------------------------------------
 function votp() {
-    # Check that vault exists
-    if [ $(command -v vault) ]; then; else
-        echo "${_COLOR_RED}[!]${_RESET} vault must be installed to use votp!"
+    emulate -L zsh
+    setopt local_options warn_create_global
+
+    # Ensure colors are available
+    _vault_helper_Ensure_Colors
+
+    # Validate required commands
+    if ! command -v vault &> /dev/null; then
+        print "${_COLOR_RED}[!]${_RESET} Error: vault must be installed to use votp!" >&2
         return 1
     fi
 
-    # Help text if no OTP key is entered or -h is passed in
-    if [ $# -eq 0 ] || [[ $1 == -h* ]]; then
-        if [ $# -eq 0 ]; then
-            echo "${_COLOR_RED}[!]${_RESET} Must provide TOTP key!"
-            echo ""
+    # Help text if no arguments or -h is passed in
+    if (( $# == 0 )) || [[ $1 == -h* ]]; then
+        if (( $# == 0 )); then
+            print "${_COLOR_RED}[!]${_RESET} Error: Must provide TOTP key or use -l to list keys!" >&2
+            print ""
         fi
-        
-        echo "${_COLOR_CYAN}[i]${_RESET} votp [-l] <key>"
-        echo "${_COLOR_CYAN}[i]${_RESET}   key: TOTP key to retrieve token for"
-        echo "${_COLOR_CYAN}[i]${_RESET}   -l: List all keys"
-        return 1
+
+        print "${_COLOR_CYAN}[i]${_RESET} votp [-l|-h] <key>"
+        print "${_COLOR_CYAN}[i]${_RESET}   <key>: TOTP key to retrieve token for"
+        print "${_COLOR_CYAN}[i]${_RESET}   -l:    List all available keys"
+        print "${_COLOR_CYAN}[i]${_RESET}   -h:    Show this help message"
+        return (( $# == 0 ? 1 : 0 ))
     fi
 
+    # List keys option
     if [[ $1 == -l* ]]; then
-        echo "${_COLOR_YELLOW}[!]${_RESET} -l passed in, listing keys"
-        
-        # List all possible OTP keys
-        vault list totp/keys
+        print "${_COLOR_BLUE}[i]${_RESET} Listing available TOTP keys..."
+
+        if vault list totp/keys 2>/dev/null; then
+            return 0
+        else
+            print "${_COLOR_RED}[!]${_RESET} Failed to list TOTP keys. Check Vault authentication and permissions." >&2
+            return 1
+        fi
     else
-        # Get OTP code for passed in key
-        vault read -field=code totp/code/$1
+        # Generate TOTP code for specified key
+        local key="$1"
+
+        if [[ -z "$key" ]]; then
+            print "${_COLOR_RED}[!]${_RESET} Error: Key name cannot be empty!" >&2
+            return 1
+        fi
+
+        print "${_COLOR_BLUE}[i]${_RESET} Generating TOTP code for key: $key"
+
+        local totpCode
+        if totpCode=$(vault read -field=code "totp/code/$key" 2>/dev/null); then
+            if [[ -n "$totpCode" ]]; then
+                print "$totpCode"
+                return 0
+            else
+                print "${_COLOR_RED}[!]${_RESET} Received empty TOTP code for key: $key" >&2
+                return 1
+            fi
+        else
+            print "${_COLOR_RED}[!]${_RESET} Failed to generate TOTP code for key: $key" >&2
+            print "${_COLOR_YELLOW}[!]${_RESET} Check that the key exists and you have proper permissions" >&2
+            return 1
+        fi
     fi
 }
+
