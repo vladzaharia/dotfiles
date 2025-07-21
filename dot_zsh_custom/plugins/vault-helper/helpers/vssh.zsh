@@ -1,63 +1,104 @@
-# SSH to remote machine using Vault SSH certificate
+# Vault SSH Utility
+# Modern ZSH implementation following best practices for variable scoping and error handling
+# Provides SSH connections using Vault-signed certificates
+
+#---------------------------------------------------------------
+# Function:    vssh
+# Description: SSH to remote machine using Vault SSH certificate
+# Arguments:   [-r] for root, [-h] for help, [username@]hostname
+# Returns:     SSH connection exit code
+# Globals:     Uses color variables, USER
+# Usage:       vssh [username@]hostname
+#              vssh -r hostname        # Connect as root
+# Examples:    vssh server.example.com
+#              vssh user@server.example.com
+#              vssh -r server.example.com
+#---------------------------------------------------------------
 function vssh() {
-    # Check that vault exists
-    if [ $(command -v vault) ]; then; else
-        echo "${_COLOR_RED}[!]${_RESET} vault must be installed to use vssh!"
+    emulate -L zsh
+    setopt local_options warn_create_global
+
+    # Ensure colors are available
+    _vault_helper_Ensure_Colors
+
+    # Validate required commands
+    if ! command -v vault &> /dev/null; then
+        print "${_COLOR_RED}[!]${_RESET} Error: vault must be installed to use vssh!" >&2
+        return 1
+    fi
+
+    if ! command -v ssh &> /dev/null; then
+        print "${_COLOR_RED}[!]${_RESET} Error: ssh must be installed to use vssh!" >&2
         return 1
     fi
 
     # Help text if no hostname is entered or -h is passed in
-    if [ $# -eq 0 ] || [[ $1 == -h* ]]; then
-        if [ $# -eq 0 ]; then
-            echo "${_COLOR_RED}[!]${_RESET} Must provide hostname!"
-            echo ""
+    if (( $# == 0 )) || [[ $1 == -h* ]]; then
+        if (( $# == 0 )); then
+            print "${_COLOR_RED}[!]${_RESET} Error: Must provide hostname!" >&2
+            print ""
         fi
 
-        echo "${_COLOR_CYAN}[i]${_cRESET} vssh [-r] [username@]<hostname>"
-        echo "${_COLOR_CYAN}[i]${_RESET}   hostname: Computer to connect to"
-        echo "${_COLOR_CYAN}[i]${_RESET}   username: User to connect as, defaults to your own"
-        echo "${_COLOR_CYAN}[i]${_RESET}   -r: Connect as root"
-	    return 1
+        print "${_COLOR_CYAN}[i]${_RESET} vssh [-r|-h] [username@]<hostname>"
+        print "${_COLOR_CYAN}[i]${_RESET}   hostname: Computer to connect to"
+        print "${_COLOR_CYAN}[i]${_RESET}   username: User to connect as (defaults to current user)"
+        print "${_COLOR_CYAN}[i]${_RESET}   -r:       Connect as root user"
+        print "${_COLOR_CYAN}[i]${_RESET}   -h:       Show this help message"
+        return (( $# == 0 ? 1 : 0 ))
     fi
 
     # Set default values
-    local vaultMode=ca
-    local vaultRole=user
-    local username=$USER
-    local hostname=$1
+    local vaultMode="ca"
+    local vaultRole="user"
+    local username="$USER"
+    local hostname="$1"
 
-    # Find public key
-    _vssh_find_key
-    echo "${_COLOR_BLUE}[i]${_RESET} Using public key $HOME/.ssh/$sshKey.pub"
+    # Find SSH key
+    local sshKey
+    if ! _vault_helper_Find_SSH_Key sshKey; then
+        print "${_COLOR_RED}[!]${_RESET} Error: No SSH key found in ~/.ssh/" >&2
+        return 1
+    fi
+
+    print "${_COLOR_BLUE}[i]${_RESET} Using SSH key: $HOME/.ssh/$sshKey.pub"
 
     # Determine if we should be connecting as root
     if [[ $1 == -r* ]] || [[ $3 == -r* ]]; then
-        echo "${_COLOR_YELLOW}[!]${_RESET} -r passed in, connecting as root"
-            
-        vaultRole=root
-        username=root
-        hostname=$2
+        print "${_COLOR_YELLOW}[!]${_RESET} Connecting as root user"
+        vaultRole="root"
+        username="root"
+        hostname="$2"
     fi
 
-    local connString=$username@$hostname
+    # Validate hostname
+    if [[ -z "$hostname" ]]; then
+        print "${_COLOR_RED}[!]${_RESET} Error: No hostname provided!" >&2
+        return 1
+    fi
+
+    # Build connection string
+    local connString="$username@$hostname"
     # Check if full connection string was passed in
     if [[ $hostname == *@* ]]; then
-        connString=$hostname
+        connString="$hostname"
     fi
 
-    # Execute vault
-    vault ssh -mode=$vaultMode -role=$vaultRole -public-key-path="$HOME/.ssh/$sshKey.pub" -private-key-path="$HOME/.ssh/$sshKey" $connString
+    # Validate SSH key files exist
+    if [[ ! -f "$HOME/.ssh/$sshKey.pub" ]]; then
+        print "${_COLOR_RED}[!]${_RESET} Error: Public key not found: $HOME/.ssh/$sshKey.pub" >&2
+        return 1
+    fi
+
+    if [[ ! -f "$HOME/.ssh/$sshKey" ]]; then
+        print "${_COLOR_RED}[!]${_RESET} Error: Private key not found: $HOME/.ssh/$sshKey" >&2
+        return 1
+    fi
+
+    # Execute vault SSH
+    print "${_COLOR_BLUE}[i]${_RESET} Connecting to $connString using Vault SSH..."
+    vault ssh -mode="$vaultMode" -role="$vaultRole" \
+        -public-key-path="$HOME/.ssh/$sshKey.pub" \
+        -private-key-path="$HOME/.ssh/$sshKey" \
+        "$connString"
 }
 
-function _vssh_find_key() {
-    # All possible key file names
-    local possibleKeys=(id_rsa id_ecdsa id_ed25519 id_dsa id_pkmn)
-
-    for possibleKey in $possibleKeys; do
-        # Check if key exists
-        if [ -f "$HOME/.ssh/$possibleKey.pub" ]; then
-            sshKey=$possibleKey
-            return
-        fi
-    done
-}
