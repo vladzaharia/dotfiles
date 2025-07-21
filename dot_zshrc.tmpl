@@ -198,10 +198,10 @@ if [ $(command -v eza) ]; then
 fi
 
 # Zoxide
-#if [ $(command -v zoxide) ]; then
-#    eval "$(zoxide init zsh)"
-#    # alias cd=z
-#fi
+if [ $(command -v zoxide) ]; then
+    eval "$(zoxide init zsh)"
+    alias cd=z
+fi
 
 # Bat
 if [ $(command -v bat) ]; then
@@ -258,5 +258,9 @@ fi
 
 # Oh-My-Posh zsh hooks
 if [ "$(command -v oh-my-posh)" ] && [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  {{- if .flags.ephemeral }}
+  eval "$(oh-my-posh init zsh --config {{ .chezmoi.homeDir }}/.config/oh-my-posh/out/minimal.yml)"
+  {{- else }}
   eval "$(oh-my-posh init zsh --config {{ .chezmoi.homeDir }}/.config/oh-my-posh/out/full.yml)"
+  {{- end }}
 fi
