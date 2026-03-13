@@ -1,0 +1,143 @@
+# Package group definitions — one section per group.
+# Access in templates as: .packages.<group>.<platform>.<key>
+# Required groups install regardless of package_groups selection.
+
+# ── core ─────────────────────────────────────────────────────────
+[packages.core]
+description = "Essential CLI tools"
+required = true
+
+[packages.core.darwin]
+brew = ["chezmoi", "age", "atuin", "bat", "direnv", "eza", "fd", "fzf", "gnupg", "jq", "micro", "mise", "ripgrep", "tealdeer", "ugrep", "yq", "zoxide"]
+
+[packages.core.debian]
+apt = ["chezmoi", "bat", "direnv", "fd-find", "fzf", "jq", "micro", "ripgrep", "ugrep", "yq"]
+# eza, atuin, zoxide via script (custom repos or curl install)
+# age, mise via curl
+
+[packages.core.opensuse]
+zypper = ["chezmoi", "bat", "direnv", "eza", "fd", "fzf", "jq", "atuin", "micro", "zoxide", "tealdeer"]
+
+# ── dev ──────────────────────────────────────────────────────────
+[packages.dev]
+description = "Development tools and terminal setup"
+
+[packages.dev.darwin]
+brew = ["gh", "git-lfs", "docker", "docker-compose", "nvm", "jandedobbeleer/oh-my-posh/oh-my-posh", "hurl"]
+cask = ["wave", "visual-studio-code", "zed", "devpod", "requestly"]
+tap = ["jandedobbeleer/oh-my-posh"]
+
+[packages.dev.debian]
+apt = ["git-lfs"]
+# gh via custom repo, docker via custom repo
+# oh-my-posh via curl: https://ohmyposh.dev/docs/installation/linux
+
+[packages.dev.opensuse]
+zypper = ["gh", "git-lfs", "docker", "docker-compose"]
+# oh-my-posh via curl
+
+# ── cloud ────────────────────────────────────────────────────────
+[packages.cloud]
+description = "Cloud and infrastructure tooling"
+
+[packages.cloud.darwin]
+tap = ["hashicorp/tap"]
+brew = ["hashicorp/tap/vault", "hashicorp/tap/terraform"]
+
+[packages.cloud.debian]
+apt = ["vault", "terraform"]
+
+[packages.cloud.opensuse]
+zypper = ["vault", "terraform"]
+
+# ── security ─────────────────────────────────────────────────────
+[packages.security]
+description = "Security and secrets management"
+
+[packages.security.darwin]
+tap = ["1password/tap"]
+brew = ["sops", "gnupg", "1password/tap/1password-cli"]
+cask = ["1password", "tailscale-app", "unifi-identity-endpoint", "pangolin"]
+
+[packages.security.debian]
+apt = ["sops", "gnupg"]
+# 1password-cli via official script (https://1password.com/downloads/linux/)
+
+[packages.security.opensuse]
+zypper = ["sops", "gnupg"]
+
+# ── ai ───────────────────────────────────────────────────────────
+[packages.ai]
+description = "AI tools and Claude Code language server support"
+
+[packages.ai.darwin]
+brew = ["ollama"]
+cask = ["claude", "lm-studio", "plaud"]
+cask_cli = ["claude-code"]
+mas = ["6502156163"]
+npm_global = ["typescript-language-server", "typescript", "pyright"]
+go_install = ["golang.org/x/tools/gopls@latest"]
+
+[packages.ai.debian]
+npm_global = ["@anthropic-ai/claude-code", "typescript-language-server", "typescript", "pyright"]
+go_install = ["golang.org/x/tools/gopls@latest"]
+# ollama: install via curl (https://ollama.com/download/linux)
+
+[packages.ai.opensuse]
+npm_global = ["@anthropic-ai/claude-code", "typescript-language-server", "typescript", "pyright"]
+go_install = ["golang.org/x/tools/gopls@latest"]
+
+# ── apps ─────────────────────────────────────────────────────────
+[packages.apps]
+description = "macOS productivity and desktop utilities"
+workstation_only = true
+client_only = true
+
+[packages.apps.darwin]
+pre_brew = ["mas"]
+cask = ["raycast", "rectangle-pro", "daisydisk", "ubar", "obsidian", "dropshare"]
+mas = ["1198176727", "1622835804"]
+# 1198176727 = Controller for HomeKit, 1622835804 = Kagi for Safari
+
+# ── gaming ───────────────────────────────────────────────────────
+[packages.gaming]
+description = "Gaming and game streaming"
+workstation_only = true
+client_only = true
+
+[packages.gaming.darwin]
+cask = ["steam", "parsec", "moonlight", "jump-desktop"]
+
+# ── creative ─────────────────────────────────────────────────────
+[packages.creative]
+description = "Creative and design tools"
+workstation_only = true
+client_only = true
+
+[packages.creative.darwin]
+cask = ["bambu-studio"]
+# NOTE: Affinity casks deprecated — removal 2026-10-30
+# cask_deprecated = ["affinity-photo", "affinity-designer", "affinity-publisher"]
+mas = ["1136220934"]
+# 1136220934 = Infuse (media player)
+
+# ── comms ────────────────────────────────────────────────────────
+[packages.comms]
+description = "Communication and collaboration"
+workstation_only = true
+client_only = true
+
+[packages.comms.darwin]
+cask = ["discord"]
+
+# Zoom — pkmn identity only; handled conditionally in install script
+[packages.comms.darwin.pkmn]
+cask = ["zoom"]
+
+# ── pkmn ─────────────────────────────────────────────────────────
+[packages.pkmn]
+description = "Pokemon/work-specific tools"
+identity = "pkmn"
+
+[packages.pkmn.darwin]
+brew = []
