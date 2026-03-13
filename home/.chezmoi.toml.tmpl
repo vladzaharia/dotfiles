@@ -1,22 +1,28 @@
-{{- $devcontainer := (or (env "DEVPOD" | not | not) (env "GITPOD_WORKSPACE_ID" | not | not) (env "CODESPACES" | not | not) (env "CODER_ENV" | not | not))  -}}
+{{/* ============================================================ */}}
+{{/* STEP 1: Auto-detect environment (must run before any prompts) */}}
+{{/* ============================================================ */}}
 
-{{- $wsl := (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
-{{- $distro := (.chezmoi.os) -}}
-{{- $distroLike := (.chezmoi.os) -}}
+{{- $ephemeral := (or (env "DEVPOD" | not | not) (env "GITPOD_WORKSPACE_ID" | not | not)
+                      (env "CODESPACES" | not | not) (env "CODER_ENV" | not | not)) -}}
+{{- $wsl       := (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+{{- if or (stat "/home/kasm-default-profile") $wsl -}}{{- $ephemeral = true -}}{{- end -}}
+
+{{- $distro     := .chezmoi.os -}}
+{{- $distroLike := .chezmoi.os -}}
 {{- if eq $distro "linux" -}}
-{{- $distro = (.chezmoi.osRelease.id) -}}
-{{- $distroLike = (or (index .chezmoi.osRelease "idLike") (.chezmoi.osRelease.id)) -}}
+{{-   $distro     = .chezmoi.osRelease.id -}}
+{{-   $distroLike = (or (index .chezmoi.osRelease "idLike") .chezmoi.osRelease.id) -}}
 {{- end -}}
 
 {{- $chassisType := "desktop" -}}
-{{- if $devcontainer -}}
+{{- if $ephemeral -}}
 {{-   $chassisType = "ephemeral" -}}
 {{- else if stat "/home/kasm-default-profile" -}}
 {{-   $chassisType = "kasm" -}}
-{{- else if $wsl }}
+{{- else if $wsl -}}
 {{-   $chassisType = "wsl" -}}
 {{- else if eq .chezmoi.hostname "beepy" -}}
-{{-  $chassisType = "beepy" -}}
+{{-   $chassisType = "beepy" -}}
 {{- else if eq .chezmoi.os "darwin" -}}
 {{-   if contains "MacBook" (output "sysctl" "-n" "hw.model") -}}
 {{-     $chassisType = "laptop" -}}
@@ -29,55 +35,90 @@
 {{-   $chassisType = (output "powershell.exe" "-noprofile" "-command" "if (Get-WmiObject -Class win32_battery -ComputerName localhost) { echo laptop } else { echo desktop }") -}}
 {{- end -}}
 
-{{ $pokemon := false }}
-{{ $email := "hey@vlad.gg" }}
-{{- if (regexMatch "Mac-[A-Za-z0-9]+" .chezmoi.hostname) -}}
-{{ $pokemon = true }}
-{{ $email = "v.zaharia@pokemon.com" }}
+{{/* Fastfetch color — inlined because .chezmoidata/ is not available during config template rendering */}}
+{{- $fastfetchColor := "black" -}}
+{{- if or (eq $distroLike "fedora") (eq .chezmoi.os "windows") (eq $distro "darwin") -}}
+{{-   $fastfetchColor = "light_blue" -}}
+{{- else if eq $distro "ubuntu" -}}
+{{-   $fastfetchColor = "yellow" -}}
+{{- else if eq $distroLike "debian" -}}
+{{-   $fastfetchColor = "red" -}}
+{{- else if eq $distroLike "opensuse" -}}
+{{-   $fastfetchColor = "green" -}}
 {{- end -}}
+
+{{/* ============================================================ */}}
+{{/* STEP 2: Prompts — SKIPPED entirely on ephemeral environments  */}}
+{{/* Ephemeral gets safe, minimal defaults for non-interactive     */}}
+{{/* startup (Codespaces, GitPod, Coder, DevPod workspaces)       */}}
+{{/* ============================================================ */}}
+
+{{- $identity      := "home" -}}
+{{- $pokemon       := false -}}
+{{- $machineRole   := "workstation" -}}
+{{- $dockerRuntime := "none" -}}
+{{- $packageGroups := list -}}
+
+{{- if not $ephemeral -}}
+
+  {{/* Identity: home (personal) or pkmn (work) — different first letters avoid prefix ambiguity */}}
+  {{- $identity = promptChoiceOnce . "identity" "Which identity is this machine" (list "home" "pkmn") -}}
+  {{- $pokemon  = eq $identity "pkmn" -}}
+
+  {{/* Machine role: auto-detect for known chassis types; ask only when ambiguous */}}
+  {{- if or (eq $chassisType "server") (eq $chassisType "vm") -}}
+  {{-   $machineRole = "server" -}}
+  {{- else if and (eq .chezmoi.os "linux") (not (or (eq $chassisType "laptop") (eq $chassisType "desktop"))) -}}
+  {{-   $machineRole = promptChoiceOnce . "machine_role" "What is this machine's role" (list "workstation" "server") -}}
+  {{- end -}}
+
+  {{/* Docker runtime: macOS ARM workstations only */}}
+  {{- if and (eq .chezmoi.os "darwin") (eq .chezmoi.arch "arm64") -}}
+  {{-   $dockerRuntime = promptChoiceOnce . "docker_runtime" "Which Docker runtime" (list "orbstack" "colima" "docker-desktop" "none") -}}
+  {{- end -}}
+
+  {{/* Package groups: offer groups appropriate for this machine */}}
+  {{- $available := list "terminal" "dev" "cloud" "ai" "security" -}}
+  {{- if eq $machineRole "workstation" -}}
+  {{-   $available = concat $available (list "apps" "gaming" "creative" "comms") -}}
+  {{- end -}}
+  {{- if $pokemon -}}{{- $available = append $available "pkmn" -}}{{- end -}}
+  {{- $packageGroups = promptMultichoiceOnce . "package_groups" "Select package groups to install" $available -}}
+
+{{- end -}}
+{{/* On ephemeral: $packageGroups = [] → install scripts produce empty/no-op output */}}
+
+{{/* ============================================================ */}}
+{{/* STEP 3: Generate chezmoi.toml output                         */}}
+{{/* ============================================================ */}}
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
-{{ if and (ne $chassisType "ephemeral") (ne $chassisType "beepy") -}}
+{{- if and (not $ephemeral) (ne $chassisType "beepy") }}
 encryption = "age"
 [age]
 {{-   if $pokemon }}
-    identity = "~/.keys/pkmn.key"
+    identity  = "~/.keys/pkmn.key"
     recipient = "age1chxlg7tm275f5fsw8lfpj9x76drqfgtaphu02ef7u3lurkppwqnqfwxarn"
 {{-   else }}
-    identity = "~/.keys/personal.key"
+    identity  = "~/.keys/personal.key"
     recipient = "age1hpzuwy5lhe6ke9dkj37npz9qlgcfxkk2yyl0z235xt3sgqrmqpssqsjtcm"
 {{-   end }}
 {{- end }}
 
+[git]
+    autoCommit = true
+
 [data]
-    chezmoi.chassis = {{ $chassisType | quote }}
+    chezmoi.chassis     = {{ $chassisType | quote }}
     chezmoi.distro.name = {{ $distro | quote }}
     chezmoi.distro.like = {{ $distroLike | quote }}
-
-    {{ if eq $distroLike "fedora" -}}
-    fastfetch.color = "light_blue"
-    {{ else if eq $distro "ubuntu" -}}
-    fastfetch.color = "yellow"
-    {{ else if eq $distroLike "debian" -}}
-    fastfetch.color = "red"
-    {{ else if eq $distroLike "opensuse" -}}
-    fastfetch.color = "green"
-    {{ else if eq .chezmoi.os "windows" -}}
-    fastfetch.color = "light_blue"
-    {{ else if eq $distro "darwin" -}}
-    fastfetch.color = "light_blue"
-    {{ else -}}
-    fastfetch.color = "black"
-    {{ end -}}
-
-    {{ if or (stat "/Applications/rio.app") (stat "/Applications/Rio.app") -}}
-    flags.apps.rio = true
-    {{ end -}}
-
-    flags.applesilicon = {{ and (eq $distro "darwin") (eq .chezmoi.arch "arm64") }}
-    flags.ephemeral = {{ or (eq $chassisType "ephemeral") (eq $chassisType "kasm") }}
-    flags.pokemon = {{ $pokemon }}
-
-    personal.name = "Vlad Zaharia"
-    personal.email = {{ $email | quote }}
+    docker.runtime      = {{ $dockerRuntime | quote }}
+    fastfetch.color     = {{ $fastfetchColor | quote }}
+    flags.applesilicon  = {{ and (eq .chezmoi.os "darwin") (eq .chezmoi.arch "arm64") }}
+    flags.ephemeral     = {{ $ephemeral }}
+    flags.pokemon       = {{ $pokemon }}
+    flags.apps.rio      = {{ or (stat "/Applications/rio.app") (stat "/Applications/Rio.app") | not | not }}
+    personal.name       = "Vlad Zaharia"
+    personal.email      = {{ if $pokemon }}"v.zaharia@pokemon.com"{{ else }}"hey@vlad.gg"{{ end }}
+    package_groups      = {{ $packageGroups | toJson }}
