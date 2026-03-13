@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__playwright__*",
+      "mcp__serena__*",
+      "mcp__context7__*",
+      "mcp__github__*",
+      "mcp__supabase__*",
+      "mcp__gitlab__*",
+      "mcp__omi-tools__execute_sql",
+      "mcp__omi-tools__semantic_search",
+      "Bash(git *)",
+      "Bash(gh *)",
+      "Bash(npm *)",
+      "Bash(pnpm *)",
+      "Bash(yarn *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(go *)",
+      "Bash(python3 *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(echo *)",
+      "Bash(which *)",
+      "Bash(pwd)",
+      "Bash(env)",
+      "Bash(make *)",
+      "Bash(docker ps*)",
+      "Bash(docker logs*)",
+      "Bash(docker compose ps*)",
+      "Bash(docker compose logs*)",
+      "Bash(chezmoi *)",
+      "WebFetch(*)",
+      "WebSearch(*)"
+    ]
+  }
+}

@@ -87,7 +87,13 @@ if [ "$(command -v brew)" ]; then
     brew tap hashicorp/tap
     
     # Cross-plat 
-    brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd fzf gnupg hammerspoon hurl nvm ripgrep tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide jandedobbeleer/oh-my-posh/oh-my-posh
+    brew install 1password/tap/1password-cli age atuin bat direnv docker docker-compose eza fd fzf gnupg hammerspoon hurl nvm ripgrep tealdeer ugrep hashicorp/tap/vault wezterm yq zoxide jandedobbeleer/oh-my-posh/oh-my-posh && brew install --cask wave
+
+    # Fix WaveTerm SSH parsing: comment out Include in /etc/ssh/ssh_config
+    # WaveTerm's ssh_config parser (kevinburke fork) can't handle Include directives
+    if grep -q "^Include /etc/ssh/ssh_config.d" /etc/ssh/ssh_config; then
+        sudo sed -i '' 's|^Include /etc/ssh/ssh_config.d|#Include /etc/ssh/ssh_config.d|' /etc/ssh/ssh_config
+    fi
 
     {{   if .flags.applesilicon -}}
     echo "${LCYAN}###${RESET} Homebrew install (arm64)"
@@ -108,6 +114,25 @@ if [ ! "$(command -v zrok)" ]; then
     install /tmp/zrok/zrok ~/.local/bin
     rm -rf /tmp/zrok
     zrok config set apiEndpoint https://zrok.tun.polaris.gdn/
+fi
+
+
+# Claude Code LSP language servers (used by typescript-lsp, gopls-lsp, pyright-lsp plugins)
+echo "${LCYAN}###${RESET} Claude Code LSP servers"
+
+if [ ! "$(command -v typescript-language-server)" ]; then
+    echo "${CYAN}###${RESET} typescript-language-server install"
+    npm install -g typescript-language-server typescript
+fi
+
+if [ "$(command -v go)" ] && [ ! "$(command -v gopls)" ]; then
+    echo "${CYAN}###${RESET} gopls install"
+    go install golang.org/x/tools/gopls@latest
+fi
+
+if [ ! "$(command -v pyright)" ]; then
+    echo "${CYAN}###${RESET} pyright install"
+    npm install -g pyright
 fi
 
 {{ end -}}

@@ -1,0 +1,42 @@
+{
+  "autoupdate:channel": "latest",
+  "telemetry:enabled": true,
+
+  "app:confirmquit": false,
+  "app:focusfollowscursor": "term",
+  "app:defaultnewblock": "term",
+
+  "term:fontfamily": "MonoLisa Nerd Font",
+  "term:fontsize": 13,
+  "term:theme": "aci",
+  "term:durable": true,
+  "term:scrollback": 10000,
+  "term:copyonselect": true,
+  "term:cursor": "bar",
+  "term:cursorblink": true,
+  "term:bellsound": true,
+  "term:bellindicator": true,
+  "term:shiftenternewline": true,
+  "term:macoptionismeta": true,
+  "term:allowbracketedpaste": true,
+
+  "conn:askbeforewshinstall": false,
+
+  "editor:stickyscrollenabled": true,
+  "editor:minimapenabled": true,
+  "editor:fontsize": 12,
+
+  "preview:showhiddenfiles": true,
+  "preview:defaultsort": "modtime",
+
+  "window:blur": true,
+  "window:opacity": 0.95,
+  "window:tilegapsize": 4,
+
+  "web:defaultsearch": "https://www.google.com/search?q={query}",
+
+  "widget:showhelp": false,
+
+  "waveai:defaultmode": "openai-gpt54",
+  "waveai:showcloudmodes": true
+}

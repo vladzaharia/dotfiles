@@ -6,6 +6,7 @@ local lastActiveApp = nil -- Cache last active terminal for even faster switchin
 local function initializeTerminals()
   -- Define terminals in order of preference with correct bundle IDs
   local terminalConfigs = {
+    { name = "WaveTerm", bundleId = "dev.waveterm.waveterm", path = "/Applications/WaveTerm.app", noResize = true },
     { name = "Warp", bundleId = "dev.warp.Warp-Stable", path = "/Applications/Warp.app" },
     { name = "WezTerm", bundleId = "com.github.wez.wezterm", path = "/Applications/WezTerm.app" },
     { name = "Rio", bundleId = "com.raphaelamorim.rio", path = "/Applications/rio.app" },
@@ -46,7 +47,10 @@ local function toggleTerminal()
       return
     else
       lastActiveApp:activate()
-      positionWindow(lastActiveApp)
+      local config = terminals[lastActiveApp:bundleID()]
+      if config and not config.noResize then
+        positionWindow(lastActiveApp)
+      end
       return
     end
   end
@@ -55,13 +59,16 @@ local function toggleTerminal()
   local runningApps = hs.application.runningApplications()
   for _, app in ipairs(runningApps) do
     local bundleId = app:bundleID()
-    if terminals[bundleId] then -- O(1) hash table lookup
+    local config = terminals[bundleId]
+    if config then -- O(1) hash table lookup
       lastActiveApp = app -- Cache for next time
       if app:isFrontmost() then
         app:hide()
       else
         app:activate()
-        positionWindow(app)
+        if not config.noResize then
+          positionWindow(app)
+        end
       end
       return
     end
