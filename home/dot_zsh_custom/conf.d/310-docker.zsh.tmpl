@@ -1,0 +1,14 @@
+######
+### Group 310: Docker runtime environment
+######
+
+{{- if .flags.applesilicon }}
+{{- if eq .docker.runtime "colima" }}
+export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
+{{- else if eq .docker.runtime "orbstack" }}
+if command -v orbctl > /dev/null 2>&1; then
+    eval "$(orbctl completion zsh)"
+    compdef _orb orbctl orb
+fi
+{{- end }}
+{{- end }}

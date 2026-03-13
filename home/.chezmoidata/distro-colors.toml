@@ -1,0 +1,8 @@
+[fastfetch_colors]
+fedora   = "light_blue"
+ubuntu   = "yellow"
+debian   = "red"
+opensuse = "green"
+windows  = "light_blue"
+darwin   = "light_blue"
+default  = "black"

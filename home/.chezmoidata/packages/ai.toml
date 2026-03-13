@@ -1,0 +1,26 @@
+description = "AI tools and Claude Code language server support"
+
+# ── macOS — full GUI + CLI stack ──────────────────────────────────
+[darwin]
+cask = [
+  "claude",
+  "lm-studio",
+  "plaud",
+]
+cask_cli = [
+  "claude-code",
+]
+brew = ["ollama"]
+mas = ["6502156163"]  # omi (AI wearable / meeting notes)
+npm_global = ["typescript-language-server", "typescript", "pyright"]
+go_install = ["golang.org/x/tools/gopls@latest"]
+
+# ── Linux — CLI tools only (no GUI apps) ─────────────────────────
+[debian]
+npm_global = ["@anthropic-ai/claude-code", "typescript-language-server", "typescript", "pyright"]
+go_install = ["golang.org/x/tools/gopls@latest"]
+# ollama: install via curl (https://ollama.com/download/linux) — no apt package
+
+[opensuse]
+npm_global = ["@anthropic-ai/claude-code", "typescript-language-server", "typescript", "pyright"]
+go_install = ["golang.org/x/tools/gopls@latest"]

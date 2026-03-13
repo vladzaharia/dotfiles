@@ -1,0 +1,11 @@
+description = "Cloud and infrastructure tooling"
+
+[darwin]
+tap = ["hashicorp/tap"]
+brew = ["hashicorp/tap/vault", "hashicorp/tap/terraform"]
+
+[debian]
+apt = ["vault", "terraform"]
+
+[opensuse]
+zypper = ["vault", "terraform"]

@@ -1,0 +1,10 @@
+.DS_Store
+.envrc
+*.env
+.direnv/
+node_modules/
+.idea/
+.vscode/
+*.log
+*.swp
+.tool-versions

@@ -1,0 +1,12 @@
+######
+### Group 900: Shell prompt (always last — must load after all tools are on PATH)
+######
+
+# Oh-My-Posh
+if command -v oh-my-posh > /dev/null 2>&1 && [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+{{- if .flags.ephemeral }}
+    eval "$(oh-my-posh init zsh --config {{ .chezmoi.homeDir }}/.config/oh-my-posh/out/minimal.yml)"
+{{- else }}
+    eval "$(oh-my-posh init zsh --config {{ .chezmoi.homeDir }}/.config/oh-my-posh/out/full.yml)"
+{{- end }}
+fi

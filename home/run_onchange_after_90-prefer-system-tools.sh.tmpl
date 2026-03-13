@@ -1,0 +1,32 @@
+{{ if not .flags.ephemeral -}}
+#!/bin/sh
+CYAN='\033[0;36m'
+RESET='\033[0m'
+
+LOCAL_BIN="${HOME}/.local/bin"
+
+# Prefer a system-installed binary over a locally-downloaded one.
+# Temporarily removes LOCAL_BIN from PATH to find the system version.
+prefer_system() {
+    local tool="$1"
+    local local_path="${LOCAL_BIN}/${tool}"
+    [ -f "${local_path}" ] || return 0  # no local copy, nothing to do
+
+    local sys_path
+    sys_path=$(PATH=$(printf '%s' "$PATH" | tr ':' '\n' | grep -vxF "$LOCAL_BIN" | tr '\n' ':') \
+               command -v "$tool" 2>/dev/null || true)
+
+    if [ -n "$sys_path" ]; then
+        printf "${CYAN}  →${RESET} Preferring system ${tool} at ${sys_path} (removed local copy)\n"
+        rm -f "${local_path}"
+    fi
+}
+
+printf "${CYAN}###${RESET} Preferring system tools over local ~/.local/bin copies\n"
+prefer_system chezmoi     # bootstrap binary → brew/apt/zypper version
+prefer_system micro       # curl install → brew/apt/zypper version
+prefer_system zrok        # curl install → brew/apt/zypper version
+prefer_system zoxide      # curl install → brew version
+prefer_system fastfetch   # curl install → brew version
+prefer_system age         # curl install → brew version
+{{ end -}}

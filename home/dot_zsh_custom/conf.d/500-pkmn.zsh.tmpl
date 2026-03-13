@@ -1,0 +1,10 @@
+######
+### Group 500: Pokemon/work-specific configuration
+######
+
+{{- if .flags.pokemon }}
+# Source per-directory pkmn config if present
+if [ -f "./.pkmn.zshrc" ]; then
+    . ./.pkmn.zshrc
+fi
+{{- end }}

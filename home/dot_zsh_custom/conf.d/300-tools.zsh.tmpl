@@ -1,0 +1,65 @@
+######
+### Group 300: Tool integrations and hooks
+######
+
+# Homebrew
+if command -v brew > /dev/null 2>&1; then
+    eval "$(brew shellenv)"
+fi
+
+# Direnv
+if command -v direnv > /dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+fi
+
+# Mise
+if command -v mise > /dev/null 2>&1; then
+    eval "$(mise activate zsh)"
+fi
+
+# Vault
+if command -v vault > /dev/null 2>&1; then
+    export VAULT_ADDR="https://vault.polaris.rest"
+    autoload -U +X bashcompinit && bashcompinit
+    complete -o nospace -C "$(command -v vault)" vault
+fi
+
+{{- if not .flags.pokemon }}
+# Atuin
+if command -v atuin > /dev/null 2>&1; then
+    export ATUIN_SYNC_ADDRESS="https://atuin.polaris.rest"
+    {{- if eq .chezmoi.distro.name "ubuntu" }}
+    . "{{ .chezmoi.homeDir }}/.atuin/bin/env"
+    {{- else }}
+    eval "$(atuin init zsh)"
+    {{- end }}
+fi
+{{- end }}
+
+# Eza
+if command -v eza > /dev/null 2>&1; then
+    export EZA_ICON_SPACING=2
+    export EZA_COLORS="di=38;5;039;1:ex=38;5;082;1:vi=38;5;105:.*=38;5;243:*.apk=38;5;154:*.env=38;5;243:*.jar=38;5;196:*.ts=38;5;033:docker-compose.yml=38;5;045"
+fi
+
+# Zoxide
+if command -v zoxide > /dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
+
+# Bat
+if command -v bat > /dev/null 2>&1; then
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+fi
+
+{{ if and (index .flags "apps") (index .flags.apps "rio") -}}
+# Rio + Tattoy
+if command -v tattoy > /dev/null 2>&1 && [[ "${USE_TATTOY}" == "true" ]] && [[ "${TATTOY_RUNNING}" != "1" ]]; then
+    tattoy
+fi
+{{ end -}}
+
+# Fastfetch MOTD
+if command -v fastfetch > /dev/null 2>&1; then
+    fastfetch -c {{ .chezmoi.homeDir }}/.config/fastfetch/fastfetch.jsonc
+fi

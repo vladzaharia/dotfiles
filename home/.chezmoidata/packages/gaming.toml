@@ -1,0 +1,11 @@
+description = "Gaming and game streaming"
+workstation_only = true
+client_only = true
+
+[darwin]
+cask = [
+  "steam",
+  "parsec",
+  "moonlight",
+  "jump-desktop",
+]

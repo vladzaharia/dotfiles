@@ -1,0 +1,30 @@
+######
+### Group 200: oh-my-zsh configuration
+######
+
+# Path to oh-my-zsh installation
+export ZSH="{{ .chezmoi.homeDir }}/.oh-my-zsh"
+
+# Path to custom plugins
+export ZSH_CUSTOM="{{ .chezmoi.homeDir }}/.zsh_custom"
+export ZSH_PLUGINS="$ZSH_CUSTOM/plugins"
+
+# Theme (overridden by oh-my-posh in 900-prompt.zsh)
+ZSH_THEME="robbyrussell"
+
+# Performance
+DISABLE_AUTO_UPDATE="true"
+DISABLE_MAGIC_FUNCTIONS="true"
+DISABLE_COMPFIX="true"
+
+# Disable oh-my-zsh update (handled via chezmoi)
+zstyle ':omz:update' mode disabled
+
+# Features
+ENABLE_CORRECTION="true"
+COMPLETION_WAITING_DOTS="true"
+
+# Add extra completions
+fpath+=${ZSH_CUSTOM:-${ZSH:-{{ .chezmoi.homeDir }}/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+
+source $ZSH/oh-my-zsh.sh

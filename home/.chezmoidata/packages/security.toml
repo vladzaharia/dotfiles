@@ -1,0 +1,20 @@
+description = "Security and secrets management"
+
+# ── Cross-platform CLI tools ──────────────────────────────────────
+[debian]
+apt = ["sops", "gnupg"]
+# 1password-cli: install via official script (https://1password.com/downloads/linux/)
+
+[opensuse]
+zypper = ["sops", "gnupg"]
+
+# ── macOS — CLI tools + GUI apps ─────────────────────────────────
+[darwin]
+tap = ["1password/tap"]
+brew = ["sops", "gnupg", "1password/tap/1password-cli"]
+cask = [
+  "1password",
+  "tailscale-app",
+  "unifi-identity-endpoint",
+  "pangolin",
+]

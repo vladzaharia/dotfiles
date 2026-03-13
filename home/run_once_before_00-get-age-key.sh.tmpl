@@ -1,0 +1,36 @@
+{{ if and (not .flags.ephemeral) (ne .chezmoi.chassis "beepy") -}}
+#!/bin/sh
+CYAN='\033[0;36m'
+LCYAN='\033[1;36m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+RESET='\033[0m'
+
+if ! command -v op > /dev/null 2>&1; then
+    printf "${RED}✗${RESET} 1Password CLI (op) not found — install it and re-run chezmoi apply\n" >&2
+    exit 1
+fi
+
+mkdir -p "${HOME}/.keys"
+chmod 700 "${HOME}/.keys"
+
+{{- if .flags.pokemon }}
+KEY_FILE="${HOME}/.keys/pkmn.key"
+OP_ITEM="xcek5aq6r37ywlrejyzrmiuyjq"
+{{- else }}
+KEY_FILE="${HOME}/.keys/personal.key"
+OP_ITEM="iaccoc2dxvhdl7x47vfi3rlx3a"
+{{- end }}
+OP_VAULT="gx6f2sygfjlgibc5ehqcsunpdq"
+
+if [ ! -f "${KEY_FILE}" ]; then
+    printf "${LCYAN}###${RESET} Fetching age key from 1Password\n"
+    # NOTE: verify field name before first run on a new machine:
+    #   op item get ${OP_ITEM} --vault ${OP_VAULT} --format json | jq '[.fields[] | {label, value}]'
+    op read "op://${OP_VAULT}/${OP_ITEM}/notesPlain" > "${KEY_FILE}"
+    chmod 600 "${KEY_FILE}"
+    printf "${CYAN}  →${RESET} Age key written to ${KEY_FILE}\n"
+else
+    printf "${YELLOW}###${RESET} Age key already present at ${KEY_FILE}, skipping\n"
+fi
+{{ end -}}

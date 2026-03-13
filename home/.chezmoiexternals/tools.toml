@@ -1,0 +1,4 @@
+[".wgetrc"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/dotphiles/dotphiles/master/wget/wgetrc"
+    refreshPeriod = "168h"

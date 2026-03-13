@@ -1,0 +1,31 @@
+description = "Development tools and terminal setup"
+
+# ── Cross-platform (all platforms) ───────────────────────────────
+[debian]
+apt = ["git-lfs"]
+# gh via custom repo, docker via custom repo
+# oh-my-posh via curl: https://ohmyposh.dev/docs/installation/linux
+
+[opensuse]
+zypper = ["gh", "git-lfs", "docker", "docker-compose"]
+# oh-my-posh via curl
+
+# ── macOS (CLI tools + GUI apps) ─────────────────────────────────
+[darwin]
+brew = [
+  "gh",
+  "git-lfs",
+  "docker",
+  "docker-compose",
+  "nvm",
+  "jandedobbeleer/oh-my-posh/oh-my-posh",
+  "hurl",
+]
+# macOS GUI dev tools
+cask = [
+  "wave",
+  "visual-studio-code",
+  "zed",
+  "devpod",
+  "requestly",
+]

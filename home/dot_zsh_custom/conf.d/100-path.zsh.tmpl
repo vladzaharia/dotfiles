@@ -1,0 +1,27 @@
+######
+### Group 100: PATH and environment variables
+######
+
+# Base PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:{{ .chezmoi.homeDir }}/bin:{{ .chezmoi.homeDir }}/.local/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
+
+{{- if eq .chezmoi.distro.name "darwin" }}
+# macOS / Homebrew PATH
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+
+# Flutter
+if [ -d "{{ .chezmoi.homeDir }}/Flutter/flutter/bin" ]; then
+    export PATH="{{ .chezmoi.homeDir }}/Flutter/flutter/bin:$PATH"
+fi
+{{- end }}
+
+# Windsurf
+if [ -d "{{ .chezmoi.homeDir }}/.codeium/windsurf/bin" ]; then
+    export PATH="{{ .chezmoi.homeDir }}/.codeium/windsurf/bin:$PATH"
+fi
+
+# Default editor
+export EDITOR='nano'
+if command -v micro > /dev/null 2>&1; then
+    export EDITOR="$(command -v micro)"
+fi

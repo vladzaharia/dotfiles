@@ -1,0 +1,64 @@
+#!/bin/sh
+CYAN='\033[0;36m'
+RESET='\033[0m'
+
+{{ if (and (eq .chezmoi.distro.like "debian") (not (eq .chezmoi.chassis "kasm"))) -}}
+
+# Remove Infisical repository
+if [ -f /etc/apt/sources.list.d/infisical-infisical-cli.list ]; then
+    printf "${CYAN}###${RESET} Removing Infisical repository\n"
+    sudo rm -rf /etc/apt/sources.list.d/infisical-infisical-cli.list
+fi
+
+# Remove Infisical
+if command -v infisical > /dev/null 2>&1; then
+    sudo apt-get remove infisical -y
+fi
+
+# Remove Exa
+if command -v exa > /dev/null 2>&1; then
+    sudo apt-get remove exa -y
+fi
+
+# Remove Moon
+if command -v moon > /dev/null 2>&1; then
+    printf "${CYAN}###${RESET} Removing Moon\n"
+    rm -rf "{{ .chezmoi.homeDir }}/.moon"
+fi
+
+{{ else if eq .chezmoi.distro.like "suse opensuse" -}}
+
+# Cleanup things in the future
+
+{{ else if eq .chezmoi.distro.name "darwin" -}}
+
+if command -v brew > /dev/null 2>&1; then
+    # Remove Infisical
+    if command -v infisical > /dev/null 2>&1; then
+        brew remove infisical
+    fi
+
+    # Remove Moon
+    if command -v moon > /dev/null 2>&1; then
+        printf "${CYAN}###${RESET} Removing Moon\n"
+        rm -rf "{{ .chezmoi.homeDir }}/.moon"
+    fi
+
+    # Remove Azure CLI
+    if command -v az > /dev/null 2>&1; then
+        brew remove azure-cli
+    fi
+
+    # Remove Exa
+    if command -v exa > /dev/null 2>&1; then
+        brew remove exa
+    fi
+
+    # Fix WaveTerm SSH parsing: comment out Include in /etc/ssh/ssh_config
+    # WaveTerm's ssh_config parser (kevinburke fork) can't handle Include directives
+    if grep -q "^Include /etc/ssh/ssh_config.d" /etc/ssh/ssh_config 2>/dev/null; then
+        sudo sed -i '' 's|^Include /etc/ssh/ssh_config.d|#Include /etc/ssh/ssh_config.d|' /etc/ssh/ssh_config
+    fi
+fi
+
+{{ end -}}

@@ -1,52 +1,70 @@
-# Dotfiles
+# dotfiles
 
-Reproducible home setup using [chezmoi](https://www.chezmoi.io/).
+Personal home setup via [chezmoi](https://www.chezmoi.io/).
 
-## Prerequisites
+## Quick Start
 
-chezmoi will run a package install script on first run, and anytime dependencies change. 
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/vladzaharia/dotfiles/main/bootstrap.sh)"
+```
 
-## Supported Platforms
+On first run, chezmoi will ask which **identity** (personal/pkmn) and **package groups** to install,
+then fetch your age encryption key from 1Password automatically.
 
-- ✅ macOS (Apple or Intel)
-    - [brew](https://brew.sh) is required to download packages
-- ✅ Debian / Ubuntu
-- ⚠️ Windows
-    - Only some settings are supported
-- ⚠️ WSL Debian / Ubuntu
-    - Biometric 1Password authentication not available
-- ⚠️ Ephemeral workspaces (GitPod / Codespaces)
-    - Minimal package installation to reduce startup time
-    - No access to secret files
+### Options
 
-## Bootstrapping
+| Flag | Description |
+|------|-------------|
+| `--dry-run` | Preview changes without applying |
+| `--local` | Use local clone instead of GitHub |
+| `--branch=<branch>` | Use a specific git branch |
+| `--https` | Force HTTPS clone (auto-set in containers) |
+| `--retries=<n>` | Network retry attempts (default: 3) |
 
-You can bootstrap the environment by downloading [the bootstrap file](https://raw.githubusercontent.com/vladzaharia/dotfiles/main/bootstrap.sh) and using `bootstrap.sh -g` which will download and install chezmoi and link it to this GitHub repository. 
+Clones via **SSH** by default (easy for ongoing updates). Automatically switches to **HTTPS** in containers/ephemeral environments where no SSH key is present.
 
-Running `bootstrap.sh` without the flag will also download and install chezmoi, but link it to the local directory instead.
+## Platforms
 
-## Installed Software
+| Platform | Status | Notes |
+|----------|--------|-------|
+| macOS (Apple Silicon) | ✅ | Full support |
+| macOS (Intel) | ✅ | Full support |
+| Debian / Ubuntu | ✅ | Full support |
+| openSUSE | ✅ | Full support |
+| Windows | ⚠️ | Config files only |
+| WSL | ⚠️ | No biometric 1Password |
+| Ephemeral (GitPod/Codespaces) | ⚠️ | Minimal install, no secrets |
 
-| Software | macOS | Debian | WSL | GitPod / Codespaces |
-|----------|-------|--------|-----|---------------------|
-| [oh-my-zsh](https://ohmyz.sh/)| ✅ | ✅ | ✅ | ✅ |
-| [direnv](https://direnv.net/) | ✅ | ✅ | ✅ | ✅ |
-| [1password-cli](https://1password.com/downloads/command-line/) | ✅ | ✅ | ✅ | |
-| [docker](https://www.docker.com/)| ✅ | ✅ | ✅ | |
-| [kubectl](https://kubernetes.io/docs/tasks/tools/) | ✅ | ✅ | ✅ | |
-| [azure-cli](https://docs.microsoft.com/en-us/cli/azure/) | ✅ | | | |
-| [nvm](https://github.com/nvm-sh/nvm)| ✅ | | | |
+## Package Groups
 
-## Secret Files
+Selected interactively on first run via `promptMultichoiceOnce`. `core` always installs. macOS workstation groups (`apps`, `gaming`, `creative`, `comms`) only offered on macOS workstations.
 
-The following files are stored and retrieved via 1Password:
+| Group | Platforms | Contents |
+|-------|-----------|----------|
+| `core` | **All** | Always installed: bat, eza, fd, micro, mise, ripgrep, zoxide, chezmoi… |
+| `dev` | **All** CLI + macOS GUI | All: gh, git-lfs, docker, oh-my-posh; macOS: WaveTerm, VS Code, Zed, DevPod, Requestly |
+| `cloud` | **All** | vault, terraform |
+| `ai` | **All** CLI + macOS GUI | macOS: Claude app, LM Studio, Plaud, omi; All: Claude Code, Ollama, LSP servers |
+| `security` | **All** CLI + macOS GUI | All: sops, gnupg; macOS: 1Password app + CLI, Tailscale, Pangolin, UniFi |
+| `apps` | macOS workstation | Raycast, Obsidian, Rectangle Pro, DaisyDisk, Dropshare, HomeKit, Kagi |
+| `gaming` | macOS workstation | Steam, Parsec, Moonlight, Jump Desktop |
+| `creative` | macOS workstation | Bambu Studio, Affinity suite\*, Infuse |
+| `comms` | macOS workstation | Discord; Zoom (pkmn only) |
+| `pkmn` | **All** (pkmn identity) | Work-specific tools |
 
-- `.ssh/id_rsa`
-- `.gnupg/pubring.kbx`
-- `.gnupg/trustdb.gpg`
+\* Affinity casks deprecated 2026-10-30 — migration to App Store needed at that point.
 
-chezmoi will automatically download and install the 1Password CLI on supported platforms, and will wait until 1Password is available before attempting to restore the secret files.
+> **Ephemeral environments** (Codespaces, GitPod, Coder, DevPod): no prompts, no packages installed, no secrets — minimal dotfiles only.
 
-After chezmoi installs packages, either [set up biometric unlock](https://developer.1password.com/docs/cli/get-started#turn-on-biometric-unlock) or [sign in manually](https://developer.1password.com/docs/cli/sign-in-manually).
+To add machine-local packages, edit `~/.config/chezmoi/chezmoi.toml`:
+```toml
+[data]
+  extra_packages.darwin.brew = ["neovim"]
+  disabled_packages = ["hurl"]
+```
 
-Once complete, open a new console to allow zsh to find 1Password and set the flag stating it's available. Run `chezmoi init` again to restore the secret files with the stored session.
+## Secrets
+
+Age encryption keys are stored in 1Password and fetched automatically on init via the 1Password CLI.
+On macOS with 1Password app, this uses Touch ID / system auth — no passphrase prompts.
+Encrypted files: SSH keys, GPG keyring, pkmn-specific configs.

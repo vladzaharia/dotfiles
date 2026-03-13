@@ -1,0 +1,5 @@
+description = "Pokemon/work-specific tools"
+identity = "pkmn"
+
+[darwin]
+brew = []  # add pkmn-specific tools here

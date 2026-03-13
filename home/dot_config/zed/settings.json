@@ -1,0 +1,107 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "agent_ui_font_size": 15.0,
+  "context_servers": {
+    "mcp-server-sequential-thinking": {
+      "enabled": false,
+      "settings": {}
+    },
+    "mcp-server-puppeteer": {
+      "enabled": false,
+      "settings": {}
+    },
+    "mcp-server-context7": {
+      "enabled": false,
+      "settings": {}
+    },
+    "shadcn-mcp-server": {
+      "enabled": false,
+      "settings": {}
+    },
+    "serena": {
+      "enabled": true,
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "ide",
+        "--project",
+        "$(pwd)"
+      ]
+    },
+    "Playwright": {
+      "enabled": false,
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "env": {}
+    },
+    "Package Version": {
+      "enabled": false,
+      "command": "/Users/vlad/go/bin/mcp-package-version",
+      "args": [],
+      "env": {}
+    },
+    "mcp-server-exa-search": {
+      "enabled": false,
+      "settings": {
+        "exa_api_key": ""
+      }
+    }
+  },
+  "icon_theme": {
+    "mode": "system",
+    "light": "Colored Zed Icons Theme Light",
+    "dark": "Colored Zed Icons Theme Dark"
+  },
+  "auto_update": true,
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 10000
+    }
+  },
+  "base_keymap": "VSCode",
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
+
+  /** AI Agent Settings */
+  "agent": {
+    "always_allow_tool_actions": true,
+    "default_model": {
+      "provider": "lmstudio",
+      "model": "liquid/lfm2.5-1.2b"
+    }
+  },
+
+  /** UI Settings */
+  "buffer_font_family": "MonoLisa Nerd Font",
+  "buffer_font_fallbacks": [
+    "MonoLisa",
+    "Monaco",
+    "Menlo",
+    "Courier New",
+    "Consolas",
+    "Lucida Console",
+    ".SystemUIFont"
+  ],
+  "buffer_font_size": 13,
+  "ui_font_size": 15.0,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Modest Dark"
+  }
+}
