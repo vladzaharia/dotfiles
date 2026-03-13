@@ -6,4 +6,11 @@ Include {{ .chezmoi.homeDir }}/.orbstack/ssh/config
 {{-   end }}
 
 Include config.d/*
+
+# Inline entries for apps that can't follow Include directives (e.g. WaveTerm)
+Host greenwood-ts
+    Hostname 100.97.31.112
+    User vlad
+    Port 22
+
 {{ end -}}

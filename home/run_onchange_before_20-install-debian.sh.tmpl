@@ -41,18 +41,18 @@ fi
 {{- range $group := .package_groups }}
 {{-   $gdata := index $.packages $group }}
 {{-   if $gdata }}
-printf "${LCYAN}###${RESET} Installing group: {{ $group }} — {{ $gdata.description }}\n"
+printf "${LCYAN}###${RESET} Installing group: {{ $group }} — {{ index $gdata "description" }}\n"
 {{-     $debian := index $gdata "debian" | default dict }}
 {{-     with (index $debian "apt" | default list) }}
 {{-       $pkgs := . }}
-{{-       range $.disabled_packages }}{{- $pkgs = without $pkgs . }}{{- end }}
+{{-       range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
 {{-       if $pkgs }}
 sudo apt-get install -y {{ $pkgs | join " " }}
 {{-       end }}
 {{-     end }}
 {{-     with (index $debian "npm_global" | default list) }}
 {{-       $pkgs := . }}
-{{-       range $.disabled_packages }}{{- $pkgs = without $pkgs . }}{{- end }}
+{{-       range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
 {{-       if $pkgs }}
 npm install -g {{ $pkgs | join " " }}
 {{-       end }}
@@ -83,7 +83,7 @@ fi
 {{- end }}
 
 # --- Machine-local extra packages ---
-{{- with .extra_packages }}
+{{- with (index $ "extra_packages") }}
 {{-   with (index . "debian" | default dict | index "apt" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (apt)\n"
 sudo apt-get install -y {{ . | join " " }}

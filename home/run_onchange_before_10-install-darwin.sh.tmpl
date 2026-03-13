@@ -11,8 +11,8 @@ fi
 
 # --- Taps ---
 {{- range $group, $data := .packages }}
-{{-   if or $data.required (has $group $.package_groups) }}
-{{-     range (index $data "darwin" | default dict | index "tap" | default list) }}
+{{-   if or (index $data "required") (has $group $.package_groups) }}
+{{-     range (index (index $data "darwin" | default dict) "tap" | default list) }}
 brew tap {{ . }}
 {{-     end }}
 {{-   end }}
@@ -20,25 +20,26 @@ brew tap {{ . }}
 
 # --- Core (always installed) ---
 printf "${LCYAN}###${RESET} Installing core packages\n"
-brew install {{ .packages.core.darwin.brew | join " " }}
+brew install {{ index (index (index $.packages "core") "darwin") "brew" | join " " }}
 
 # --- Selected groups ---
 {{- range $group := .package_groups }}
 {{-   $gdata := index $.packages $group }}
 {{-   if $gdata }}
-printf "${LCYAN}###${RESET} Installing group: {{ $group }} — {{ $gdata.description }}\n"
+printf "${LCYAN}###${RESET} Installing group: {{ $group }} — {{ index $gdata "description" }}\n"
 {{-     $darwin := index $gdata "darwin" | default dict }}
 {{-     with (index $darwin "pre_brew" | default list) }}
 brew install {{ . | join " " }}
 {{-     end }}
 {{-     range $key, $pkgs := $darwin }}
+{{-       if not (kindIs "slice" $pkgs) }}{{- continue }}{{- end }}
 {{-       if hasPrefix "cask" $key }}
-{{-         range $.disabled_packages }}{{- $pkgs = without $pkgs . }}{{- end }}
+{{-         range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
 {{-         if $pkgs }}
 brew install --cask {{ $pkgs | join " " }}
 {{-         end }}
-{{-       else if or (eq $key "brew") (hasPrefix "brew" $key) }}
-{{-         range $.disabled_packages }}{{- $pkgs = without $pkgs . }}{{- end }}
+{{-       else if or (eq $key "brew") (hasPrefix "brew_" $key) }}
+{{-         range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
 {{-         if $pkgs }}
 brew install {{ $pkgs | join " " }}
 {{-         end }}
@@ -49,7 +50,7 @@ mas install {{ $pkgs | join " " }}
 {{-       end }}
 {{-     end }}
 {{-     if and (eq $group "comms") $.flags.pokemon }}
-{{-       $comms_pkmn := index $gdata "darwin.pkmn" | default dict }}
+{{-       $comms_pkmn := index (index $gdata "darwin" | default dict) "pkmn" | default dict }}
 {{-       with (index $comms_pkmn "cask" | default list) }}
 brew install --cask {{ . | join " " }}
 {{-       end }}
@@ -59,13 +60,14 @@ brew install --cask {{ . | join " " }}
 
 # --- NPM globals (ai group) ---
 {{- if has "ai" .package_groups }}
-{{-   $npm := .packages.ai.darwin.npm_global | default list }}
-{{-   range .disabled_packages }}{{- $npm = without $npm . }}{{- end }}
+{{-   $ai_darwin := index (index $.packages "ai") "darwin" | default dict }}
+{{-   $npm := index $ai_darwin "npm_global" | default list }}
+{{-   range (index $ "disabled_packages" | default list) }}{{- $npm = without $npm . }}{{- end }}
 {{-   if $npm }}
 printf "${LCYAN}###${RESET} Installing NPM global packages\n"
 npm install -g {{ $npm | join " " }}
 {{-   end }}
-{{-   with (.packages.ai.darwin.go_install | default list) }}
+{{-   with (index $ai_darwin "go_install" | default list) }}
 printf "${LCYAN}###${RESET} Installing Go tools\n"
 {{-     range . }}
 go install {{ . }}
@@ -82,7 +84,7 @@ brew install colima
 {{- end }}
 
 # --- Machine-local extra packages ---
-{{- with .extra_packages }}
+{{- with (index $ "extra_packages") }}
 {{-   with (index . "darwin" | default dict | index "brew" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (brew)\n"
 brew install {{ . | join " " }}

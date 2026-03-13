@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(brew list:*)",
+      "Bash(find /Users/vlad -maxdepth 1 -name \".*\" -type f 2>/dev/null | head -30)",
+      "WebFetch(domain:www.chezmoi.io)",
+      "WebSearch",
+      "Bash(which mas:*)",
+      "Bash(brew --version)",
+      "Bash(brew search:*)",
+      "Bash(brew *)",
+      "Bash(mkdir -p home && git mv \\\\\n  .chezmoi.toml.tmpl \\\\\n  .chezmoiexternal.toml.tmpl \\\\\n  .chezmoiignore \\\\\n  .gitpod.yml \\\\\n  AppData \\\\\n  dot_backup \\\\\n  dot_bashrc.tmpl \\\\\n  dot_config \\\\\n  dot_continue \\\\\n  dot_gitconfig.tmpl \\\\\n  dot_hammerspoon \\\\\n  dot_hushlogin \\\\\n  dot_liquidpromptrc.tmpl \\\\\n  dot_nanorc.tmpl \\\\\n  dot_profile \\\\\n  dot_zsh_custom \\\\\n  dot_zshrc.tmpl \\\\\n  encrypted_dot_pkmn.gitconfig.age \\\\\n  encrypted_dot_pkmn.zshrc.age \\\\\n  private_dot_claude \\\\\n  private_dot_gnupg \\\\\n  private_dot_keys \\\\\n  private_dot_ssh \\\\\n  private_Library \\\\\n  run_once_before_decrypt-private-key.sh.tmpl \\\\\n  run_onchange_cleanup-packages.sh.tmpl \\\\\n  run_onchange_install-packages.ps1 \\\\\n  run_onchange_install-packages.sh.tmpl \\\\\n  run_upgrade.sh.tmpl \\\\\n  Documents \\\\\n  home/)",
+      "Bash(ls home/.* 2>/dev/null || echo \"No hidden files visible\"\nls -la home/ | head -30)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi rm home/run_once_before_decrypt-private-key.sh.tmpl)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi rm -f home/run_once_before_decrypt-private-key.sh.tmpl)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi rm -f home/run_onchange_cleanup-packages.sh.tmpl)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi rm -f home/run_onchange_install-packages.sh.tmpl home/run_onchange_install-packages.ps1)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi rm -f home/.chezmoiexternal.toml.tmpl)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi status --short | head -80)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi status --short | grep \"^??\" | head -30)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi diff .gitmodules)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi diff HEAD .gitmodules)",
+      "Bash(mise list:*)",
+      "Bash(command -v mise && mise list 2>/dev/null | head -20 || echo \"mise not in PATH\")",
+      "Bash(git add:*)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi status --short)",
+      "Bash(git commit:*)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi add home/.chezmoi.toml.tmpl && git -C /Users/vlad/.local/share/chezmoi commit -m \"$\\(cat <<'EOF'\nFix chezmoi.toml.tmpl: double ??, p/p ambiguity, fastfetch_colors unavailable\n\n- Remove trailing '?' from all promptChoiceOnce/promptMultichoiceOnce strings\n  \\(chezmoi appends its own '?' — having one in the string caused double '??'\\)\n- Change identity option 'personal' → 'home' to avoid prefix ambiguity with\n  'pkmn' \\(both started with 'p'; chezmoi uses prefix matching so 'p' was\n  ambiguous\\). $pokemon check unchanged: still eq $identity \"pkmn\"\n- Replace .fastfetch_colors lookup with inline if/else chain\n  \\(.chezmoidata/ is loaded after .chezmoi.toml.tmpl renders, so the map\n  wasn't available — caused 'map has no entry for key fastfetch_colors'\\)\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi rm home/.chezmoidata/packages/core.toml home/.chezmoidata/packages/dev.toml home/.chezmoidata/packages/cloud.toml home/.chezmoidata/packages/security.toml home/.chezmoidata/packages/ai.toml home/.chezmoidata/packages/pkmn.toml home/.chezmoidata/packages/apps.toml home/.chezmoidata/packages/gaming.toml home/.chezmoidata/packages/creative.toml home/.chezmoidata/packages/comms.toml)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi add home/.chezmoidata/packages.toml && git -C /Users/vlad/.local/share/chezmoi commit -m \"$\\(cat <<'EOF'\nFix packages data: consolidate from subdirectory into single packages.toml\n\nchezmoi does not recurse into .chezmoidata/ subdirectories — only top-level\nfiles are read. The per-group files in packages/ were never loaded, causing\n'map has no entry for key packages' in install templates.\n\nConsolidate all groups into home/.chezmoidata/packages.toml using nested\nTOML sections \\([packages.core], [packages.dev], etc.\\) so .packages.* is\navailable in all templates.\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(grep -n '\\\\$data\\\\.\\\\|\\\\.packages\\\\.' /Users/vlad/.local/share/chezmoi/home/run_onchange_before_10-install-darwin.sh.tmpl /Users/vlad/.local/share/chezmoi/home/run_onchange_before_20-install-debian.sh.tmpl /Users/vlad/.local/share/chezmoi/home/run_onchange_before_30-install-suse.sh.tmpl /Users/vlad/.local/share/chezmoi/home/Brewfile.tmpl)",
+      "Bash(grep -n '\\\\$gdata\\\\.\\\\|darwin\\\\.pkmn\\\\|darwin\\\\.brew\\\\|darwin\\\\.npm\\\\|darwin\\\\.go' /Users/vlad/.local/share/chezmoi/home/run_onchange_before_10-install-darwin.sh.tmpl /Users/vlad/.local/share/chezmoi/home/run_onchange_before_20-install-debian.sh.tmpl /Users/vlad/.local/share/chezmoi/home/run_onchange_before_30-install-suse.sh.tmpl)",
+      "Bash(chmod +x /Users/vlad/.local/share/chezmoi/check.sh && /Users/vlad/.local/share/chezmoi/check.sh 2>&1)",
+      "Bash(/Users/vlad/.local/share/chezmoi/check.sh 2>&1)",
+      "Bash(git -C /Users/vlad/.local/share/chezmoi add -A && git -C /Users/vlad/.local/share/chezmoi commit -m \"$\\(cat <<'EOF'\nFix template map access and add check.sh test harness\n\nTemplate fixes \\(all caused by Go template map access rules\\):\n- index $data \"required\" / index $gdata \"description\": dot-notation on maps\n  panics for missing keys; index returns nil instead\n- \"A | default dict | index key\": pipeline passes value as LAST arg, making\n  \"key\" the collection — fix with index \\(A | default dict\\) \"key\"\n- $.disabled_packages / .extra_packages: machine-local keys absent on fresh\n  installs — fix with index $ \"key\" | default list/nil\n\nAdd check.sh at repo root:\n- Runs chezmoi execute-template on every .tmpl file\n- Reports pass/fail per template with error messages\n- Skips .chezmoi.toml.tmpl \\(uses config-only promptChoiceOnce\\)\n- Run before chezmoi apply: ./check.sh\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}

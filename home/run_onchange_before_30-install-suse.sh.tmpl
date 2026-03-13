@@ -20,18 +20,18 @@ fi
 {{- range $group := .package_groups }}
 {{-   $gdata := index $.packages $group }}
 {{-   if $gdata }}
-printf "${LCYAN}###${RESET} Installing group: {{ $group }} — {{ $gdata.description }}\n"
+printf "${LCYAN}###${RESET} Installing group: {{ $group }} — {{ index $gdata "description" }}\n"
 {{-     $opensuse := index $gdata "opensuse" | default dict }}
 {{-     with (index $opensuse "zypper" | default list) }}
 {{-       $pkgs := . }}
-{{-       range $.disabled_packages }}{{- $pkgs = without $pkgs . }}{{- end }}
+{{-       range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
 {{-       if $pkgs }}
 sudo zypper -n install {{ $pkgs | join " " }}
 {{-       end }}
 {{-     end }}
 {{-     with (index $opensuse "npm_global" | default list) }}
 {{-       $pkgs := . }}
-{{-       range $.disabled_packages }}{{- $pkgs = without $pkgs . }}{{- end }}
+{{-       range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
 {{-       if $pkgs }}
 npm install -g {{ $pkgs | join " " }}
 {{-       end }}
@@ -45,7 +45,7 @@ go install {{ . }}
 {{- end }}
 
 # --- Machine-local extra packages ---
-{{- with .extra_packages }}
+{{- with (index $ "extra_packages") }}
 {{-   with (index . "opensuse" | default dict | index "zypper" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (zypper)\n"
 sudo zypper -n install {{ . | join " " }}

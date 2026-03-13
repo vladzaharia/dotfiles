@@ -1,7 +1,3 @@
-.gitpod.yml
-bootstrap.sh
-README.md
-
 .oh-my-zsh/cache
 .oh-my-zsh/cache/**
 .oh-my-zsh/**/*.zwc
@@ -48,7 +44,7 @@ README.md
 !Documents/AutoHotkey
 !Documents/AutoHotkey/**
 
-{{- else}}
+{{- else }}
 AppData/**
 Documents/**
 Documents/WindowsPowerShell/**
@@ -64,4 +60,17 @@ Documents/AutoHotkey/**
 *.sh
 *.bat
 *.ps1
+{{- end }}
+
+{{- if not (eq .chezmoi.os "darwin") }}
+Brewfile
+.config/zed/**
+{{- end }}
+
+{{- if not .flags.applesilicon }}
+.zsh_custom/conf.d/310-docker.zsh
+{{- end }}
+
+{{- if not .flags.pokemon }}
+.zsh_custom/conf.d/500-pkmn.zsh
 {{- end }}
