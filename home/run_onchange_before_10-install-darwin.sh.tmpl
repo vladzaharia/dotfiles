@@ -36,7 +36,7 @@ brew install {{ . | join " " }}
 {{-       if hasPrefix "cask" $key }}
 {{-         range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
 {{-         if $pkgs }}
-brew install --cask {{ $pkgs | join " " }}
+brew install --cask --adopt {{ $pkgs | join " " }}
 {{-         end }}
 {{-       else if or (eq $key "brew") (hasPrefix "brew_" $key) }}
 {{-         range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
@@ -52,7 +52,7 @@ mas install {{ $pkgs | join " " }}
 {{-     if and (eq $group "comms") $.flags.pokemon }}
 {{-       $comms_pkmn := index (index $gdata "darwin" | default dict) "pkmn" | default dict }}
 {{-       with (index $comms_pkmn "cask" | default list) }}
-brew install --cask {{ . | join " " }}
+brew install --cask --adopt {{ . | join " " }}
 {{-       end }}
 {{-     end }}
 {{-   end }}
@@ -91,7 +91,7 @@ brew install {{ . | join " " }}
 {{-   end }}
 {{-   with (index . "darwin" | default dict | index "cask" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (cask)\n"
-brew install --cask {{ . | join " " }}
+brew install --cask --adopt {{ . | join " " }}
 {{-   end }}
 {{-   with (index . "darwin" | default dict | index "mas" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (mas)\n"
