@@ -18,7 +18,7 @@ zi ice wait lucid has'brew'
 zi snippet OMZP::brew
 
 # asdf
-zi ice has'asdf'
+zi ice wait lucid has'asdf'
 zi snippet OMZP::asdf
 
 # Docker
@@ -52,11 +52,6 @@ zi wait lucid for \
   $ZSH_PLUGINS/colors \
   $ZSH_PLUGINS/colorize \
   OMZP::colored-man-pages
-
-# Fancy Diff
-zi light $ZSH_PLUGINS/z-a-bin-gem-node
-zi ice as'null' sbin'bin/*'
-zi light $ZSH_PLUGINS/zsh-diff-so-fancy
 
 # Syntax highlighting / Autocompletion
 zi wait lucid for \

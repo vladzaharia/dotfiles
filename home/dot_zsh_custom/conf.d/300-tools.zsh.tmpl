@@ -52,12 +52,20 @@ if command -v bat > /dev/null 2>&1; then
     export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 fi
 
-{{ if and (index .flags "apps") (index .flags.apps "rio") -}}
-# Rio + Tattoy
-if command -v tattoy > /dev/null 2>&1 && [[ "${USE_TATTOY}" == "true" ]] && [[ "${TATTOY_RUNNING}" != "1" ]]; then
-    tattoy
+# Tool completions — written to fpath cache to avoid calling compdef before compinit
+_comp_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completions"
+mkdir -p "$_comp_cache"
+fpath=("$_comp_cache" $fpath)
+
+# uv (Python package manager)
+if command -v uv > /dev/null 2>&1; then
+    [[ "$_comp_cache/_uv" -nt "$(command -v uv)" ]] || uv generate-shell-completion zsh > "$_comp_cache/_uv" 2>/dev/null
 fi
-{{ end -}}
+
+# Zellij
+if command -v zellij > /dev/null 2>&1; then
+    [[ "$_comp_cache/_zellij" -nt "$(command -v zellij)" ]] || zellij setup --generate-completion zsh > "$_comp_cache/_zellij" 2>/dev/null
+fi
 
 # Fastfetch MOTD
 if command -v fastfetch > /dev/null 2>&1; then

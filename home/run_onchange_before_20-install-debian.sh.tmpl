@@ -37,6 +37,17 @@ if ! command -v oh-my-posh > /dev/null 2>&1; then
     curl -s https://ohmyposh.dev/install.sh | bash -s
 fi
 
+{{- if has "dev" .package_groups }}
+# --- asdf (git install) ---
+if [ ! -d "$HOME/.asdf" ]; then
+    printf "${LCYAN}###${RESET} Installing asdf\n"
+    git clone https://github.com/asdf-vm/asdf.git "$HOME/.asdf"
+else
+    printf "${LCYAN}###${RESET} Updating asdf\n"
+    git -C "$HOME/.asdf" pull
+fi
+{{- end }}
+
 # --- Selected groups ---
 {{- range $group := .package_groups }}
 {{-   $gdata := index $.packages $group }}

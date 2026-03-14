@@ -8,32 +8,37 @@ description = "Essential CLI tools"
 required = true
 
 [packages.core.darwin]
-brew = ["chezmoi", "age", "atuin", "bat", "direnv", "eza", "fd", "fzf", "gnupg", "jq", "micro", "mise", "ripgrep", "tealdeer", "ugrep", "yq", "zoxide"]
+brew = ["chezmoi", "age", "atuin", "bat", "difftastic", "direnv", "doggo", "eza", "fd", "fzf", "glow", "gnupg", "jq", "lnav", "micro", "mise", "ripgrep", "tealdeer", "yq", "zoxide"]
 
 [packages.core.debian]
-apt = ["chezmoi", "bat", "direnv", "fd-find", "fzf", "jq", "micro", "ripgrep", "ugrep", "yq"]
+apt = ["chezmoi", "bat", "difftastic", "direnv", "fd-find", "fzf", "glow", "jq", "lnav", "micro", "ripgrep", "yq"]
 # eza, atuin, zoxide via script (custom repos or curl install)
 # age, mise via curl
+# doggo: custom install from github.com/mr-karan/doggo releases
 
 [packages.core.opensuse]
-zypper = ["chezmoi", "bat", "direnv", "eza", "fd", "fzf", "jq", "atuin", "micro", "zoxide", "tealdeer"]
+zypper = ["chezmoi", "bat", "difftastic", "direnv", "eza", "fd", "fzf", "glow", "jq", "lnav", "atuin", "micro", "zoxide", "tealdeer"]
 
 # ── dev ──────────────────────────────────────────────────────────
 [packages.dev]
 description = "Development tools and terminal setup"
 
 [packages.dev.darwin]
-brew = ["gh", "git-lfs", "docker", "docker-compose", "nvm", "jandedobbeleer/oh-my-posh/oh-my-posh", "hurl"]
+brew = ["asdf", "gh", "git-lfs", "docker", "docker-compose", "gum", "jandedobbeleer/oh-my-posh/oh-my-posh", "hurl", "uv", "zellij"]
 cask = ["wave", "visual-studio-code", "zed", "devpod", "requestly"]
-tap = ["jandedobbeleer/oh-my-posh"]
+tap = ["jandedobbeleer/oh-my-posh", "charmbracelet/tap"]
+npm_global = ["turbo", "oxlint"]
 
 [packages.dev.debian]
-apt = ["git-lfs"]
+apt = ["git-lfs", "uv", "zellij"]
 # gh via custom repo, docker via custom repo
+# asdf via git (see install-debian script)
 # oh-my-posh via curl: https://ohmyposh.dev/docs/installation/linux
+# gum: may need custom install on Linux (charmbracelet/tap)
 
 [packages.dev.opensuse]
-zypper = ["gh", "git-lfs", "docker", "docker-compose"]
+zypper = ["gh", "git-lfs", "docker", "docker-compose", "uv", "zellij"]
+# asdf via git (see install-suse script)
 # oh-my-posh via curl
 
 # ── cloud ────────────────────────────────────────────────────────
@@ -42,15 +47,14 @@ description = "Cloud and infrastructure tooling"
 
 [packages.cloud.darwin]
 tap = ["hashicorp/tap"]
-brew = ["hashicorp/tap/vault", "terraform"]
-# terraform from homebrew/core (conflicts with hashicorp/tap when both installed)
+brew = ["hashicorp/tap/vault"]
 # vault has no homebrew/core formula, so must use hashicorp/tap
 
 [packages.cloud.debian]
-apt = ["vault", "terraform"]
+apt = ["vault"]
 
 [packages.cloud.opensuse]
-zypper = ["vault", "terraform"]
+zypper = ["vault"]
 
 # ── security ─────────────────────────────────────────────────────
 [packages.security]
@@ -76,7 +80,8 @@ description = "AI tools and Claude Code language server support"
 brew = ["ollama"]
 cask = ["claude", "lm-studio", "plaud"]
 cask_cli = ["claude-code"]
-mas = ["6502156163"]
+mas = [{id = "6502156163", app = "Omi.app"}]
+# Omi installs under /Applications/Omi.localized/Omi.app — find searches recursively
 npm_global = ["typescript-language-server", "typescript", "pyright"]
 go_install = ["golang.org/x/tools/gopls@latest"]
 
@@ -97,9 +102,11 @@ client_only = true
 
 [packages.apps.darwin]
 pre_brew = ["mas"]
-cask = ["raycast", "rectangle-pro", "daisydisk", "ubar", "obsidian", "dropshare"]
-mas = ["1198176727", "1622835804"]
-# 1198176727 = Controller for HomeKit, 1622835804 = Kagi for Safari
+cask = ["raycast", "rectangle-pro", "daisydisk", "ubar", "obsidian", "dropshare", "jump-desktop"]
+mas = [
+  {id = "1198176727", app = "ControllerForHomeKit.app"},
+  {id = "1622835804", app = "Kagi for Safari.app"},
+]
 
 # ── gaming ───────────────────────────────────────────────────────
 [packages.gaming]
@@ -108,7 +115,7 @@ workstation_only = true
 client_only = true
 
 [packages.gaming.darwin]
-cask = ["steam", "parsec", "moonlight", "jump-desktop"]
+cask = ["steam", "parsec", "moonlight"]
 
 # ── creative ─────────────────────────────────────────────────────
 [packages.creative]
@@ -120,8 +127,7 @@ client_only = true
 cask = ["bambu-studio"]
 # NOTE: Affinity casks deprecated — removal 2026-10-30
 # cask_deprecated = ["affinity-photo", "affinity-designer", "affinity-publisher"]
-mas = ["1136220934"]
-# 1136220934 = Infuse (media player)
+mas = [{id = "1136220934", app = "Infuse.app"}]
 
 # ── comms ────────────────────────────────────────────────────────
 [packages.comms]
@@ -142,4 +148,10 @@ description = "Pokemon/work-specific tools"
 identity = "pkmn"
 
 [packages.pkmn.darwin]
-brew = []
+brew = ["awscli"]
+
+[packages.pkmn.debian]
+apt = ["awscli"]
+
+[packages.pkmn.opensuse]
+zypper = ["aws-cli"]
