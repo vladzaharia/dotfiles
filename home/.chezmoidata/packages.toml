@@ -42,7 +42,9 @@ description = "Cloud and infrastructure tooling"
 
 [packages.cloud.darwin]
 tap = ["hashicorp/tap"]
-brew = ["hashicorp/tap/vault", "hashicorp/tap/terraform"]
+brew = ["hashicorp/tap/vault", "terraform"]
+# terraform from homebrew/core (conflicts with hashicorp/tap when both installed)
+# vault has no homebrew/core formula, so must use hashicorp/tap
 
 [packages.cloud.debian]
 apt = ["vault", "terraform"]

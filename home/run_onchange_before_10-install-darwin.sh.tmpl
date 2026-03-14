@@ -2,12 +2,31 @@
 #!/bin/sh
 CYAN='\033[0;36m'
 LCYAN='\033[1;36m'
+YELLOW='\033[1;33m'
 RESET='\033[0m'
 
 if ! command -v brew > /dev/null 2>&1; then
     printf "${CYAN}✗${RESET} Homebrew not found — install it first: https://brew.sh\n" >&2
     exit 1
 fi
+
+# Suppress mas Spotlight indexing noise
+export MAS_NO_AUTO_INDEX=1
+
+# brew_cask: idempotent cask install that handles three cases:
+#   1. Already Homebrew-managed → upgrade (no-op if current)
+#   2. Exists in /Applications but unmanaged, same version → adopt
+#   3. Exists in /Applications but unmanaged, wrong version → overwrite
+brew_cask() {
+    local pkg="$1"
+    if brew list --cask "$pkg" > /dev/null 2>&1; then
+        printf "${YELLOW}  →${RESET} ${pkg}: already managed, upgrading if outdated\n"
+        brew upgrade --cask "$pkg" 2>/dev/null || true
+    else
+        brew install --cask --adopt "$pkg" 2>/dev/null || \
+        brew install --cask --overwrite "$pkg"
+    fi
+}
 
 # --- Taps ---
 {{- range $group, $data := .packages }}
@@ -35,8 +54,8 @@ brew install {{ . | join " " }}
 {{-       if not (kindIs "slice" $pkgs) }}{{- continue }}{{- end }}
 {{-       if hasPrefix "cask" $key }}
 {{-         range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
-{{-         if $pkgs }}
-brew install --cask --adopt {{ $pkgs | join " " }}
+{{-         range $pkgs }}
+brew_cask {{ . }}
 {{-         end }}
 {{-       else if or (eq $key "brew") (hasPrefix "brew_" $key) }}
 {{-         range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
@@ -44,15 +63,15 @@ brew install --cask --adopt {{ $pkgs | join " " }}
 brew install {{ $pkgs | join " " }}
 {{-         end }}
 {{-       else if eq $key "mas" }}
-{{-         if $pkgs }}
-mas install {{ $pkgs | join " " }}
+{{-         range $pkgs }}
+mas install {{ . }}
 {{-         end }}
 {{-       end }}
 {{-     end }}
 {{-     if and (eq $group "comms") $.flags.pokemon }}
 {{-       $comms_pkmn := index (index $gdata "darwin" | default dict) "pkmn" | default dict }}
-{{-       with (index $comms_pkmn "cask" | default list) }}
-brew install --cask --adopt {{ . | join " " }}
+{{-       range (index $comms_pkmn "cask" | default list) }}
+brew_cask {{ . }}
 {{-       end }}
 {{-     end }}
 {{-   end }}
@@ -91,11 +110,15 @@ brew install {{ . | join " " }}
 {{-   end }}
 {{-   with (index . "darwin" | default dict | index "cask" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (cask)\n"
-brew install --cask --adopt {{ . | join " " }}
+{{-     range . }}
+brew_cask {{ . }}
+{{-     end }}
 {{-   end }}
 {{-   with (index . "darwin" | default dict | index "mas" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (mas)\n"
-mas install {{ . | join " " }}
+{{-     range . }}
+mas install {{ . }}
+{{-     end }}
 {{-   end }}
 {{- end }}
 
