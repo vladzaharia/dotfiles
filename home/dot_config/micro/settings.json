@@ -1,0 +1,28 @@
+{
+    "autoclose": true,
+    "autoindent": true,
+    "autosave": 0,
+    "colorscheme": "monokai-dark",
+    "eofnewline": true,
+    "mkparents": true,
+    "mouse": true,
+    "pluginchannels": [
+        "https://raw.githubusercontent.com/micro-editor/plugin-channel/master/channel.json"
+    ],
+    "pluginrepos": [],
+    "reload": "auto",
+    "ruler": true,
+    "savecursor": true,
+    "saveundo": true,
+    "scrollmargin": 3,
+    "scrollspeed": 2,
+    "smartpaste": true,
+    "softwrap": false,
+    "splitbottom": true,
+    "splitright": true,
+    "syntax": true,
+    "tabsize": 4,
+    "tabstospaces": true,
+    "trailingws": false,
+    "wordwrap": false
+}

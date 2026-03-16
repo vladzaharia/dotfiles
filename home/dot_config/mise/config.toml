@@ -1,0 +1,19 @@
+# mise configuration
+# https://mise.jdx.dev/configuration.html
+
+[settings]
+# Warn (not error) on missing tools
+not_found_auto_install = true
+
+# Verbose output for installs
+verbose = false
+
+# Number of jobs for parallel installs
+jobs = 4
+
+# Trust project .mise.toml files automatically
+trusted_config_paths = []
+
+[env]
+# Auto-load .env files in project directories
+_.file = ".env"

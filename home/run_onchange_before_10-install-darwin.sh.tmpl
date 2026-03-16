@@ -13,18 +13,52 @@ fi
 # Suppress mas Spotlight indexing noise
 export MAS_NO_AUTO_INDEX=1
 
+# brew_formula: idempotent formula install — suppresses "already installed" noise,
+#               upgrades if outdated, batch-installs only what is missing.
+brew_formula() {
+    local to_install=""
+    for pkg in "$@"; do
+        if brew list --formula "$pkg" > /dev/null 2>&1; then
+            printf "${YELLOW}  →${RESET} ${pkg}: already installed, upgrading if outdated\n"
+            brew upgrade --formula "$pkg" 2>/dev/null || true
+        else
+            to_install="${to_install} ${pkg}"
+        fi
+    done
+    [ -n "$to_install" ] && brew install ${to_install} || true
+}
+
 # brew_cask: idempotent cask install that handles three cases:
 #   1. Already Homebrew-managed → upgrade (no-op if current)
 #   2. Exists in /Applications but unmanaged, same version → adopt
-#   3. Exists in /Applications but unmanaged, wrong version → overwrite
+#   3. Exists in /Applications but unmanaged, wrong version → force install
 brew_cask() {
     local pkg="$1"
     if brew list --cask "$pkg" > /dev/null 2>&1; then
         printf "${YELLOW}  →${RESET} ${pkg}: already managed, upgrading if outdated\n"
         brew upgrade --cask "$pkg" 2>/dev/null || true
     else
-        brew install --cask --adopt "$pkg" 2>/dev/null || \
-        brew install --cask --overwrite "$pkg"
+        brew install --cask --adopt "$pkg" 2>/dev/null || true
+        # Re-check: adopt may exit non-zero even when it successfully registers the cask.
+        # Only force-install if the cask is still unmanaged after the adopt attempt.
+        if ! brew list --cask "$pkg" > /dev/null 2>&1; then
+            brew install --cask --force "$pkg"
+        fi
+    fi
+}
+
+# mas_install: idempotent App Store install.
+# Detects via filesystem (find /Applications -name "$app") rather than
+# mas list / Spotlight, which is unreliable when the Spotlight index is
+# read-only or out of date.
+# Usage: mas_install <id> <AppName.app>
+mas_install() {
+    local id="$1"
+    local app="$2"
+    if find /Applications -maxdepth 3 -name "$app" -type d 2>/dev/null | grep -q .; then
+        printf "${YELLOW}  →${RESET} ${app}: already installed\n"
+    else
+        mas install "$id"
     fi
 }
 
@@ -39,7 +73,7 @@ brew tap {{ . }}
 
 # --- Core (always installed) ---
 printf "${LCYAN}###${RESET} Installing core packages\n"
-brew install {{ index (index (index $.packages "core") "darwin") "brew" | join " " }}
+brew_formula {{ index (index (index $.packages "core") "darwin") "brew" | join " " }}
 
 # --- Selected groups ---
 {{- range $group := .package_groups }}
@@ -48,7 +82,7 @@ brew install {{ index (index (index $.packages "core") "darwin") "brew" | join "
 printf "${LCYAN}###${RESET} Installing group: {{ $group }} — {{ index $gdata "description" }}\n"
 {{-     $darwin := index $gdata "darwin" | default dict }}
 {{-     with (index $darwin "pre_brew" | default list) }}
-brew install {{ . | join " " }}
+brew_formula {{ . | join " " }}
 {{-     end }}
 {{-     range $key, $pkgs := $darwin }}
 {{-       if not (kindIs "slice" $pkgs) }}{{- continue }}{{- end }}
@@ -60,11 +94,15 @@ brew_cask {{ . }}
 {{-       else if or (eq $key "brew") (hasPrefix "brew_" $key) }}
 {{-         range (index $ "disabled_packages" | default list) }}{{- $pkgs = without $pkgs . }}{{- end }}
 {{-         if $pkgs }}
-brew install {{ $pkgs | join " " }}
+brew_formula {{ $pkgs | join " " }}
 {{-         end }}
 {{-       else if eq $key "mas" }}
 {{-         range $pkgs }}
-mas install {{ . }}
+{{-           if kindIs "map" . }}
+mas_install {{ index . "id" }} {{ index . "app" | quote }}
+{{-           else }}
+mas_install {{ . }} {{ . | quote }}
+{{-           end }}
 {{-         end }}
 {{-       end }}
 {{-     end }}
@@ -77,19 +115,22 @@ brew_cask {{ . }}
 {{-   end }}
 {{- end }}
 
-# --- NPM globals (ai group) ---
-{{- if has "ai" .package_groups }}
-{{-   $ai_darwin := index (index $.packages "ai") "darwin" | default dict }}
-{{-   $npm := index $ai_darwin "npm_global" | default list }}
-{{-   range (index $ "disabled_packages" | default list) }}{{- $npm = without $npm . }}{{- end }}
-{{-   if $npm }}
-printf "${LCYAN}###${RESET} Installing NPM global packages\n"
+# --- NPM globals and Go tools (all groups) ---
+{{- range $group := .package_groups }}
+{{-   $gdata := index $.packages $group }}
+{{-   if $gdata }}
+{{-     $gdarwin := index $gdata "darwin" | default dict }}
+{{-     $npm := index $gdarwin "npm_global" | default list }}
+{{-     range (index $ "disabled_packages" | default list) }}{{- $npm = without $npm . }}{{- end }}
+{{-     if $npm }}
+printf "${LCYAN}###${RESET} Installing NPM global packages ({{ $group }})\n"
 npm install -g {{ $npm | join " " }}
-{{-   end }}
-{{-   with (index $ai_darwin "go_install" | default list) }}
-printf "${LCYAN}###${RESET} Installing Go tools\n"
-{{-     range . }}
+{{-     end }}
+{{-     with (index $gdarwin "go_install" | default list) }}
+printf "${LCYAN}###${RESET} Installing Go tools ({{ $group }})\n"
+{{-       range . }}
 go install {{ . }}
+{{-       end }}
 {{-     end }}
 {{-   end }}
 {{- end }}
@@ -98,7 +139,7 @@ go install {{ . }}
 {{- if .flags.applesilicon }}
 {{-   if eq .docker.runtime "colima" }}
 printf "${LCYAN}###${RESET} Installing colima (Docker runtime)\n"
-brew install colima
+brew_formula colima
 {{-   end }}
 {{- end }}
 
@@ -106,7 +147,7 @@ brew install colima
 {{- with (index $ "extra_packages") }}
 {{-   with (index . "darwin" | default dict | index "brew" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (brew)\n"
-brew install {{ . | join " " }}
+brew_formula {{ . | join " " }}
 {{-   end }}
 {{-   with (index . "darwin" | default dict | index "cask" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (cask)\n"
@@ -117,21 +158,14 @@ brew_cask {{ . }}
 {{-   with (index . "darwin" | default dict | index "mas" | default list) }}
 printf "${LCYAN}###${RESET} Installing machine-local extras (mas)\n"
 {{-     range . }}
-mas install {{ . }}
+{{-       if kindIs "map" . }}
+mas_install {{ index . "id" }} {{ index . "app" | quote }}
+{{-       else }}
+mas_install {{ . }} {{ . | quote }}
+{{-       end }}
 {{-     end }}
 {{-   end }}
 {{- end }}
 
-# --- Zrok (custom install — no brew formula) ---
-{{- if not (or (stat (printf "%s/.local/bin/zrok" .chezmoi.homeDir)) (stat "/usr/local/bin/zrok")) }}
-printf "${LCYAN}###${RESET} Installing zrok\n"
-ZROK_VERSION=0.4.48
-mkdir -p /tmp/zrok
-curl -OL "https://github.com/openziti/zrok/releases/download/v${ZROK_VERSION}/zrok_${ZROK_VERSION}_darwin_{{ .chezmoi.arch }}.tar.gz" --output-dir /tmp/zrok
-tar -xf "/tmp/zrok/zrok_${ZROK_VERSION}_darwin_{{ .chezmoi.arch }}.tar.gz" -C /tmp/zrok
-install /tmp/zrok/zrok "{{ .chezmoi.homeDir }}/.local/bin"
-rm -rf /tmp/zrok
-zrok config set apiEndpoint https://zrok.tun.polaris.gdn/
-{{- end }}
 
 {{ end -}}

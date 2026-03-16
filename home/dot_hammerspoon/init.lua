@@ -1,3 +1,15 @@
+-- Auto-reload config on file change
+local function reloadConfig(files)
+  for _, file in ipairs(files) do
+    if file:sub(-4) == ".lua" then
+      hs.reload()
+      return
+    end
+  end
+end
+hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
+hs.alert.show("Config reloaded", 1)
+
 -- Cache terminal preferences on startup (much faster than repeated file system checks)
 local terminals = {}
 local preferredTerminal = nil

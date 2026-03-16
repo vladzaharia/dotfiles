@@ -1,0 +1,55 @@
+# direnv stdlib extensions
+# https://direnv.net/man/direnvrc.1.html
+
+# Python: create and activate a venv in .direnv/python
+layout_python() {
+    local python=${1:-python3}
+    [[ $# -gt 0 ]] && shift
+    unset PYTHONHOME
+    local venv
+    venv="$(direnv_layout_dir)/python"
+    if [[ ! -d "$venv" ]]; then
+        log_status "Creating Python venv at $venv"
+        "$python" -m venv "$venv"
+    fi
+    export VIRTUAL_ENV="$venv"
+    PATH_add "$venv/bin"
+}
+
+# uv: create and activate a uv venv in .direnv/python
+layout_uv() {
+    local python=${1:-python3}
+    unset PYTHONHOME
+    local venv
+    venv="$(direnv_layout_dir)/python"
+    if [[ ! -d "$venv" ]]; then
+        log_status "Creating uv venv at $venv"
+        uv venv "$venv" --python "$python"
+    fi
+    export VIRTUAL_ENV="$venv"
+    PATH_add "$venv/bin"
+}
+
+# Node: use volta or mise-managed node; add node_modules/.bin to PATH
+layout_node() {
+    PATH_add node_modules/.bin
+}
+
+# Load .env file if it exists (safe wrapper — won't error if absent)
+dotenv_if_exists() {
+    local f="${1:-.env}"
+    [[ -f "$f" ]] && dotenv "$f"
+}
+
+# Add ./bin to PATH if it exists
+use_bin() {
+    [[ -d bin ]] && PATH_add bin
+}
+
+# Require a minimum tool version via mise
+require_tool() {
+    local tool=$1 version=$2
+    if ! command -v "$tool" &>/dev/null; then
+        log_error "Required tool '$tool' not found. Run: mise install $tool@$version"
+    fi
+}

@@ -1,0 +1,25 @@
+# bat configuration
+# https://github.com/sharkdp/bat
+
+# Use terminal colors so bat inherits the Aci palette from the terminal emulator
+--theme="ansi"
+
+# Display style: line numbers, git change markers, file header, grid
+--style="numbers,changes,header-filename,header-filesize,grid"
+
+# Render italic text
+--italic-text=always
+
+# Use less with passthrough and raw control chars
+--pager="less -FR"
+
+# Syntax mappings for ambiguous file extensions
+--map-syntax="*.conf:INI"
+--map-syntax=".env*:DotENV"
+--map-syntax="*.env:DotENV"
+--map-syntax="*.log:syslog"
+--map-syntax="Makefile*:Makefile"
+--map-syntax="*.jsonc:JSON"
+--map-syntax="*.toml:TOML"
+--map-syntax="Dockerfile*:Dockerfile"
+--map-syntax="*.zsh*:Zsh"

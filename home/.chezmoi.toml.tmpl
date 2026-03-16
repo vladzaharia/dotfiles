@@ -53,7 +53,7 @@
 {{/* startup (Codespaces, GitPod, Coder, DevPod workspaces)       */}}
 {{/* ============================================================ */}}
 
-{{- $identity      := "home" -}}
+{{- $identities    := list "home" -}}
 {{- $pokemon       := false -}}
 {{- $machineRole   := "workstation" -}}
 {{- $dockerRuntime := "none" -}}
@@ -61,9 +61,11 @@
 
 {{- if not $ephemeral -}}
 
-  {{/* Identity: home (personal) or pkmn (work) — different first letters avoid prefix ambiguity */}}
-  {{- $identity = promptChoiceOnce . "identity" "Which identity is this machine" (list "home" "pkmn") -}}
-  {{- $pokemon  = eq $identity "pkmn" -}}
+  {{/* Identities: multi-select — home (personal) and/or pkmn (work).
+       Different first letters avoid chezmoi prefix-matching ambiguity.
+       Key is "identities" (plural) so it doesn't collide with any cached "identity" string. */}}
+  {{- $identities = promptMultichoiceOnce . "identities" "Select identities for this machine" (list "home" "pkmn") -}}
+  {{- $pokemon    = has "pkmn" $identities -}}
 
   {{/* Machine role: auto-detect for known chassis types; ask only when ambiguous */}}
   {{- if or (eq $chassisType "server") (eq $chassisType "vm") -}}
@@ -78,7 +80,7 @@
   {{- end -}}
 
   {{/* Package groups: offer groups appropriate for this machine */}}
-  {{- $available := list "terminal" "dev" "cloud" "ai" "security" -}}
+  {{- $available := list "dev" "cloud" "ai" "security" -}}
   {{- if eq $machineRole "workstation" -}}
   {{-   $available = concat $available (list "apps" "gaming" "creative" "comms") -}}
   {{- end -}}
@@ -118,7 +120,7 @@ encryption = "age"
     flags.applesilicon  = {{ and (eq .chezmoi.os "darwin") (eq .chezmoi.arch "arm64") }}
     flags.ephemeral     = {{ $ephemeral }}
     flags.pokemon       = {{ $pokemon }}
-    flags.apps.rio      = {{ or (stat "/Applications/rio.app") (stat "/Applications/Rio.app") | not | not }}
+    identities          = {{ $identities | toJson }}
     personal.name       = "Vlad Zaharia"
     personal.email      = {{ if $pokemon }}"v.zaharia@pokemon.com"{{ else }}"hey@vlad.gg"{{ end }}
     package_groups      = {{ $packageGroups | toJson }}

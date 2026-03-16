@@ -1,9 +1,10 @@
 [core]
 	excludesFile = ~/.gitignore
+	autocrlf = input
 	{{- if eq .chezmoi.os "windows" }}
 	editor = \"C:\\Users\\me\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code\" --wait
 	{{- else }}
-	editor = nano
+	editor = micro
 	{{- end }}
 
 [user]
@@ -15,11 +16,114 @@
 	signingkey = ~/.ssh/id_ed25519
 {{- end }}
 
+[diff]
+	tool = difftastic
+	external = difft
+	colorMoved = default
+	algorithm = histogram
+
+[difftool "difftastic"]
+	cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
+
+[difftool]
+	prompt = false
+
+[pager]
+	difftool = true
+
+[merge]
+	conflictstyle = zdiff3
+
+[rebase]
+	autosquash = true
+	autostash = true
+
+[rerere]
+	enabled = true
+	autoupdate = true
+
+[fetch]
+	prune = true
+
 [pull]
 	rebase = false
 
 [push]
 	autoSetupRemote = true
+	followTags = true
+
+[help]
+	autocorrect = 10
+
+[color]
+	ui = auto
+
+[alias]
+	# Status
+	st   = status -sb
+	s    = status
+
+	# Staging
+	a    = add
+	ap   = add -p
+	au   = add -u
+
+	# Commits
+	c    = commit
+	cm   = commit -m
+	ca   = commit --amend
+	can  = commit --amend --no-edit
+	wip  = commit -am "WIP"
+
+	# Difftastic (semantic diffs — preferred)
+	dft  = -c diff.external=difft diff
+	dlog = -c diff.external=difft log -p --ext-diff
+	dshow = -c diff.external=difft show --ext-diff
+
+	# Standard diff (word-level, quick)
+	d    = diff
+	ds   = diff --staged
+	dw   = diff --word-diff
+
+	# Log
+	lg   = log --oneline --decorate --graph --all
+	l    = log --oneline --decorate -20
+	ll   = log --format="%C(yellow)%h %C(blue)%ad%C(reset) %s %C(green)%an%C(reset)" --date=short
+
+	# Branch
+	b    = branch
+	ba   = branch -a
+	bd   = branch -d
+	bD   = branch -D
+
+	# Checkout / Switch
+	co   = checkout
+	cob  = checkout -b
+	sw   = switch
+	swc  = switch -c
+
+	# Remote
+	f    = fetch --all --prune
+	p    = push
+	pf   = push --force-with-lease
+	pl   = pull
+
+	# Stash
+	ss   = stash
+	sp   = stash pop
+	sl   = stash list
+	sd   = stash drop
+
+	# Undo / Reset
+	unstage = reset HEAD --
+	undo    = reset HEAD~1 --mixed
+	nuke    = reset HEAD~1 --hard
+
+	# Utility
+	aliases = !git config --list | grep '^alias\\.' | sed 's/alias\\.//g' | sort
+	root    = rev-parse --show-toplevel
+	ignored = ls-files --others --ignored --exclude-standard
+	contrib = shortlog -sn --no-merges
 
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f

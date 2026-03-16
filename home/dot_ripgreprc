@@ -1,0 +1,41 @@
+# ripgrep configuration
+# https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#configuration-file
+
+# Case-insensitive unless pattern has uppercase
+--smart-case
+
+# Search hidden files and directories
+--hidden
+
+# Exclude common non-essential directories
+--glob=!.git/*
+--glob=!node_modules/*
+--glob=!.next/*
+--glob=!dist/*
+--glob=!build/*
+--glob=!out/*
+--glob=!.cache/*
+--glob=!target/*
+--glob=!vendor/*
+--glob=!.yarn/*
+--glob=!__pycache__/*
+--glob=!*.pyc
+--glob=!.direnv/*
+--glob=!.terraform/*
+--glob=!htmlcov/*
+--glob=!coverage/*
+
+# Follow symbolic links
+--follow
+
+# Truncate long lines in output and show a preview marker
+--max-columns=150
+--max-columns-preview
+
+# Color configuration
+--colors=line:fg:yellow
+--colors=line:style:bold
+--colors=path:fg:blue
+--colors=path:style:bold
+--colors=match:fg:red
+--colors=match:style:bold

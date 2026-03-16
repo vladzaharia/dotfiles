@@ -26,6 +26,13 @@ if command -v moon > /dev/null 2>&1; then
     rm -rf "{{ .chezmoi.homeDir }}/.moon"
 fi
 
+# Remove deprecated tools: terraform, ugrep, nvm, volta, zrok
+sudo apt-get remove -y terraform ugrep 2>/dev/null || true
+rm -rf "{{ .chezmoi.homeDir }}/.nvm"
+rm -rf "{{ .chezmoi.homeDir }}/.volta"
+rm -rf "{{ .chezmoi.homeDir }}/.zrok"
+rm -f "{{ .chezmoi.homeDir }}/.local/bin/zrok"
+
 {{ else if eq .chezmoi.distro.like "suse opensuse" -}}
 
 # Cleanup things in the future
@@ -54,11 +61,24 @@ if command -v brew > /dev/null 2>&1; then
         brew remove exa
     fi
 
+    # Remove deprecated tools
+    brew list terraform &>/dev/null && brew uninstall terraform || true
+    brew list nvm &>/dev/null && brew uninstall nvm || true
+    brew list ugrep &>/dev/null && brew uninstall ugrep || true
+    brew list --cask rio &>/dev/null && brew uninstall --cask rio || true
+    brew list diff-so-fancy &>/dev/null && brew uninstall diff-so-fancy || true
+
     # Fix WaveTerm SSH parsing: comment out Include in /etc/ssh/ssh_config
     # WaveTerm's ssh_config parser (kevinburke fork) can't handle Include directives
     if grep -q "^Include /etc/ssh/ssh_config.d" /etc/ssh/ssh_config 2>/dev/null; then
         sudo sed -i '' 's|^Include /etc/ssh/ssh_config.d|#Include /etc/ssh/ssh_config.d|' /etc/ssh/ssh_config
     fi
 fi
+
+# Remove leftover tool directories and binaries
+rm -rf "{{ .chezmoi.homeDir }}/.nvm"
+rm -rf "{{ .chezmoi.homeDir }}/.volta"
+rm -rf "{{ .chezmoi.homeDir }}/.zrok"
+rm -f "{{ .chezmoi.homeDir }}/.local/bin/zrok"
 
 {{ end -}}

@@ -42,14 +42,30 @@ if command -v eza > /dev/null 2>&1; then
     export EZA_COLORS="di=38;5;039;1:ex=38;5;082;1:vi=38;5;105:.*=38;5;243:*.apk=38;5;154:*.env=38;5;243:*.jar=38;5;196:*.ts=38;5;033:docker-compose.yml=38;5;045"
 fi
 
-# Zoxide
-if command -v zoxide > /dev/null 2>&1; then
-    eval "$(zoxide init zsh)"
-fi
-
 # Bat
 if command -v bat > /dev/null 2>&1; then
     export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export BAT_CONFIG_PATH="{{ .chezmoi.homeDir }}/.config/bat/config"
+fi
+
+# Ripgrep
+if command -v rg > /dev/null 2>&1; then
+    export RIPGREP_CONFIG_PATH="{{ .chezmoi.homeDir }}/.ripgreprc"
+fi
+
+# FZF
+if command -v fzf > /dev/null 2>&1; then
+    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border=rounded --inline-info --color=dark,hl:blue,hl+:cyan'
+    if command -v fd > /dev/null 2>&1; then
+        export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+        export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git --exclude node_modules'
+        export FZF_ALT_C_OPTS='--preview "eza --tree --icons --git-ignore --level=2 {}"'
+    fi
+    if command -v bat > /dev/null 2>&1; then
+        export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers --line-range=:500 {}"'
+    fi
+    eval "$(fzf --zsh)"
 fi
 
 # Tool completions — written to fpath cache to avoid calling compdef before compinit

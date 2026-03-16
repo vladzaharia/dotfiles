@@ -10,3 +10,8 @@ if command -v oh-my-posh > /dev/null 2>&1 && [ "$TERM_PROGRAM" != "Apple_Termina
     eval "$(oh-my-posh init zsh --config {{ .chezmoi.homeDir }}/.config/oh-my-posh/out/full.yml)"
 {{- end }}
 fi
+
+# Zoxide — must be last so nothing overrides its cd function after init
+if command -v zoxide > /dev/null 2>&1; then
+    eval "$(zoxide init zsh --cmd cd)"
+fi

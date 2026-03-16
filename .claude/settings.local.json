@@ -32,7 +32,18 @@
       "Bash(grep -n '\\\\$gdata\\\\.\\\\|darwin\\\\.pkmn\\\\|darwin\\\\.brew\\\\|darwin\\\\.npm\\\\|darwin\\\\.go' /Users/vlad/.local/share/chezmoi/home/run_onchange_before_10-install-darwin.sh.tmpl /Users/vlad/.local/share/chezmoi/home/run_onchange_before_20-install-debian.sh.tmpl /Users/vlad/.local/share/chezmoi/home/run_onchange_before_30-install-suse.sh.tmpl)",
       "Bash(chmod +x /Users/vlad/.local/share/chezmoi/check.sh && /Users/vlad/.local/share/chezmoi/check.sh 2>&1)",
       "Bash(/Users/vlad/.local/share/chezmoi/check.sh 2>&1)",
-      "Bash(git -C /Users/vlad/.local/share/chezmoi add -A && git -C /Users/vlad/.local/share/chezmoi commit -m \"$\\(cat <<'EOF'\nFix template map access and add check.sh test harness\n\nTemplate fixes \\(all caused by Go template map access rules\\):\n- index $data \"required\" / index $gdata \"description\": dot-notation on maps\n  panics for missing keys; index returns nil instead\n- \"A | default dict | index key\": pipeline passes value as LAST arg, making\n  \"key\" the collection — fix with index \\(A | default dict\\) \"key\"\n- $.disabled_packages / .extra_packages: machine-local keys absent on fresh\n  installs — fix with index $ \"key\" | default list/nil\n\nAdd check.sh at repo root:\n- Runs chezmoi execute-template on every .tmpl file\n- Reports pass/fail per template with error messages\n- Skips .chezmoi.toml.tmpl \\(uses config-only promptChoiceOnce\\)\n- Run before chezmoi apply: ./check.sh\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git -C /Users/vlad/.local/share/chezmoi add -A && git -C /Users/vlad/.local/share/chezmoi commit -m \"$\\(cat <<'EOF'\nFix template map access and add check.sh test harness\n\nTemplate fixes \\(all caused by Go template map access rules\\):\n- index $data \"required\" / index $gdata \"description\": dot-notation on maps\n  panics for missing keys; index returns nil instead\n- \"A | default dict | index key\": pipeline passes value as LAST arg, making\n  \"key\" the collection — fix with index \\(A | default dict\\) \"key\"\n- $.disabled_packages / .extra_packages: machine-local keys absent on fresh\n  installs — fix with index $ \"key\" | default list/nil\n\nAdd check.sh at repo root:\n- Runs chezmoi execute-template on every .tmpl file\n- Reports pass/fail per template with error messages\n- Skips .chezmoi.toml.tmpl \\(uses config-only promptChoiceOnce\\)\n- Run before chezmoi apply: ./check.sh\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(/Users/vlad/.local/share/chezmoi/check.sh && git -C /Users/vlad/.local/share/chezmoi add home/run_onchange_before_10-install-darwin.sh.tmpl home/Brewfile.tmpl && git -C /Users/vlad/.local/share/chezmoi commit -m \"$\\(cat <<'EOF'\nUse brew install --cask --adopt to handle pre-existing apps\n\nWithout --adopt, Homebrew errors if an app already exists at the install\npath \\(e.g. Steam installed directly before Homebrew managed it\\).\n--adopt takes ownership of the existing installation without reinstalling,\nmaking the install idempotent on both fresh and existing machines.\n\nAlso note --adopt in Brewfile comment for brew bundle usage.\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git:*)",
+      "Bash(./check.sh 2>&1)",
+      "Bash(mas list:*)",
+      "Bash(mdimport:*)",
+      "Bash(/usr/libexec/PlistBuddy -c \"Print :itemId\" /Applications/ControllerForHomeKit.app/Contents/iTunesMetadata.plist 2>/dev/null && echo \"works\")",
+      "Bash(find:*)",
+      "Skill(commit-commands:commit)",
+      "WebFetch(domain:difftastic.wilfred.me.uk)",
+      "WebFetch(domain:git.io)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

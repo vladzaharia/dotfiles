@@ -1,0 +1,125 @@
+// Zellij configuration
+// https://zellij.dev/documentation/
+
+default_shell "zsh"
+default_layout "compact"
+pane_frames true
+on_force_close "detach"
+scroll_buffer_size 10000
+
+// Use system clipboard
+copy_command "pbcopy"
+copy_clipboard "system"
+copy_on_select true
+
+// Enable mouse
+mouse_mode true
+
+// Session serialisation (restore tabs/panes after restart)
+session_serialization true
+
+keybinds clear-defaults=false {
+    // Ctrl+G locks/unlocks (prevents shortcut conflicts in editors)
+    shared_except "locked" {
+        bind "Ctrl g" { SwitchToMode "Locked"; }
+    }
+    locked {
+        bind "Ctrl g" { SwitchToMode "Normal"; }
+    }
+
+    normal {
+        // Pane navigation (vim-style via Alt to avoid conflicts)
+        bind "Alt h" { MoveFocus "Left"; }
+        bind "Alt j" { MoveFocus "Down"; }
+        bind "Alt k" { MoveFocus "Up"; }
+        bind "Alt l" { MoveFocus "Right"; }
+
+        // Pane management
+        bind "Alt n" { NewPane; }
+        bind "Alt |" { NewPane "Right"; }
+        bind "Alt -" { NewPane "Down"; }
+        bind "Alt x" { CloseFocus; }
+        bind "Alt z" { ToggleFocusFullscreen; }
+        bind "Alt f" { ToggleFloatingPanes; }
+
+        // Tab management
+        bind "Alt t" { NewTab; }
+        bind "Alt w" { CloseTab; }
+        bind "Alt [" { GoToPreviousTab; }
+        bind "Alt ]" { GoToNextTab; }
+        bind "Alt 1" { GoToTab 1; }
+        bind "Alt 2" { GoToTab 2; }
+        bind "Alt 3" { GoToTab 3; }
+        bind "Alt 4" { GoToTab 4; }
+        bind "Alt 5" { GoToTab 5; }
+
+        // Modes
+        bind "Ctrl r" { SwitchToMode "Resize"; }
+        bind "Ctrl s" { SwitchToMode "Scroll"; }
+        bind "Ctrl p" { SwitchToMode "Pane"; }
+        bind "Ctrl o" { SwitchToMode "Session"; }
+
+        // Session
+        bind "Ctrl d" { Detach; }
+        bind "Ctrl q" { Quit; }
+    }
+
+    resize {
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "h" "Left"  { Resize "Increase Left"; }
+        bind "j" "Down"  { Resize "Increase Down"; }
+        bind "k" "Up"    { Resize "Increase Up"; }
+        bind "l" "Right" { Resize "Increase Right"; }
+        bind "H"         { Resize "Decrease Left"; }
+        bind "J"         { Resize "Decrease Down"; }
+        bind "K"         { Resize "Decrease Up"; }
+        bind "L"         { Resize "Decrease Right"; }
+        bind "=" "+"     { Resize "Increase"; }
+        bind "-"         { Resize "Decrease"; }
+    }
+
+    scroll {
+        bind "Esc" "q" { SwitchToMode "Normal"; }
+        bind "j" "Down"      { ScrollDown; }
+        bind "k" "Up"        { ScrollUp; }
+        bind "Ctrl d" "d"    { HalfPageScrollDown; }
+        bind "Ctrl u" "u"    { HalfPageScrollUp; }
+        bind "Ctrl f" "PageDown" { PageScrollDown; }
+        bind "Ctrl b" "PageUp"   { PageScrollUp; }
+        bind "g"             { ScrollToTop; }
+        bind "G"             { ScrollToBottom; }
+        bind "e"             { EditScrollback; }
+        bind "/"             { SwitchToMode "EnterSearch"; }
+    }
+
+    search {
+        bind "Esc" { SwitchToMode "Scroll"; }
+        bind "n"   { Search "down"; }
+        bind "N"   { Search "up"; }
+    }
+}
+
+themes {
+    aci {
+        fg         180 225 253
+        bg          13  25  38
+        black       54  54  54
+        red        255   8 131
+        green      131 255   8
+        yellow     255 131   8
+        blue         8 131 255
+        magenta    131   8 255
+        cyan         8 255 131
+        white      182 182 182
+        orange     255  30 142
+    }
+}
+
+theme "aci"
+
+ui {
+    pane_frames {
+        rounded_corners true
+        hide_session_name false
+    }
+}
