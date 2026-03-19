@@ -33,9 +33,13 @@ rm -rf "{{ .chezmoi.homeDir }}/.volta"
 rm -rf "{{ .chezmoi.homeDir }}/.zrok"
 rm -f "{{ .chezmoi.homeDir }}/.local/bin/zrok"
 
+# Remove asdf (replaced by mise)
+rm -rf "{{ .chezmoi.homeDir }}/.asdf"
+
 {{ else if eq .chezmoi.distro.like "suse opensuse" -}}
 
-# Cleanup things in the future
+# Remove asdf (replaced by mise)
+rm -rf "{{ .chezmoi.homeDir }}/.asdf"
 
 {{ else if eq .chezmoi.distro.name "darwin" -}}
 
@@ -60,6 +64,10 @@ if command -v brew > /dev/null 2>&1; then
     if command -v exa > /dev/null 2>&1; then
         brew remove exa
     fi
+
+    # Remove asdf (replaced by mise)
+    brew list asdf &>/dev/null && brew uninstall asdf || true
+    rm -rf "{{ .chezmoi.homeDir }}/.asdf"
 
     # Remove deprecated tools
     brew list terraform &>/dev/null && brew uninstall terraform || true

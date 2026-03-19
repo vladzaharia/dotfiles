@@ -14,6 +14,10 @@ jobs = 4
 # Trust project .mise.toml files automatically
 trusted_config_paths = []
 
+[tools]
+node = ["lts", "latest"]  # lts is first = default active version
+pnpm = "latest"
+
 [env]
 # Auto-load .env files in project directories
 _.file = ".env"

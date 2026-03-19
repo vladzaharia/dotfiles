@@ -1,0 +1,15 @@
+# uv configuration
+# https://docs.astral.sh/uv/configuration/
+
+# Compile Python bytecode (.pyc) on install — speeds up subsequent imports
+compile-bytecode = true
+
+# Use hard links when possible to save disk space across the cache
+link-mode = "hardlink"
+
+# Prefer system Python when no .python-version is present
+python-preference = "managed"
+
+[pip]
+# Always use a virtual environment — prevents accidental global installs
+require-virtualenv = false

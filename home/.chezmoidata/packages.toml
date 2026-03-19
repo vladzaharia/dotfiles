@@ -24,7 +24,7 @@ zypper = ["chezmoi", "bat", "difftastic", "direnv", "eza", "fd", "fzf", "glow", 
 description = "Development tools and terminal setup"
 
 [packages.dev.darwin]
-brew = ["asdf", "gh", "git-lfs", "docker", "docker-compose", "gum", "jandedobbeleer/oh-my-posh/oh-my-posh", "hurl", "uv", "zellij"]
+brew = ["gh","git-lfs", "docker", "docker-compose", "gum", "jandedobbeleer/oh-my-posh/oh-my-posh", "hurl", "uv", "zellij"]
 cask = ["wave", "visual-studio-code", "zed", "devpod", "requestly"]
 tap = ["jandedobbeleer/oh-my-posh", "charmbracelet/tap"]
 npm_global = ["turbo", "oxlint"]

@@ -1,0 +1,31 @@
+# tealdeer configuration
+# https://dbrgn.github.io/tealdeer/config.html
+
+[updates]
+# Check for updates and auto-update the cache
+auto_update = true
+# Re-fetch pages cache if older than this many hours (720h = 30 days)
+auto_update_interval_hours = 720
+
+[display]
+# Use compact output (no blank line between example blocks)
+compact = false
+# Don't pipe through a pager — output is short enough to read inline
+use_pager = false
+
+[style.description]
+foreground = "white"
+
+[style.command_name]
+foreground = "cyan"
+bold = true
+
+[style.example_text]
+foreground = "green"
+
+[style.example_code]
+foreground = "yellow"
+
+[style.example_variable]
+foreground = "white"
+underline = true

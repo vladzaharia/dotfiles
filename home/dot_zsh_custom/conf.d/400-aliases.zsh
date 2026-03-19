@@ -7,9 +7,30 @@ if command -v micro > /dev/null 2>&1; then
     alias nano=micro
 fi
 
-# ── Better cat ───────────────────────────────────────────────────
+# ── Intelligent cat ──────────────────────────────────────────────
+# Markdown files → glow; everything else → bat
 if command -v bat > /dev/null 2>&1; then
-    alias cat=bat
+    cat() {
+        if (( $# == 0 )); then
+            command bat
+            return
+        fi
+
+        local files=()
+        for arg in "$@"; do
+            [[ "$arg" == -* ]] || files+=("$arg")
+        done
+
+        if (( ${#files[@]} > 0 )) && command -v glow > /dev/null 2>&1; then
+            local all_md=true
+            for f in "${files[@]}"; do
+                [[ "$f" =~ \.(md|markdown|mdx)$ ]] || { all_md=false; break }
+            done
+            $all_md && { command glow "$@"; return }
+        fi
+
+        command bat "$@"
+    }
     alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
     alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
 fi

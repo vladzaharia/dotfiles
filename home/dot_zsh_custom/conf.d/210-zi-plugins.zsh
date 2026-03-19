@@ -17,10 +17,6 @@ autoload -Uz _zi
 zi ice wait lucid has'brew'
 zi snippet OMZP::brew
 
-# asdf
-zi ice wait lucid has'asdf'
-zi snippet OMZP::asdf
-
 # Docker
 zi wait lucid has'docker' for \
   OMZP::docker \

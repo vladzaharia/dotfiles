@@ -43,7 +43,8 @@
       "Skill(commit-commands:commit)",
       "WebFetch(domain:difftastic.wilfred.me.uk)",
       "WebFetch(domain:git.io)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(chezmoi diff:*)"
     ]
   }
 }

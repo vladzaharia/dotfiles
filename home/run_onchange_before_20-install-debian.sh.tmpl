@@ -32,21 +32,16 @@ if ! command -v fastfetch > /dev/null 2>&1; then
     curl -sSL https://alessandromrc.github.io/fastfetch-installer/installer.sh | bash
 fi
 
+# --- mise (curl install) ---
+if ! command -v mise > /dev/null 2>&1 && [ ! -x "$HOME/.local/bin/mise" ]; then
+    printf "${LCYAN}###${RESET} Installing mise\n"
+    curl https://mise.run | sh
+fi
+
 # --- oh-my-posh (curl install) ---
 if ! command -v oh-my-posh > /dev/null 2>&1; then
     curl -s https://ohmyposh.dev/install.sh | bash -s
 fi
-
-{{- if has "dev" .package_groups }}
-# --- asdf (git install) ---
-if [ ! -d "$HOME/.asdf" ]; then
-    printf "${LCYAN}###${RESET} Installing asdf\n"
-    git clone https://github.com/asdf-vm/asdf.git "$HOME/.asdf"
-else
-    printf "${LCYAN}###${RESET} Updating asdf\n"
-    git -C "$HOME/.asdf" pull
-fi
-{{- end }}
 
 # --- Selected groups ---
 {{- range $group := .package_groups }}

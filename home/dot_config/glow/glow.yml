@@ -1,0 +1,14 @@
+# glow configuration
+# https://github.com/charmbracelet/glow
+
+# Render style: dark | light | notty | <path to custom style.json>
+style: "dark"
+
+# Wrap output at this column width (0 = terminal width)
+width: 100
+
+# Use a pager (less) for long documents
+pager: true
+
+# Enable mouse support when using pager
+mouse: true
