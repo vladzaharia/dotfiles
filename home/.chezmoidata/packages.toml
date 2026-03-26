@@ -25,7 +25,7 @@ description = "Development tools and terminal setup"
 
 [packages.dev.darwin]
 brew = ["gh","git-lfs", "docker", "docker-compose", "gum", "jandedobbeleer/oh-my-posh/oh-my-posh", "hurl", "uv", "zellij"]
-cask = ["wave", "visual-studio-code", "zed", "devpod", "requestly"]
+cask = ["wave", "visual-studio-code", "zed", "devpod", "requestly", "hammerspoon"]
 tap = ["jandedobbeleer/oh-my-posh", "charmbracelet/tap"]
 npm_global = ["turbo", "oxlint"]
 

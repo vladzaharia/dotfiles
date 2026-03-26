@@ -10,6 +10,6 @@ link-mode = "hardlink"
 # Prefer system Python when no .python-version is present
 python-preference = "managed"
 
-[pip]
+#[pip]
 # Always use a virtual environment — prevents accidental global installs
-require-virtualenv = false
+#require-virtualenv = false
