@@ -8,7 +8,6 @@ local function reloadConfig(files)
   end
 end
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
-hs.alert.show("Config reloaded", 1)
 
 -- Cache terminal preferences on startup (much faster than repeated file system checks)
 local terminals = {}
@@ -18,7 +17,7 @@ local lastActiveApp = nil -- Cache last active terminal for even faster switchin
 local function initializeTerminals()
   -- Define terminals in order of preference with correct bundle IDs
   local terminalConfigs = {
-    { name = "WaveTerm", bundleId = "dev.waveterm.waveterm", path = "/Applications/WaveTerm.app", noResize = true },
+    { name = "Wave", bundleId = "dev.commandline.waveterm", path = "/Applications/Wave.app", noResize = true },
     { name = "Warp", bundleId = "dev.warp.Warp-Stable", path = "/Applications/Warp.app" },
     { name = "WezTerm", bundleId = "com.github.wez.wezterm", path = "/Applications/WezTerm.app" },
     { name = "Rio", bundleId = "com.raphaelamorim.rio", path = "/Applications/rio.app" },
@@ -41,6 +40,8 @@ local function initializeTerminals()
     preferredTerminal = { name = "Terminal", bundleId = "com.apple.Terminal" }
     terminals[preferredTerminal.bundleId] = preferredTerminal
   end
+
+  hs.alert.show("Preferred terminal: " .. preferredTerminal.name, 1)
 end
 
 local function positionWindow(app)
